@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Speed Test 7 Màu</title>
+  <style>
+    :root {
+      --gradient: linear-gradient(270deg, #ff0080, #7928ca, #007cf0, #00dfd8, #00f260, #f7971e, #ff0080);
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #000;
+      background-size: 400% 400%;
+      animation: gradientBG 20s ease infinite;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      text-align: center;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    h1 {
+      font-size: 3em;
+      margin-bottom: 0.5em;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradientBG 10s ease infinite;
+    }
+
+    button {
+      padding: 15px 40px;
+      font-size: 1.2em;
+      border: none;
+      border-radius: 50px;
+      background: var(--gradient);
+      background-size: 300% 300%;
+      color: white;
+      cursor: pointer;
+      animation: gradientBG 5s ease infinite;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+      transition: transform 0.2s ease;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+    }
+
+    #result {
+      margin-top: 2em;
+      font-size: 1.5em;
+      line-height: 2em;
+      white-space: pre-line;
+      animation: fadeIn 1s ease;
+      text-shadow: 0 0 8px #fff;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <h1>⚡ SPEED TEST</h1>
+  <button onclick="startTest()">🚀 BẮT ĐẦU ĐO</button>
+  <div id="result">Chưa đo</div>
+
+  <script>
+    async function startTest() {
+      const result = document.getElementById("result");
+      result.innerText = "⏳ Đang đo...";
+
+      try {
+        // Ping
+        const pingStart = performance.now();
+        await fetch("/ping");
+        const ping = performance.now() - pingStart;
+
+        // Download
+        const dlStart = performance.now();
+        const dlRes = await fetch("/download");
+        const blob = await dlRes.blob();
+        const dlEnd = performance.now();
+        const dlSpeed = (blob.size * 8) / ((dlEnd - dlStart) / 1000) / 1e6;
+
+        // Upload
+        const uploadSize = 10 * 1024 * 1024;
+        const data = new Uint8Array(uploadSize);
+        const ulStart = performance.now();
+        await fetch("/upload", { method: "POST", body: data });
+        const ulEnd = performance.now();
+        const ulSpeed = (uploadSize * 8) / ((ulEnd - ulStart) / 1000) / 1e6;
+
+        result.innerText = `📡 Ping: ${ping.toFixed(1)} ms\n⬇️ Download: ${dlSpeed.toFixed(2)} Mbps\n⬆️ Upload: ${ulSpeed.toFixed(2)} Mbps`;
+      } catch (err) {
+        result.innerText = "❌ Lỗi khi đo tốc độ.";
+        console.error(err);
+      }
+    }
+  </script>
+</body>
+    </html>
