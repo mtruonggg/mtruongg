@@ -2,24 +2,83 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Thi Luật Roleplay - HR Medic</title>
+  <title>Thi Luật RP & Phỏng vấn HR Medic</title>
   <style>
-    body {font-family: Arial, sans-serif;background: #f2f2f2;margin: 0;padding: 0;}
-    header {background: #b71c1c;color: #fff;padding: 20px;text-align: center;}
-    .container {width: 90%;max-width: 950px;margin: 20px auto;background: #fff;padding: 20px;border-radius: 10px;box-shadow: 0px 2px 8px rgba(0,0,0,0.2);}
-    .question {margin-bottom: 20px;padding: 10px;border-bottom: 1px solid #ddd;}
-    .question p {font-weight: bold;}
-    label {display: block;margin: 4px 0;}
-    button {background: #b71c1c;color: #fff;padding: 12px 20px;border: none;border-radius: 8px;cursor: pointer;font-size: 16px;margin-top: 20px;}
-    button:hover {background: #8e0000;}
-    #result {margin-top: 20px;font-size: 18px;font-weight: bold;color: #2e7d32;}
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f7fb;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+    header {
+      background: #2c3e50;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      border-bottom: 4px solid #3498db;
+    }
+    .container {
+      max-width: 900px;
+      margin: 20px auto;
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    h2 {
+      color: #2c3e50;
+      margin-top: 30px;
+    }
+    .question {
+      margin-bottom: 20px;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background: #fafafa;
+    }
+    .options label {
+      display: block;
+      margin: 5px 0;
+      cursor: pointer;
+    }
+    textarea {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      margin-top: 10px;
+      resize: vertical;
+    }
+    button {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      margin-top: 20px;
+      background: #3498db;
+      color: white;
+      font-size: 18px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #2980b9;
+    }
+    #result {
+      margin-top: 25px;
+      padding: 15px;
+      border-radius: 8px;
+      font-size: 18px;
+      font-weight: bold;
+      background: #ecf0f1;
+    }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Bài Thi Luật Roleplay - HR Medic</h1>
-    <p>Server FiveM</p>
-  </header>
+  <header>📋 Thi Luật RP & Phỏng Vấn HR Medic</header>
   <div class="container">
     <form id="quizForm"></form>
     <button type="button" onclick="submitQuiz()">Nộp bài</button>
@@ -27,75 +86,97 @@
   </div>
 
   <script>
-    // 30 câu hỏi + đáp án đúng
+    // Danh sách 25 câu trắc nghiệm
     const questions = [
-      {q:"FearRP là gì?",options:{a:"Không được sợ hãi trong RP",b:"Phải sợ hãi trước tình huống nguy hiểm hợp lý",c:"Luật cấm bỏ chạy"},correct:"b"},
-      {q:"NLR (New Life Rule) nghĩa là gì?",options:{a:"Sau khi chết phải quên toàn bộ sự kiện trước đó",b:"Sau khi chết có quyền báo thù",c:"Được quay lại hiện trường ngay"},correct:"a"},
-      {q:"Metagaming (MG) là gì?",options:{a:"Dùng thông tin ngoài game vào game",b:"Bắn nhau ngoài RP",c:"Đổi job liên tục"},correct:"a"},
-      {q:"Powergaming (PG) là gì?",options:{a:"Ép người khác RP theo ý mình",b:"Lạm dụng bug",c:"Spam chat"},correct:"a"},
-      {q:"RDM là hành vi gì?",options:{a:"Giết người vô cớ không lý do RP",b:"Dùng xe tông người",c:"Bị cướp tiền"},correct:"a"},
-      {q:"VDM là hành vi gì?",options:{a:"Dùng xe tông người không hợp lý",b:"Lạm dụng bug",c:"Chơi ngoài giờ"},correct:"a"},
-      {q:"Medic có được tham gia băng đảng không?",options:{a:"Có, nếu ngoài giờ",b:"Không, để tránh xung đột luật RP",c:"Tùy sự kiện"},correct:"b"},
-      {q:"Khi đang duty, Medic phải ưu tiên làm gì?",options:{a:"Đi dạo",b:"Ưu tiên cứu chữa bệnh nhân",c:"Tham gia bắn nhau"},correct:"b"},
-      {q:"Nếu Medic bị gọi đến hiện trường có nổ súng, nên làm gì?",options:{a:"Lao vào cứu ngay",b:"Đợi an toàn hoặc có cảnh sát hỗ trợ mới tiếp cận",c:"Bỏ mặc"},correct:"b"},
-      {q:"Medic có quyền sử dụng súng không?",options:{a:"Có, khi bị tấn công",b:"Không, Medic chỉ dùng công cụ y tế",c:"Có, bất kỳ lúc nào"},correct:"b"},
-      {q:"Cấm hành vi nào trong RP?",options:{a:"Chơi hack/cheat",b:"Đóng vai hợp lý",c:"Đi bệnh viện"},correct:"a"},
-      {q:"Khi bị cướp, bạn phải tuân thủ luật nào?",options:{a:"FearRP",b:"VDM",c:"NLR"},correct:"a"},
-      {q:"Medic có thể bỏ mặc bệnh nhân không?",options:{a:"Không, trừ khi nguy hiểm tính mạng bản thân",b:"Có, nếu bận",c:"Tuỳ thích"},correct:"a"},
-      {q:"Nói OOC trong IC có tính là MG không?",options:{a:"Có",b:"Không",c:"Tuỳ tình huống"},correct:"a"},
-      {q:"HR Medic có nhiệm vụ gì?",options:{a:"Quản lý, đào tạo nhân viên Medic",b:"Đi cướp ngân hàng",c:"Bắn nhau"},correct:"a"},
-      {q:"Medic có được lái xe cá nhân đi cứu không?",options:{a:"Có nhưng phải hợp lý",b:"Không bao giờ",c:"Thoải mái"},correct:"a"},
-      {q:"Khi revive bệnh nhân, cần làm gì?",options:{a:"Diễn tả bằng /me /do",b:"Bấm revive nhanh",c:"Bỏ qua"},correct:"a"},
-      {q:"Có thể dùng thông tin Discord để RP trong game không?",options:{a:"Không, đó là MG",b:"Có",c:"Tuỳ thích"},correct:"a"},
-      {q:"Medic có quyền từ chối cứu ai không?",options:{a:"Có, nếu tình huống nguy hiểm hoặc vi phạm luật RP",b:"Không bao giờ",c:"Tùy cấp bậc"},correct:"a"},
-      {q:"Nếu bị report, cần làm gì?",options:{a:"Cung cấp POV nếu có và giải thích trung thực",b:"Chối",c:"Lờ đi"},correct:"a"},
-      {q:"Điều gì quan trọng nhất trong RP?",options:{a:"Tạo trải nghiệm chân thực",b:"Kiếm tiền nhanh",c:"Leo rank"},correct:"a"},
-      {q:"Medic có thể làm việc khi say rượu trong RP không?",options:{a:"Không",b:"Có",c:"Tuỳ thích"},correct:"a"},
-      {q:"Luật HR Medic yêu cầu gì với nhân viên mới?",options:{a:"Học luật RP cơ bản",b:"Biết cầm súng",c:"Đi cướp ngân hàng"},correct:"a"},
-      {q:"Nếu gặp bug, nên làm gì?",options:{a:"Báo staff",b:"Lợi dụng",c:"Bỏ qua"},correct:"a"},
-      {q:"Medic có thể lái trực thăng không?",options:{a:"Có nếu được cấp phép",b:"Không",c:"Tùy thích"},correct:"a"},
-      {q:"Medic có được nhận tiền 'cảm ơn' sau ca cứu chữa không?",options:{a:"Có, nhưng không được đòi hỏi",b:"Không bao giờ",c:"Được phép thỏa thuận giá"},correct:"a"},
-      {q:"Khi HR Medic tổ chức đào tạo, yêu cầu đầu tiên với học viên là gì?",options:{a:"Nắm rõ luật RP cơ bản",b:"Biết lái xe cứu thương",c:"Biết sử dụng vũ khí"},correct:"a"},
-      {q:"HR Medic có quyền cấp rank cho nhân viên không?",options:{a:"Có, theo quy trình và cấp trên duyệt",b:"Không bao giờ",c:"Có thể tự ý"},correct:"a"},
-      {q:"Nếu nhân viên Medic bỏ trực quá nhiều lần, HR cần làm gì?",options:{a:"Nhắc nhở, báo cáo cấp trên, có thể xử lý kỷ luật",b:"Bỏ qua",c:"Cho nghỉ luôn"},correct:"a"},
-      {q:"Điều quan trọng nhất của Medic trong RP là gì?",options:{a:"Giữ tính mạng và trải nghiệm RP cho người chơi",b:"Kiếm tiền",c:"Thăng cấp nhanh"},correct:"a"}
+      // --- 15 câu Luật RP ---
+      {q:"FearRP nghĩa là gì?", options:["Không được làm liều khi bị đe dọa mạng sống","Không sợ ai trong RP","Được phép chống lại dù nguy hiểm"], correct:0},
+      {q:"NLR (New Life Rule) là:", options:["Sau khi chết quên toàn bộ tình huống trước đó","Nhớ lại mọi thứ sau khi chết","Được hồi sinh và tiếp tục đánh nhau"], correct:0},
+      {q:"RDM là hành vi nào?", options:["Giết người không lý do","Giết người trong tự vệ","Giết theo kịch bản"], correct:0},
+      {q:"VDM nghĩa là gì?", options:["Dùng xe cán người không RP","Đua xe hợp pháp","Đỗ xe sai chỗ"], correct:0},
+      {q:"Meta Gaming là gì?", options:["Dùng OOC info vào IC","Dùng IC info vào OOC","Nói chuyện trong Discord"], correct:0},
+      {q:"Power Gaming là:", options:["Làm điều phi logic, ép người khác không có quyền lựa chọn","Đóng vai nhân vật hợp lý","RP tình huống đúng luật"], correct:0},
+      {q:"Bug Abuse là:", options:["Lợi dụng lỗi game để có lợi","Báo lỗi cho admin","Không sử dụng bug"], correct:0},
+      {q:"Combat Logging là:", options:["Thoát game khi đang RP combat","RP combat hợp lý","AFK trong game"], correct:0},
+      {q:"Mix OOC/IC là gì?", options:["Nói chuyện OOC trong IC hoặc ngược lại","Giữ IC tách biệt OOC","Không dùng voice chat"], correct:0},
+      {q:"Trolling trong RP là:", options:["Gây rối, phá RP người khác","Giúp đỡ newbie","RP nghiêm túc"], correct:0},
+      {q:"Cop Baiting là:", options:["Cố tình chọc cảnh sát để bị bắt","RP phạm tội hợp lý","Tuân thủ luật IC"], correct:0},
+      {q:"Fail RP là:", options:["Diễn không hợp logic, không đúng luật RP","RP đúng luật","Tuân thủ kịch bản"], correct:0},
+      {q:"IC là gì?", options:["In Character - hành động trong vai","Out of Character","In Combat"], correct:0},
+      {q:"OOC là gì?", options:["Out of Character - ngoài vai","In Character","Off Of Combat"], correct:0},
+      {q:"Metagaming qua Discord là:", options:["Dùng voice Discord báo info IC","Nói chuyện bình thường","Không RP"], correct:0},
+
+      // --- 10 câu Medic ---
+      {q:"Nhiệm vụ chính của Medic là gì?", options:["Cứu chữa người chơi, hỗ trợ y tế","Tham gia bắn nhau","Đi bắt tội phạm"], correct:0},
+      {q:"Medic có được phép mang vũ khí không?", options:["Không được mang vũ khí","Được mang súng ngắn","Được mang tất cả"], correct:0},
+      {q:"Khi gặp tai nạn giao thông, Medic cần làm gì đầu tiên?", options:["Đảm bảo an toàn hiện trường","Bắt thủ phạm","Bỏ qua"], correct:0},
+      {q:"Medic có được ưu tiên vượt đèn đỏ?", options:["Có, khi đang làm nhiệm vụ khẩn cấp","Không bao giờ","Chỉ khi có police hộ tống"], correct:0},
+      {q:"Trách nhiệm của Medic khi revive là gì?", options:["Hỗ trợ bệnh nhân RP hồi tỉnh","Bỏ mặc sau revive","Lấy tiền rồi bỏ đi"], correct:0},
+      {q:"Khi bệnh nhân tử vong RP, Medic phải:", options:["Tuân thủ NLR, coi như chết hẳn","Revive ngay lập tức","Gọi admin"], correct:0},
+      {q:"Khi gặp vụ việc phạm pháp, Medic:", options:["Chỉ hỗ trợ y tế, không can thiệp pháp luật","Bắt giữ tội phạm","RP bắn trả"], correct:0},
+      {q:"Giao tiếp trong lúc cứu chữa phải:", options:["Lịch sự, chuyên nghiệp","Chọc ghẹo","Bỏ qua bệnh nhân"], correct:0},
+      {q:"Khi nhiều người bị thương, Medic ưu tiên:", options:["Người bị thương nặng nhất","Người quen","Ai trả tiền trước"], correct:0},
+      {q:"Medic có được tham gia Crime RP không?", options:["Không được","Được, nếu không ai biết","Luôn được"], correct:0},
+
+      // --- 5 câu HR Medic ---
+      {q:"Nhiệm vụ HR Medic là gì?", options:["Quản lý, tuyển dụng, đào tạo nhân sự Medic","Đi cứu người","Đi bắt tội phạm"], correct:0},
+      {q:"HR Medic phải xử lý thế nào khi nhân viên vi phạm?", options:["Ghi nhận và báo cáo, kỷ luật theo quy định","Bao che","Làm ngơ"], correct:0},
+      {q:"Trong phỏng vấn tuyển Medic mới, HR cần:", options:["Kiểm tra luật RP & y tế cơ bản","Hỏi chuyện vui vẻ","Không cần hỏi gì"], correct:0},
+      {q:"HR Medic có quyền gì?", options:["Tuyển dụng, kỷ luật, quản lý nhân sự","Điều khiển cảnh sát","Tham gia Crime RP"], correct:0},
+      {q:"Nếu nhân viên mới không đạt yêu cầu trong đào tạo?", options:["Cho thử việc lại hoặc loại","Giữ lại cho đủ người","Cho làm cảnh sát"], correct:0}
     ];
 
-    // Shuffle array
-    function shuffle(array) {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-      }
-      return array;
-    }
+    // Thêm 5 câu hỏi tình huống tự luận
+    const scenarios = [
+      "Bạn là Medic, gặp tai nạn có 3 người bất tỉnh cùng lúc, bạn xử lý thế nào?",
+      "Nếu bệnh nhân không hợp tác RP khi bạn cứu chữa, bạn làm gì?",
+      "Bạn thấy đồng nghiệp Medic vi phạm FailRP, bạn xử lý ra sao?",
+      "Trong trường hợp bị tội phạm khống chế khi đi làm nhiệm vụ, bạn nên làm gì?",
+      "Bạn đang phỏng vấn một ứng viên Medic nhưng họ không nắm luật RP, bạn xử lý thế nào?"
+    ];
 
-    // Render câu hỏi với đáp án random
-    const form = document.getElementById("quizForm");
-    questions.forEach((item, index) => {
-      const div = document.createElement("div");
-      div.className = "question";
+    // Render câu hỏi
+    function renderQuiz() {
+      const form = document.getElementById("quizForm");
+      let html = "";
 
-      const p = document.createElement("p");
-      p.textContent = `${index + 1}. ${item.q}`;
-      div.appendChild(p);
-
-      const entries = Object.entries(item.options);
-      const shuffled = shuffle(entries);
-
-      shuffled.forEach(([key, text], i) => {
-        const label = document.createElement("label");
-        label.innerHTML = `<input type="radio" name="q${index}" value="${key}"> ${String.fromCharCode(65+i)}. ${text}`;
-        div.appendChild(label);
+      questions.forEach((q, i) => {
+        const shuffled = q.options.map((opt, idx) => ({opt, idx})).sort(()=>Math.random()-0.5);
+        html += `<div class="question">
+          <p><b>Câu ${i+1}:</b> ${q.q}</p>
+          <div class="options">`;
+        shuffled.forEach((o,j)=>{
+          html += `<label><input type="radio" name="q${i}" value="${o.idx}"> ${String.fromCharCode(65+j)}. ${o.opt}</label>`;
+        });
+        html += `</div></div>`;
       });
 
-      item.name = "q" + index;
-      form.appendChild(div);
-    });
+      // Tình huống
+      html += `<h2>Phần 2: Câu hỏi tình huống (5 câu)</h2>`;
+      scenarios.forEach((s, i)=>{
+        html += `<div class="question">
+          <p><b>Tình huống ${i+1}:</b> ${s}</p>
+          <textarea name="scenario${i}" rows="4" placeholder="Nhập câu trả lời..."></textarea>
+        </div>`;
+      });
+
+      form.innerHTML = html;
+    }
 
     function submitQuiz() {
       let score = 0;
-      questions.forEach(item => {
+      questions.forEach((q,i)=>{
+        const ans = document.querySelector(`input[name="q${i}"]:checked`);
+        if(ans && parseInt(ans.value) === q.correct) score++;
+      });
+      document.getElementById("result").innerHTML = 
+        `✅ Bạn trả lời đúng <b>${score}/${questions.length}</b> câu trắc nghiệm.<br>
+         📌 Phần tình huống sẽ do PVT chấm thủ công.`;
+    }
+
+    renderQuiz();
+  </script>
+</body>
+</html>      questions.forEach(item => {
         const selected = document.querySelector(`input[name="${item.name}"]:checked`);
         if (selected && selected.value === item.correct) score++;
       });
