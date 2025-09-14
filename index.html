@@ -1,94 +1,72 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <title>Thi Luật RP & Phỏng vấn HR Medic</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Bài Thi Phỏng Vấn Medic</title>
+  <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f4f7fb;
-      margin: 0;
-      padding: 0;
-      color: #333;
-    }
-    header {
-      background: #2c3e50;
-      color: white;
-      padding: 20px;
-      text-align: center;
-      font-size: 24px;
-      font-weight: bold;
-      border-bottom: 4px solid #3498db;
-    }
-    .container {
-      max-width: 900px;
-      margin: 20px auto;
-      background: white;
-      padding: 25px;
-      border-radius: 12px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    }
-    h2 {
-      color: #2c3e50;
-      margin-top: 30px;
-    }
-    .question {
-      margin-bottom: 20px;
-      padding: 15px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      background: #fafafa;
-    }
-    .options label {
-      display: block;
-      margin: 5px 0;
-      cursor: pointer;
-    }
-    textarea {
-      width: 100%;
-      padding: 10px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      margin-top: 10px;
-      resize: vertical;
-    }
-    button {
-      display: block;
-      width: 100%;
-      padding: 12px;
-      margin-top: 20px;
-      background: #3498db;
-      color: white;
-      font-size: 18px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-    button:hover {
-      background: #2980b9;
-    }
-    #result {
-      margin-top: 25px;
-      padding: 15px;
-      border-radius: 8px;
-      font-size: 18px;
-      font-weight: bold;
-      background: #ecf0f1;
-    }
+    .radio-label input[type="radio"] { accent-color: #0ea5e9; }
+    textarea { resize: vertical; }
   </style>
 </head>
-<body>
-  <header>📋 Thi Luật RP & Phỏng Vấn HR Medic</header>
-  <div class="container">
-    <form id="quizForm"></form>
-    <button type="button" onclick="submitQuiz()">Nộp bài</button>
-    <div id="result"></div>
+<body class="bg-slate-50 text-slate-800">
+  <div class="min-h-screen flex items-center justify-center p-6">
+    <div class="w-full max-w-4xl">
+      <header class="bg-gradient-to-r from-sky-600 to-cyan-600 text-white rounded-xl shadow-md p-6 mb-6">
+        <h1 class="text-2xl font-semibold flex items-center gap-3">
+          <span class="text-3xl">🩺</span> BÀI THI PHỎNG VẤN TUYỂN DỤNG VỊ TRÍ H.R
+        </h1>
+        <p class="mt-1 text-sm opacity-90">Điền thông tin, trả lời câu hỏi. Hệ thống sẽ tự động chấm điểm.</p>
+      </header>
+
+      <main class="bg-white rounded-xl shadow-lg p-6">
+        <!-- Candidate Info -->
+        <section class="mb-6">
+          <h2 class="text-lg font-medium text-sky-600 mb-3">Thông tin ứng viên</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <label class="block text-sm font-medium">Họ tên IC</label>
+              <input id="name" type="text" class="mt-1 w-full rounded-md border p-2"/>
+            </div>
+            <div>
+              <label class="block text-sm font-medium">Tuổi IC</label>
+              <input id="age" type="number" min="10" class="mt-1 w-full rounded-md border p-2"/>
+            </div>
+            <div>
+              <label class="block text-sm font-medium">Discord ID</label>
+              <input id="discord" type="text" class="mt-1 w-full rounded-md border p-2"/>
+            </div>
+          </div>
+        </section>
+
+        <!-- Quiz -->
+        <section class="mb-6">
+          <h2 class="text-lg font-medium text-sky-600 mb-3">Phần 1: Trắc nghiệm (25 câu, tối đa 15 điểm)</h2>
+          <div id="quiz" class="space-y-4"></div>
+        </section>
+
+        <!-- Scenarios -->
+        <section class="mb-6">
+          <h2 class="text-lg font-medium text-sky-600 mb-3">Phần 2: Tình huống tự luận (5 câu, tối đa 15 điểm)</h2>
+          <div id="scenarios" class="space-y-4"></div>
+        </section>
+
+        <!-- Actions -->
+        <div class="flex items-center gap-3">
+          <button onclick="submitExam()" class="px-6 py-2 bg-sky-600 hover:bg-sky-700 text-white rounded-md font-semibold shadow">Nộp bài</button>
+          <button onclick="resetForm()" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-md">Đặt lại</button>
+        </div>
+
+        <!-- Result -->
+        <div id="result" class="mt-6"></div>
+      </main>
+    </div>
   </div>
 
   <script>
-    // Danh sách 25 câu trắc nghiệm
+    /* ===== Trắc nghiệm ===== */
     const questions = [
-      // --- 15 câu Luật RP ---
       {q:"FearRP nghĩa là gì?", options:["Không được làm liều khi bị đe dọa mạng sống","Không sợ ai trong RP","Được phép chống lại dù nguy hiểm"], correct:0},
       {q:"NLR (New Life Rule) là:", options:["Sau khi chết quên toàn bộ tình huống trước đó","Nhớ lại mọi thứ sau khi chết","Được hồi sinh và tiếp tục đánh nhau"], correct:0},
       {q:"RDM là hành vi nào?", options:["Giết người không lý do","Giết người trong tự vệ","Giết theo kịch bản"], correct:0},
@@ -104,8 +82,6 @@
       {q:"IC là gì?", options:["In Character - hành động trong vai","Out of Character","In Combat"], correct:0},
       {q:"OOC là gì?", options:["Out of Character - ngoài vai","In Character","Off Of Combat"], correct:0},
       {q:"Metagaming qua Discord là:", options:["Dùng voice Discord báo info IC","Nói chuyện bình thường","Không RP"], correct:0},
-
-      // --- 10 câu Medic ---
       {q:"Nhiệm vụ chính của Medic là gì?", options:["Cứu chữa người chơi, hỗ trợ y tế","Tham gia bắn nhau","Đi bắt tội phạm"], correct:0},
       {q:"Medic có được phép mang vũ khí không?", options:["Không được mang vũ khí","Được mang súng ngắn","Được mang tất cả"], correct:0},
       {q:"Khi gặp tai nạn giao thông, Medic cần làm gì đầu tiên?", options:["Đảm bảo an toàn hiện trường","Bắt thủ phạm","Bỏ qua"], correct:0},
@@ -116,136 +92,106 @@
       {q:"Giao tiếp trong lúc cứu chữa phải:", options:["Lịch sự, chuyên nghiệp","Chọc ghẹo","Bỏ qua bệnh nhân"], correct:0},
       {q:"Khi nhiều người bị thương, Medic ưu tiên:", options:["Người bị thương nặng nhất","Người quen","Ai trả tiền trước"], correct:0},
       {q:"Medic có được tham gia Crime RP không?", options:["Không được","Được, nếu không ai biết","Luôn được"], correct:0},
-
-      // --- 5 câu HR Medic ---
-      {q:"Nhiệm vụ HR Medic là gì?", options:["Quản lý, tuyển dụng, đào tạo nhân sự Medic","Đi cứu người","Đi bắt tội phạm"], correct:0},
-      {q:"HR Medic phải xử lý thế nào khi nhân viên vi phạm?", options:["Ghi nhận và báo cáo, kỷ luật theo quy định","Bao che","Làm ngơ"], correct:0},
-      {q:"Trong phỏng vấn tuyển Medic mới, HR cần:", options:["Kiểm tra luật RP & y tế cơ bản","Hỏi chuyện vui vẻ","Không cần hỏi gì"], correct:0},
-      {q:"HR Medic có quyền gì?", options:["Tuyển dụng, kỷ luật, quản lý nhân sự","Điều khiển cảnh sát","Tham gia Crime RP"], correct:0},
-      {q:"Nếu nhân viên mới không đạt yêu cầu trong đào tạo?", options:["Cho thử việc lại hoặc loại","Giữ lại cho đủ người","Cho làm cảnh sát"], correct:0}
     ];
 
-    // Thêm 5 câu hỏi tình huống tự luận
+    /* ===== Tự luận ===== */
     const scenarios = [
-      "Bạn là Medic, gặp tai nạn có 3 người bất tỉnh cùng lúc, bạn xử lý thế nào?",
-      "Nếu bệnh nhân không hợp tác RP khi bạn cứu chữa, bạn làm gì?",
-      "Bạn thấy đồng nghiệp Medic vi phạm FailRP, bạn xử lý ra sao?",
-      "Trong trường hợp bị tội phạm khống chế khi đi làm nhiệm vụ, bạn nên làm gì?",
-      "Bạn đang phỏng vấn một ứng viên Medic nhưng họ không nắm luật RP, bạn xử lý thế nào?"
+      {q:"Bạn là Medic, gặp tai nạn có 3 người bất tỉnh cùng lúc, bạn xử lý thế nào?", keywords:["ưu tiên","nặng","gọi hỗ trợ","chia ca"], max:2.25},
+      {q:"Nếu bệnh nhân không hợp tác RP khi bạn cứu chữa, bạn làm gì?", keywords:["bình tĩnh","giải thích","báo admin","không cãi"], max:2.25},
+      {q:"Bạn thấy đồng nghiệp Medic vi phạm FailRP, bạn xử lý ra sao?", keywords:["báo cáo","nhắc nhở","hr","quản lý"], max:2.25},
+      {q:"Trong trường hợp bị tội phạm khống chế khi đi làm nhiệm vụ, bạn nên làm gì?", keywords:["fear","tuân theo","không chống cự","giữ an toàn"], max:2.25},
+      {q:"Bạn đang phỏng vấn một ứng viên Medic nhưng họ không nắm luật RP, bạn xử lý thế nào?", keywords:["cho thử lại","loại","đào tạo lại","hr"], max:6},
     ];
 
-    // Render câu hỏi
-    function renderQuiz() {
-      const form = document.getElementById("quizForm");
-      let html = "";
-
-      questions.forEach((q, i) => {
-        const shuffled = q.options.map((opt, idx) => ({opt, idx})).sort(()=>Math.random()-0.5);
-        html += `<div class="question">
-          <p><b>Câu ${i+1}:</b> ${q.q}</p>
-          <div class="options">`;
-        shuffled.forEach((o,j)=>{
-          html += `<label><input type="radio" name="q${i}" value="${o.idx}"> ${String.fromCharCode(65+j)}. ${o.opt}</label>`;
-        });
-        html += `</div></div>`;
+    /* ===== Render ===== */
+    function renderQuiz(){
+      const quizDiv=document.getElementById('quiz');
+      quizDiv.innerHTML="";
+      questions.forEach((item,i)=>{
+        const div=document.createElement('div');
+        div.className='p-4 border rounded-lg bg-slate-50';
+        div.innerHTML=`
+          <p class="font-medium mb-2">Câu ${i+1}: ${item.q}</p>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+            ${item.options.map((opt,j)=>`
+              <label class="radio-label flex items-center gap-2 p-2 border rounded-md">
+                <input type="radio" name="q${i}" value="${j}"> ${String.fromCharCode(65+j)}. ${opt}
+              </label>
+            `).join("")}
+          </div>`;
+        quizDiv.appendChild(div);
       });
-
-      // Tình huống
-      html += `<h2>Phần 2: Câu hỏi tình huống (5 câu)</h2>`;
-      scenarios.forEach((s, i)=>{
-        html += `<div class="question">
-          <p><b>Tình huống ${i+1}:</b> ${s}</p>
-          <textarea name="scenario${i}" rows="4" placeholder="Nhập câu trả lời..."></textarea>
-        </div>`;
-      });
-
-      form.innerHTML = html;
     }
 
-    function submitQuiz() {
-      let score = 0;
-      questions.forEach((q,i)=>{
-        const ans = document.querySelector(`input[name="q${i}"]:checked`);
-        if(ans && parseInt(ans.value) === q.correct) score++;
+    function renderScenarios(){
+      const sDiv=document.getElementById('scenarios');
+      sDiv.innerHTML="";
+      scenarios.forEach((s,i)=>{
+        const div=document.createElement('div');
+        div.className='p-4 border rounded-lg bg-slate-50';
+        div.innerHTML=`
+          <p class="font-medium mb-2">Tình huống ${i+1}: ${s.q}</p>
+          <textarea name="s${i}" rows="3" class="w-full p-2 border rounded-md" placeholder="Nhập câu trả lời..."></textarea>`;
+        sDiv.appendChild(div);
       });
-      document.getElementById("result").innerHTML = 
-        `✅ Bạn trả lời đúng <b>${score}/${questions.length}</b> câu trắc nghiệm.<br>
-         📌 Phần tình huống sẽ do PVT chấm thủ công.`;
     }
 
     renderQuiz();
+    renderScenarios();
+
+    /* ===== Nộp bài ===== */
+    function submitExam(){
+      // Trắc nghiệm
+      let scoreQuiz=0;
+      questions.forEach((q,i)=>{
+        const ans=document.querySelector(`input[name=q${i}]:checked`);
+        if(ans && parseInt(ans.value)===q.correct) scoreQuiz+=0.6;
+      });
+
+      // Tự luận
+      let scoreScenario=0;
+      let scenarioDetails="";
+      scenarios.forEach((s,i)=>{
+        const ans=document.querySelector(`textarea[name=s${i}]`).value.toLowerCase();
+        let point=0;
+        s.keywords.forEach(k=>{
+          if(ans.includes(k)) point+=s.max/s.keywords.length;
+        });
+        if(point>s.max) point=s.max;
+        scoreScenario+=point;
+        scenarioDetails+=`
+          <div class="mb-2">
+            <p class="font-medium">Tình huống ${i+1}: ${s.q}</p>
+            <p class="text-slate-600">Trả lời: ${ans || "(Chưa trả lời)"}</p>
+            <p class="text-sky-700 font-medium">Điểm: ${point.toFixed(2)}/${s.max}</p>
+          </div>`;
+      });
+
+      const total=scoreQuiz+scoreScenario;
+      const name=document.getElementById("name").value||"Chưa nhập";
+      const age=document.getElementById("age").value||"Chưa nhập";
+      const discord=document.getElementById("discord").value||"Chưa nhập";
+
+      document.getElementById("result").innerHTML=`
+        <div class="p-4 border rounded-lg bg-sky-50">
+          <p class="font-semibold mb-2">Ứng viên: ${name} | Tuổi IC: ${age} | Discord: ${discord}</p>
+          <p class="text-sky-900 font-medium mb-2">Điểm trắc nghiệm: ${scoreQuiz.toFixed(2)}/15</p>
+          <p class="text-sky-900 font-medium mb-2">Điểm tình huống: ${scoreScenario.toFixed(2)}/15</p>
+          <p class="text-sky-900 font-bold text-lg">Tổng điểm: ${total.toFixed(2)}/30</p>
+          <h3 class="font-semibold mt-3 mb-1">Chi tiết phần tự luận:</h3>
+          ${scenarioDetails}
+        </div>`;
+    }
+
+    /* ===== Reset ===== */
+    function resetForm(){
+      document.getElementById("name").value="";
+      document.getElementById("age").value="";
+      document.getElementById("discord").value="";
+      renderQuiz();
+      renderScenarios();
+      document.getElementById("result").innerHTML="";
+    }
   </script>
 </body>
-    </html>  </html>  <script>
-    const boardEl = document.getElementById('board');
-    const scoreEl = document.getElementById('score');
-    const piecesEl = document.getElementById('pieces');
-
-    const BOARD_SIZE = 9;
-    let board = Array.from({ length: BOARD_SIZE }, () => Array(BOARD_SIZE).fill(0));
-    let score = 0;
-
-    // Generate pieces
-    const pieces = [
-      [[1, 1, 1], [0, 1, 0]], // T shape
-      [[1, 1], [1, 1]], // Square shape
-      [[1, 1, 1, 1]], // Line shape
-    ];
-
-    pieces.forEach((piece, index) => {
-      const pieceDiv = document.createElement('div');
-      pieceDiv.className = 'piece';
-      piece.forEach(row => {
-        row.forEach(cell => {
-          const blockDiv = document.createElement('div');
-          blockDiv.className = `block ${cell ? 'filled' : ''}`;
-          pieceDiv.appendChild(blockDiv);
-        });
-      });
-      pieceDiv.setAttribute('data-piece', index);
-      piecesEl.appendChild(pieceDiv);
-    });
-
-    function renderBoard() {
-      boardEl.innerHTML = '';
-      board.forEach((row, y) => {
-        row.forEach((cell, x) => {
-          const div = document.createElement('div');
-          div.className = 'cell' + (cell ? ' filled' : '');
-          div.dataset.x = x;
-          div.dataset.y = y;
-          div.addEventListener('click', () => onCellClick(x, y));
-          boardEl.appendChild(div);
-        });
-      });
-    }
-
-    function addFloatingScore(x, y, amount) {
-      const floatingScore = document.createElement('div');
-      floatingScore.className = 'floating-score';
-      floatingScore.style.left = `${x * 42 + 10}px`;
-      floatingScore.style.top = `${y * 42 + 10}px`;
-      floatingScore.textContent = `+${amount}`;
-      document.body.appendChild(floatingScore);
-      setTimeout(() => floatingScore.remove(), 1000);
-    }
-
-    function updateScore(points) {
-      score += points;
-      scoreEl.textContent = `Score: ${score}`;
-    }
-
-    function onCellClick(x, y) {
-      // If the cell is already filled, don't do anything
-      if (board[y][x] === 1) return;
-
-      board[y][x] = 1;
-      renderBoard();
-      updateScore(10);
-      addFloatingScore(x, y, 10);
-    }
-
-    renderBoard();
-  </script>
-</body>
-                                    </html>
+  </html>
