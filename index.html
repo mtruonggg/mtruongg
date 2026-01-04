@@ -38,6 +38,22 @@ body{
   font-weight:700;
   position:relative;
   overflow:hidden;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  transition: transform 0.3s ease;
+}
+
+/* Box nhún nhẹ khi số thay đổi */
+.box.animate{
+  animation: boxJump 0.3s ease;
+}
+
+@keyframes boxJump{
+  0%{ transform: translateY(0); }
+  30%{ transform: translateY(8%); }
+  60%{ transform: translateY(0); }
+  100%{ transform: translateY(0); }
 }
 
 .num{
@@ -84,104 +100,113 @@ body{
 
 <script>
 /* ===== CONFIG ===== */
-const TARGET = new Date(2026,1,19,0,0,0).getTime()
-const TICK_SOUND  = "https://files.catbox.moe/o0fdwn.mp3"
-const FINAL_SOUND = "https://files.catbox.moe/k8qnlf.mp3"
+const TARGET = new Date(2026,1,19,0,0,0).getTime();
+const TICK1  = "https://files.catbox.moe/o0fdwn.mp3";
+const TICK2  = "https://files.catbox.moe/o0fdwn.mp3";
 /* ================= */
 
-let lastRemain = null
-let soundOK = false
+let lastRemain = null;
+let soundOK = false;
+let tickToggle = false;
 
-const tickAudio  = new Audio(TICK_SOUND)
-const finalAudio = new Audio(FINAL_SOUND)
-tickAudio.volume = 0.6
-finalAudio.volume = 1
+const tick1Audio = new Audio(TICK1);
+const tick2Audio = new Audio(TICK2);
+tick1Audio.volume = 0.7;
+tick2Audio.volume = 0.7;
 
+// Bật âm thanh khi chạm
 window.addEventListener("pointerdown",()=>{
-  if(soundOK) return
-  soundOK = true
-  tickAudio.play().then(()=>tickAudio.pause())
-  finalAudio.play().then(()=>finalAudio.pause())
-  info.textContent="Âm thanh đã bật"
-},{once:true})
+  if(soundOK) return;
+  soundOK = true;
+  tick1Audio.play().then(()=>tick1Audio.pause());
+  tick2Audio.play().then(()=>tick2Audio.pause());
+  info.textContent="Âm thanh đã bật";
+},{once:true});
 
-function play(a){
-  if(!soundOK) return
-  a.currentTime = 0
-  a.play().catch(()=>{})
+// tick xen kẽ 2 file
+function playTick(){
+  if(!soundOK) return;
+  tickToggle = !tickToggle;
+  if(tickToggle){
+    tick1Audio.currentTime=0;
+    tick1Audio.play().catch(()=>{});
+  } else {
+    setTimeout(()=>{
+      tick2Audio.currentTime=0;
+      tick2Audio.play().catch(()=>{});
+    },400); // tick 2 kêu sau 0.4s
+  }
 }
 
+// khởi tạo box
 function init(id){
-  const el=document.getElementById(id)
-  const n=document.createElement("div")
-  n.className="num current"
-  n.textContent="00"
-  el.appendChild(n)
+  const el=document.getElementById(id);
+  const n=document.createElement("div");
+  n.className="num current";
+  n.textContent="00";
+  el.appendChild(n);
 }
-["d","h","m","s"].forEach(init)
+["d","h","m","s"].forEach(init);
 
+// update số và animate box
 function update(el,val){
-  const cur=el.querySelector(".current")
-  if(cur && cur.textContent===val) return
+  const cur=el.querySelector(".current");
+  if(cur && cur.textContent===val) return;
 
-  const next=document.createElement("div")
-  next.className="num next"
-  next.textContent=val
-  el.appendChild(next)
+  const next=document.createElement("div");
+  next.className="num next";
+  next.textContent=val;
+  el.appendChild(next);
 
-  requestAnimationFrame(()=>el.classList.add("slide"))
+  // animate box riêng từng mốc
+  const box = el.closest(".unit").querySelector(".box");
+  box.classList.add("animate");
+  requestAnimationFrame(()=>el.classList.add("slide"));
 
   setTimeout(()=>{
-    el.innerHTML=""
-    const n=document.createElement("div")
-    n.className="num current"
-    n.textContent=val
-    el.appendChild(n)
-    el.classList.remove("slide")
-  },350)
+    el.innerHTML="";
+    const n=document.createElement("div");
+    n.className="num current";
+    n.textContent=val;
+    el.appendChild(n);
+    el.classList.remove("slide");
+    box.classList.remove("animate");
+  },350);
 }
 
-const dEl=d, hEl=h, mEl=m, sEl=s
-const ud=document.getElementById("ud")
-const uh=document.getElementById("uh")
-const um=document.getElementById("um")
+const dEl=d, hEl=h, mEl=m, sEl=s;
+const ud=document.getElementById("ud");
+const uh=document.getElementById("uh");
+const um=document.getElementById("um");
 
 function loop(){
-  const now = Date.now()
-  const remain = Math.max(0, Math.floor((TARGET-now)/1000))
+  const now = Date.now();
+  const remain = Math.max(0, Math.floor((TARGET-now)/1000));
 
   if(remain !== lastRemain){
-    lastRemain = remain
+    lastRemain = remain;
 
-    const d = Math.floor(remain/86400)
-    const h = Math.floor(remain%86400/3600)
-    const m = Math.floor(remain%3600/60)
-    const s = remain%60
+    const d = Math.floor(remain/86400);
+    const h = Math.floor(remain%86400/3600);
+    const m = Math.floor(remain%3600/60);
+    const s = remain%60;
 
-    update(dEl,String(d).padStart(2,"0"))
-    update(hEl,String(h).padStart(2,"0"))
-    update(mEl,String(m).padStart(2,"0"))
-    update(sEl,String(s).padStart(2,"0"))
+    update(dEl,String(d).padStart(2,"0"));
+    update(hEl,String(h).padStart(2,"0"));
+    update(mEl,String(m).padStart(2,"0"));
+    update(sEl,String(s).padStart(2,"0"));
 
-    if(d<=0) ud.classList.add("hide")
-    if(d<=0&&h<=0) uh.classList.add("hide")
-    if(d<=0&&h<=0&&m<=0) um.classList.add("hide")
+    if(d<=0) ud.classList.add("hide");
+    if(d<=0&&h<=0) uh.classList.add("hide");
+    if(d<=0&&h<=0&&m<=0) um.classList.add("hide");
 
-    if(remain<=10 && remain>=1){
-      play(finalAudio)
-      navigator.vibrate?.(remain===1?[400,150,400]:120)
-    }else{
-      play(tickAudio)
-    }
+    playTick();
 
-    if(remain===0){
-      setTimeout(()=>location.href="fireworks.html",1200)
-    }
   }
-  requestAnimationFrame(loop)
+  requestAnimationFrame(loop);
 }
 
-loop()
+loop();
 </script>
 </body>
 </html>
