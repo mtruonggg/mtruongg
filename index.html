@@ -1,197 +1,187 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="vi">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Bài Thi Phỏng Vấn Medic</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    .radio-label input[type="radio"] { accent-color: #0ea5e9; }
-    textarea { resize: vertical; }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Countdown</title>
+
+<style>
+body{
+  margin:0;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:#071b2a;
+  font-family:system-ui;
+  color:#ffe66d;
+}
+
+.wrap{text-align:center;width:100%}
+
+.countdown{
+  display:flex;
+  gap:16px;
+  justify-content:center;
+}
+
+.unit{display:flex;flex-direction:column;align-items:center}
+.unit.hide{display:none}
+
+.box{
+  width:78px;
+  height:64px;
+  background:#fff;
+  color:#111;
+  border-radius:12px;
+  font-size:34px;
+  font-weight:700;
+  position:relative;
+  overflow:hidden;
+}
+
+.num{
+  position:absolute;
+  inset:0;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.num.current{transform:translateY(0);opacity:1}
+.num.next{transform:translateY(-100%);opacity:0}
+
+.box.slide .num.current{
+  transform:translateY(100%);
+  opacity:0;
+  transition:.32s ease;
+}
+
+.box.slide .num.next{
+  transform:translateY(0);
+  opacity:1;
+  transition:.32s ease;
+}
+
+.label{margin-top:6px;font-size:12px;color:#fff}
+.info{margin-top:18px;font-size:14px;color:#fff}
+</style>
 </head>
-<body class="bg-slate-50 text-slate-800">
-  <div class="min-h-screen flex items-center justify-center p-6">
-    <div class="w-full max-w-4xl">
-      <header class="bg-gradient-to-r from-sky-600 to-cyan-600 text-white rounded-xl shadow-md p-6 mb-6">
-        <h1 class="text-2xl font-semibold flex items-center gap-3">
-          <span class="text-3xl">🩺</span> BÀI THI PHỎNG VẤN TUYỂN DỤNG VỊ TRÍ H.R
-        </h1>
-        <p class="mt-1 text-sm opacity-90">Điền thông tin, trả lời câu hỏi. Hệ thống sẽ tự động chấm điểm.</p>
-      </header>
 
-      <main class="bg-white rounded-xl shadow-lg p-6">
-        <!-- Candidate Info -->
-        <section class="mb-6">
-          <h2 class="text-lg font-medium text-sky-600 mb-3">Thông tin ứng viên</h2>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div>
-              <label class="block text-sm font-medium">Họ tên IC</label>
-              <input id="name" type="text" class="mt-1 w-full rounded-md border p-2"/>
-            </div>
-            <div>
-              <label class="block text-sm font-medium">Tuổi IC</label>
-              <input id="age" type="number" min="10" class="mt-1 w-full rounded-md border p-2"/>
-            </div>
-            <div>
-              <label class="block text-sm font-medium">Discord ID</label>
-              <input id="discord" type="text" class="mt-1 w-full rounded-md border p-2"/>
-            </div>
-          </div>
-        </section>
+<body>
+<div class="wrap">
+<h1>COUNTDOWN</h1>
 
-        <!-- Quiz -->
-        <section class="mb-6">
-          <h2 class="text-lg font-medium text-sky-600 mb-3">Phần 1: Trắc nghiệm (25 câu, tối đa 15 điểm)</h2>
-          <div id="quiz" class="space-y-4"></div>
-        </section>
+<div class="countdown">
+  <div class="unit" id="ud"><div class="box" id="d"></div><div class="label">NGÀY</div></div>
+  <div class="unit" id="uh"><div class="box" id="h"></div><div class="label">GIỜ</div></div>
+  <div class="unit" id="um"><div class="box" id="m"></div><div class="label">PHÚT</div></div>
+  <div class="unit" id="us"><div class="box" id="s"></div><div class="label">GIÂY</div></div>
+</div>
 
-        <!-- Scenarios -->
-        <section class="mb-6">
-          <h2 class="text-lg font-medium text-sky-600 mb-3">Phần 2: Tình huống tự luận (5 câu, tối đa 15 điểm)</h2>
-          <div id="scenarios" class="space-y-4"></div>
-        </section>
+<div class="info" id="info">Chạm màn hình để bật âm thanh</div>
+</div>
 
-        <!-- Actions -->
-        <div class="flex items-center gap-3">
-          <button onclick="submitExam()" class="px-6 py-2 bg-sky-600 hover:bg-sky-700 text-white rounded-md font-semibold shadow">Nộp bài</button>
-          <button onclick="resetForm()" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-md">Đặt lại</button>
-        </div>
+<script>
+/* ===== CONFIG ===== */
+const TARGET = new Date(2026,0,4,12,57,0).getTime()
+const TICK_SOUND  = "https://files.catbox.moe/o0fdwn.mp3"
+const FINAL_SOUND = "https://files.catbox.moe/8up1bl.mp3"
+/* ================= */
 
-        <!-- Result -->
-        <div id="result" class="mt-6"></div>
-      </main>
-    </div>
-  </div>
+let lastRemain = null
+let soundOK = false
 
-  <script>
-    /* ===== Trắc nghiệm ===== */
-    const questions = [
-      {q:"FearRP nghĩa là gì?", options:["Không được làm liều khi bị đe dọa mạng sống","Không sợ ai trong RP","Được phép chống lại dù nguy hiểm"], correct:0},
-      {q:"NLR (New Life Rule) là:", options:["Sau khi chết quên toàn bộ tình huống trước đó","Nhớ lại mọi thứ sau khi chết","Được hồi sinh và tiếp tục đánh nhau"], correct:0},
-      {q:"RDM là hành vi nào?", options:["Giết người không lý do","Giết người trong tự vệ","Giết theo kịch bản"], correct:0},
-      {q:"VDM nghĩa là gì?", options:["Dùng xe cán người không RP","Đua xe hợp pháp","Đỗ xe sai chỗ"], correct:0},
-      {q:"Meta Gaming là gì?", options:["Dùng OOC info vào IC","Dùng IC info vào OOC","Nói chuyện trong Discord"], correct:0},
-      {q:"Power Gaming là:", options:["Làm điều phi logic, ép người khác không có quyền lựa chọn","Đóng vai nhân vật hợp lý","RP tình huống đúng luật"], correct:0},
-      {q:"Bug Abuse là:", options:["Lợi dụng lỗi game để có lợi","Báo lỗi cho admin","Không sử dụng bug"], correct:0},
-      {q:"Combat Logging là:", options:["Thoát game khi đang RP combat","RP combat hợp lý","AFK trong game"], correct:0},
-      {q:"Mix OOC/IC là gì?", options:["Nói chuyện OOC trong IC hoặc ngược lại","Giữ IC tách biệt OOC","Không dùng voice chat"], correct:0},
-      {q:"Trolling trong RP là:", options:["Gây rối, phá RP người khác","Giúp đỡ newbie","RP nghiêm túc"], correct:0},
-      {q:"Cop Baiting là:", options:["Cố tình chọc cảnh sát để bị bắt","RP phạm tội hợp lý","Tuân thủ luật IC"], correct:0},
-      {q:"Fail RP là:", options:["Diễn không hợp logic, không đúng luật RP","RP đúng luật","Tuân thủ kịch bản"], correct:0},
-      {q:"IC là gì?", options:["In Character - hành động trong vai","Out of Character","In Combat"], correct:0},
-      {q:"OOC là gì?", options:["Out of Character - ngoài vai","In Character","Off Of Combat"], correct:0},
-      {q:"Metagaming qua Discord là:", options:["Dùng voice Discord báo info IC","Nói chuyện bình thường","Không RP"], correct:0},
-      {q:"Nhiệm vụ chính của Medic là gì?", options:["Cứu chữa người chơi, hỗ trợ y tế","Tham gia bắn nhau","Đi bắt tội phạm"], correct:0},
-      {q:"Medic có được phép mang vũ khí không?", options:["Không được mang vũ khí","Được mang súng ngắn","Được mang tất cả"], correct:0},
-      {q:"Khi gặp tai nạn giao thông, Medic cần làm gì đầu tiên?", options:["Đảm bảo an toàn hiện trường","Bắt thủ phạm","Bỏ qua"], correct:0},
-      {q:"Medic có được ưu tiên vượt đèn đỏ?", options:["Có, khi đang làm nhiệm vụ khẩn cấp","Không bao giờ","Chỉ khi có police hộ tống"], correct:0},
-      {q:"Trách nhiệm của Medic khi revive là gì?", options:["Hỗ trợ bệnh nhân RP hồi tỉnh","Bỏ mặc sau revive","Lấy tiền rồi bỏ đi"], correct:0},
-      {q:"Khi bệnh nhân tử vong RP, Medic phải:", options:["Tuân thủ NLR, coi như chết hẳn","Revive ngay lập tức","Gọi admin"], correct:0},
-      {q:"Khi gặp vụ việc phạm pháp, Medic:", options:["Chỉ hỗ trợ y tế, không can thiệp pháp luật","Bắt giữ tội phạm","RP bắn trả"], correct:0},
-      {q:"Giao tiếp trong lúc cứu chữa phải:", options:["Lịch sự, chuyên nghiệp","Chọc ghẹo","Bỏ qua bệnh nhân"], correct:0},
-      {q:"Khi nhiều người bị thương, Medic ưu tiên:", options:["Người bị thương nặng nhất","Người quen","Ai trả tiền trước"], correct:0},
-      {q:"Medic có được tham gia Crime RP không?", options:["Không được","Được, nếu không ai biết","Luôn được"], correct:0},
-    ];
+const tickAudio  = new Audio(TICK_SOUND)
+const finalAudio = new Audio(FINAL_SOUND)
+tickAudio.volume = 0.6
+finalAudio.volume = 1
 
-    /* ===== Tự luận ===== */
-    const scenarios = [
-      {q:"Bạn là Medic, gặp tai nạn có 3 người bất tỉnh cùng lúc, bạn xử lý thế nào?", keywords:["ưu tiên","nặng","gọi hỗ trợ","chia ca"], max:2.25},
-      {q:"Nếu bệnh nhân không hợp tác RP khi bạn cứu chữa, bạn làm gì?", keywords:["bình tĩnh","giải thích","báo admin","không cãi"], max:2.25},
-      {q:"Bạn thấy đồng nghiệp Medic vi phạm FailRP, bạn xử lý ra sao?", keywords:["báo cáo","nhắc nhở","hr","quản lý"], max:2.25},
-      {q:"Trong trường hợp bị tội phạm khống chế khi đi làm nhiệm vụ, bạn nên làm gì?", keywords:["fear","tuân theo","không chống cự","giữ an toàn"], max:2.25},
-      {q:"Bạn đang phỏng vấn một ứng viên Medic nhưng họ không nắm luật RP, bạn xử lý thế nào?", keywords:["cho thử lại","loại","đào tạo lại","hr"], max:6},
-    ];
+window.addEventListener("pointerdown",()=>{
+  if(soundOK) return
+  soundOK = true
+  tickAudio.play().then(()=>tickAudio.pause())
+  finalAudio.play().then(()=>finalAudio.pause())
+  info.textContent="Âm thanh đã bật"
+},{once:true})
 
-    /* ===== Render ===== */
-    function renderQuiz(){
-      const quizDiv=document.getElementById('quiz');
-      quizDiv.innerHTML="";
-      questions.forEach((item,i)=>{
-        const div=document.createElement('div');
-        div.className='p-4 border rounded-lg bg-slate-50';
-        div.innerHTML=`
-          <p class="font-medium mb-2">Câu ${i+1}: ${item.q}</p>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-            ${item.options.map((opt,j)=>`
-              <label class="radio-label flex items-center gap-2 p-2 border rounded-md">
-                <input type="radio" name="q${i}" value="${j}"> ${String.fromCharCode(65+j)}. ${opt}
-              </label>
-            `).join("")}
-          </div>`;
-        quizDiv.appendChild(div);
-      });
+function play(a){
+  if(!soundOK) return
+  a.currentTime = 0
+  a.play().catch(()=>{})
+}
+
+function init(id){
+  const el=document.getElementById(id)
+  const n=document.createElement("div")
+  n.className="num current"
+  n.textContent="00"
+  el.appendChild(n)
+}
+["d","h","m","s"].forEach(init)
+
+function update(el,val){
+  const cur=el.querySelector(".current")
+  if(cur && cur.textContent===val) return
+
+  const next=document.createElement("div")
+  next.className="num next"
+  next.textContent=val
+  el.appendChild(next)
+
+  requestAnimationFrame(()=>el.classList.add("slide"))
+
+  setTimeout(()=>{
+    el.innerHTML=""
+    const n=document.createElement("div")
+    n.className="num current"
+    n.textContent=val
+    el.appendChild(n)
+    el.classList.remove("slide")
+  },350)
+}
+
+const dEl=d, hEl=h, mEl=m, sEl=s
+const ud=document.getElementById("ud")
+const uh=document.getElementById("uh")
+const um=document.getElementById("um")
+
+function loop(){
+  const now = Date.now()
+  const remain = Math.max(0, Math.floor((TARGET-now)/1000))
+
+  if(remain !== lastRemain){
+    lastRemain = remain
+
+    const d = Math.floor(remain/86400)
+    const h = Math.floor(remain%86400/3600)
+    const m = Math.floor(remain%3600/60)
+    const s = remain%60
+
+    update(dEl,String(d).padStart(2,"0"))
+    update(hEl,String(h).padStart(2,"0"))
+    update(mEl,String(m).padStart(2,"0"))
+    update(sEl,String(s).padStart(2,"0"))
+
+    if(d<=0) ud.classList.add("hide")
+    if(d<=0&&h<=0) uh.classList.add("hide")
+    if(d<=0&&h<=0&&m<=0) um.classList.add("hide")
+
+    if(remain<=10 && remain>=1){
+      play(finalAudio)
+      navigator.vibrate?.(remain===1?[400,150,400]:120)
+    }else{
+      play(tickAudio)
     }
 
-    function renderScenarios(){
-      const sDiv=document.getElementById('scenarios');
-      sDiv.innerHTML="";
-      scenarios.forEach((s,i)=>{
-        const div=document.createElement('div');
-        div.className='p-4 border rounded-lg bg-slate-50';
-        div.innerHTML=`
-          <p class="font-medium mb-2">Tình huống ${i+1}: ${s.q}</p>
-          <textarea name="s${i}" rows="3" class="w-full p-2 border rounded-md" placeholder="Nhập câu trả lời..."></textarea>`;
-        sDiv.appendChild(div);
-      });
+    if(remain===0){
+      setTimeout(()=>location.href="fireworks.html",1200)
     }
+  }
+  requestAnimationFrame(loop)
+}
 
-    renderQuiz();
-    renderScenarios();
-
-    /* ===== Nộp bài ===== */
-    function submitExam(){
-      // Trắc nghiệm
-      let scoreQuiz=0;
-      questions.forEach((q,i)=>{
-        const ans=document.querySelector(`input[name=q${i}]:checked`);
-        if(ans && parseInt(ans.value)===q.correct) scoreQuiz+=0.6;
-      });
-
-      // Tự luận
-      let scoreScenario=0;
-      let scenarioDetails="";
-      scenarios.forEach((s,i)=>{
-        const ans=document.querySelector(`textarea[name=s${i}]`).value.toLowerCase();
-        let point=0;
-        s.keywords.forEach(k=>{
-          if(ans.includes(k)) point+=s.max/s.keywords.length;
-        });
-        if(point>s.max) point=s.max;
-        scoreScenario+=point;
-        scenarioDetails+=`
-          <div class="mb-2">
-            <p class="font-medium">Tình huống ${i+1}: ${s.q}</p>
-            <p class="text-slate-600">Trả lời: ${ans || "(Chưa trả lời)"}</p>
-            <p class="text-sky-700 font-medium">Điểm: ${point.toFixed(2)}/${s.max}</p>
-          </div>`;
-      });
-
-      const total=scoreQuiz+scoreScenario;
-      const name=document.getElementById("name").value||"Chưa nhập";
-      const age=document.getElementById("age").value||"Chưa nhập";
-      const discord=document.getElementById("discord").value||"Chưa nhập";
-
-      document.getElementById("result").innerHTML=`
-        <div class="p-4 border rounded-lg bg-sky-50">
-          <p class="font-semibold mb-2">Ứng viên: ${name} | Tuổi IC: ${age} | Discord: ${discord}</p>
-          <p class="text-sky-900 font-medium mb-2">Điểm trắc nghiệm: ${scoreQuiz.toFixed(2)}/15</p>
-          <p class="text-sky-900 font-medium mb-2">Điểm tình huống: ${scoreScenario.toFixed(2)}/15</p>
-          <p class="text-sky-900 font-bold text-lg">Tổng điểm: ${total.toFixed(2)}/30</p>
-          <h3 class="font-semibold mt-3 mb-1">Chi tiết phần tự luận:</h3>
-          ${scenarioDetails}
-        </div>`;
-    }
-
-    /* ===== Reset ===== */
-    function resetForm(){
-      document.getElementById("name").value="";
-      document.getElementById("age").value="";
-      document.getElementById("discord").value="";
-      renderQuiz();
-      renderScenarios();
-      document.getElementById("result").innerHTML="";
-    }
-  </script>
+loop()
+</script>
 </body>
-  </html>
+</html>
