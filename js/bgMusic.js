@@ -1,5 +1,5 @@
 (() => {
-  const music = new Audio('https://files.catbox.moe/42piuv.mp3'); // 🔴 đổi link catbox tại đây
+  const music = new Audio('./tet.mp3'); // 🔴 đổi link catbox tại đây
   music.loop = true;
   music.volume = 0.5;
 
