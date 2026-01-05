@@ -41,10 +41,9 @@ body{
   display:flex;
   justify-content:center;
   align-items:center;
-  transition: transform 0.3s ease;
 }
 
-/* Box nhún nhẹ khi số thay đổi */
+/* Box nhún nhẹ */
 .box.animate{
   animation: boxJump 0.3s ease;
 }
@@ -86,35 +85,38 @@ body{
 
 <body>
 <div class="wrap">
-<h1>COUNTDOWN XUÂN BÍNH NGỌ 2026</h1>
+  <h1>COUNTDOWN XUÂN BÍNH NGỌ 2026</h1>
 
-<div class="countdown">
-  <div class="unit" id="ud"><div class="box" id="d"></div><div class="label">NGÀY</div></div>
-  <div class="unit" id="uh"><div class="box" id="h"></div><div class="label">GIỜ</div></div>
-  <div class="unit" id="um"><div class="box" id="m"></div><div class="label">PHÚT</div></div>
-  <div class="unit" id="us"><div class="box" id="s"></div><div class="label">GIÂY</div></div>
-</div>
+  <div class="countdown">
+    <div class="unit" id="ud"><div class="box" id="d"></div><div class="label">NGÀY</div></div>
+    <div class="unit" id="uh"><div class="box" id="h"></div><div class="label">GIỜ</div></div>
+    <div class="unit" id="um"><div class="box" id="m"></div><div class="label">PHÚT</div></div>
+    <div class="unit" id="us"><div class="box" id="s"></div><div class="label">GIÂY</div></div>
+  </div>
 
-<div class="info" id="info">Chạm màn hình để bật âm thanh</div>
+  <div class="info" id="info">Chạm màn hình để bật âm thanh</div>
 </div>
 
 <script>
 /* ===== CONFIG ===== */
-const TARGET = new Date(2026,1,17,0,0,0).getTime();
+const TARGET = new Date(2026,1,17,0,0,0).getTime(); // 17/02/2026
 const TICK1  = "https://files.catbox.moe/o0fdwn.mp3";
 const TICK2  = "https://files.catbox.moe/o0fdwn.mp3";
+const REDIRECT_URL = "fireworks.html";
 /* ================= */
 
 let lastRemain = null;
 let soundOK = false;
 let tickToggle = false;
+let redirected = false;
 
+/* ===== AUDIO ===== */
 const tick1Audio = new Audio(TICK1);
 const tick2Audio = new Audio(TICK2);
 tick1Audio.volume = 0.9;
 tick2Audio.volume = 0.9;
 
-// Bật âm thanh khi chạm
+// bật âm thanh khi chạm
 window.addEventListener("pointerdown",()=>{
   if(soundOK) return;
   soundOK = true;
@@ -123,22 +125,22 @@ window.addEventListener("pointerdown",()=>{
   info.textContent="Âm thanh đã bật";
 },{once:true});
 
-// tick xen kẽ 2 file
+// tick xen kẽ
 function playTick(){
   if(!soundOK) return;
   tickToggle = !tickToggle;
   if(tickToggle){
     tick1Audio.currentTime=0;
     tick1Audio.play().catch(()=>{});
-  } else {
+  }else{
     setTimeout(()=>{
       tick2Audio.currentTime=0;
       tick2Audio.play().catch(()=>{});
-    },400); // tick 2 kêu sau 0.4s
+    },400);
   }
 }
 
-// khởi tạo box
+/* ===== INIT BOX ===== */
 function init(id){
   const el=document.getElementById(id);
   const n=document.createElement("div");
@@ -148,7 +150,7 @@ function init(id){
 }
 ["d","h","m","s"].forEach(init);
 
-// update số và animate box
+/* ===== UPDATE NUMBER ===== */
 function update(el,val){
   const cur=el.querySelector(".current");
   if(cur && cur.textContent===val) return;
@@ -158,8 +160,7 @@ function update(el,val){
   next.textContent=val;
   el.appendChild(next);
 
-  // animate box riêng từng mốc
-  const box = el.closest(".unit").querySelector(".box");
+  const box = el.closest(".box") || el;
   box.classList.add("animate");
   requestAnimationFrame(()=>el.classList.add("slide"));
 
@@ -179,9 +180,24 @@ const ud=document.getElementById("ud");
 const uh=document.getElementById("uh");
 const um=document.getElementById("um");
 
+/* ===== LOOP ===== */
 function loop(){
   const now = Date.now();
   const remain = Math.max(0, Math.floor((TARGET-now)/1000));
+
+  // 🎆 HẾT GIỜ → CHUYỂN FIREWORKS
+  if(remain === 0 && !redirected){
+    redirected = true;
+
+    tick1Audio.pause();
+    tick2Audio.pause();
+
+    setTimeout(()=>{
+      window.location.href = REDIRECT_URL;
+    },500);
+
+    return;
+  }
 
   if(remain !== lastRemain){
     lastRemain = remain;
@@ -201,8 +217,8 @@ function loop(){
     if(d<=0&&h<=0&&m<=0) um.classList.add("hide");
 
     playTick();
-
   }
+
   requestAnimationFrame(loop);
 }
 
