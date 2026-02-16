@@ -3,227 +3,254 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Ultimate Countdown</title>
+<title>VIP Countdown 2026</title>
 
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
+*{box-sizing:border-box}
+
 body{
-  background:#050510;
+  margin:0;
   height:100vh;
+  overflow:hidden;
   display:flex;
   justify-content:center;
   align-items:center;
   font-family:system-ui;
-  overflow:hidden;
+  background:#000;
   color:#fff;
 }
 
-/* ===== BACKGROUND GOLD GLOW ===== */
-body::before{
-  content:"";
+/* Canvas nền */
+canvas{
   position:fixed;
   inset:0;
-  background:radial-gradient(circle at center,
-    rgba(255,215,0,.15),
-    transparent 70%);
-  animation:bgPulse 4s infinite alternate;
-}
-@keyframes bgPulse{
-  from{opacity:.3}
-  to{opacity:.7}
+  z-index:-1;
 }
 
-/* ===== WRAP ===== */
-.wrap{
-  text-align:center;
-  z-index:2;
-}
-
-.title{
-  font-size:28px;
-  letter-spacing:6px;
-  margin-bottom:40px;
-  font-weight:800;
-  background:linear-gradient(#fff6c7,#ffd700,#b8860b);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  text-shadow:0 0 15px rgba(255,215,0,.7);
-}
-
-/* ===== CLOCK ===== */
-.clock{
-  display:flex;
-  gap:18px;
-  justify-content:center;
-  perspective:1000px;
-}
-
-/* ===== SPLIT FLAP BOX ===== */
-.flap{
-  position:relative;
-  width:110px;
-  height:120px;
-  perspective:1000px;
-}
-
-.card{
-  position:absolute;
-  width:100%;
-  height:100%;
-  background:linear-gradient(#111,#000);
-  border-radius:16px;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  font-size:60px;
-  font-weight:900;
-  color:#ffd700;
-  box-shadow:
-    0 15px 35px rgba(0,0,0,.7),
-    inset 0 0 25px rgba(255,215,0,.15);
-  text-shadow:
-    0 4px 0 #b8860b,
-    0 8px 15px rgba(0,0,0,.6);
-  backface-visibility:hidden;
-  transition:transform .6s cubic-bezier(.22,1,.36,1);
-}
-
-.top{
-  clip-path:inset(0 0 50% 0);
-  border-bottom:1px solid #333;
-}
-
-.bottom{
-  clip-path:inset(50% 0 0 0);
-}
-
-/* ===== FLIP ANIMATION ===== */
-.flip .top{
-  transform:rotateX(-90deg);
-}
-.flip .bottom{
-  transform:rotateX(0deg);
-}
-
-/* ===== PARTICLES ===== */
-.particle{
-  position:absolute;
-  width:6px;
-  height:6px;
-  background:gold;
-  border-radius:50%;
-  pointer-events:none;
-  animation:particle 1s forwards;
-}
-@keyframes particle{
-  to{
-    transform:translate(var(--x),var(--y)) scale(0);
-    opacity:0;
-  }
-}
-
-/* ===== FADE OUT ===== */
+/* Fade out */
 .fade-out{
   animation:fadeOut 1s forwards;
 }
 @keyframes fadeOut{
-  to{opacity:0}
+  to{opacity:0;transform:scale(1.1)}
+}
+
+/* Wrap */
+.wrap{
+  text-align:center;
+  transition:.4s;
+}
+
+.wrap.final{
+  animation:zoomPulse .5s infinite alternate;
+}
+
+@keyframes zoomPulse{
+  from{transform:scale(1)}
+  to{transform:scale(1.05)}
+}
+
+/* TITLE */
+.title{
+  font-size:28px;
+  letter-spacing:6px;
+  margin-bottom:30px;
+  font-weight:800;
+
+  background:linear-gradient(180deg,#fff6c7,#ffd700,#b8860b);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+
+  text-shadow:
+    0 0 10px rgba(255,215,0,.8),
+    0 0 25px rgba(255,215,0,.4);
+}
+
+/* Clock */
+.clock{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+/* Box */
+.box{
+  width:90px;
+  height:80px;
+  border-radius:18px;
+  backdrop-filter:blur(12px);
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.15);
+  box-shadow:
+    0 6px 20px rgba(0,0,0,0.6),
+    inset 0 0 15px rgba(255,215,0,0.2);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:42px;
+  font-weight:800;
+}
+
+/* Gold text */
+.gold{
+  background:linear-gradient(180deg,#fff6c7,#ffd700,#b8860b);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  text-shadow:0 0 8px rgba(255,215,0,.6);
+}
+
+/* Colon */
+.colon{
+  font-size:40px;
+  color:#ffd700;
+  animation:blink 1.2s infinite;
+}
+@keyframes blink{
+  0%,50%,100%{opacity:1}
+  25%,75%{opacity:.3}
 }
 </style>
 </head>
+
 <body>
 
-<div class="wrap">
-  <div class="title">COUNTDOWN</div>
+<canvas id="bg"></canvas>
+
+<div class="wrap" id="wrap">
+  <div class="title">COUNTDOWN 2026</div>
 
   <div class="clock">
-    <div class="flap" id="h"></div>
-    <div class="flap" id="m"></div>
-    <div class="flap" id="s"></div>
+    <div class="box gold" id="h">00</div>
+    <div class="colon">:</div>
+    <div class="box gold" id="m">00</div>
+    <div class="colon">:</div>
+    <div class="box gold" id="s">00</div>
   </div>
 </div>
 
 <script>
+/* ===== CONFIG ===== */
 const TARGET = new Date(2026,1,17,0,0,0).getTime();
+const TICK1  = "https://files.catbox.moe/o0fdwn.mp3";
+const TICK2  = "https://files.catbox.moe/o0fdwn.mp3";
 const REDIRECT_URL = "./fireworks.html";
 
-/* ===== CREATE FLAP ===== */
-function createFlap(el){
-  el.innerHTML=`
-    <div class="card top">00</div>
-    <div class="card bottom">00</div>
-  `;
-}
-createFlap(h);
-createFlap(m);
-createFlap(s);
+/* ===== ELEMENT ===== */
+const wrap = document.getElementById("wrap");
+const hEl = document.getElementById("h");
+const mEl = document.getElementById("m");
+const sEl = document.getElementById("s");
 
-/* ===== UPDATE FLAP ===== */
-function updateFlap(el,newVal){
-  const top=el.querySelector(".top");
-  const bottom=el.querySelector(".bottom");
+/* ===== AUDIO ===== */
+const tick1Audio = new Audio(TICK1);
+const tick2Audio = new Audio(TICK2);
+tick1Audio.volume = 0.9;
+tick2Audio.volume = 0.9;
 
-  if(top.textContent===newVal) return;
+let soundEnabled = false;
+let tickToggle = false;
 
-  createParticles(el);
+window.addEventListener("pointerdown",()=>{
+  if(soundEnabled) return;
+  soundEnabled = true;
 
-  el.classList.add("flip");
+  tick1Audio.play().then(()=>tick1Audio.pause()).catch(()=>{});
+  tick2Audio.play().then(()=>tick2Audio.pause()).catch(()=>{});
+},{once:true});
 
-  setTimeout(()=>{
-    top.textContent=newVal;
-    bottom.textContent=newVal;
-    el.classList.remove("flip");
-  },300);
-}
+function playTick(){
+  if(!soundEnabled) return;
 
-/* ===== PARTICLE EFFECT ===== */
-function createParticles(el){
-  const rect=el.getBoundingClientRect();
-  for(let i=0;i<20;i++){
-    const p=document.createElement("div");
-    p.className="particle";
-    p.style.left=rect.width/2+"px";
-    p.style.top=rect.height/2+"px";
-    p.style.setProperty("--x",(Math.random()*200-100)+"px");
-    p.style.setProperty("--y",(Math.random()*-200)+"px");
-    el.appendChild(p);
-    setTimeout(()=>p.remove(),1000);
-  }
+  tickToggle = !tickToggle;
+
+  const audio = tickToggle ? tick1Audio : tick2Audio;
+  audio.currentTime = 0;
+  audio.play().catch(()=>{});
 }
 
 /* ===== LOOP ===== */
-let last=-1;
-let finished=false;
+let last = -1;
+let redirected = false;
 
 function loop(){
-  const now=Date.now();
-  const remain=Math.max(0,Math.floor((TARGET-now)/1000));
+  const now = Date.now();
+  const remain = Math.max(0, Math.floor((TARGET-now)/1000));
 
-  if(remain!==last){
-    last=remain;
+  if(remain !== last){
+    last = remain;
 
-    const hh=String(Math.floor(remain%86400/3600)).padStart(2,"0");
-    const mm=String(Math.floor(remain%3600/60)).padStart(2,"0");
-    const ss=String(remain%60).padStart(2,"0");
+    const h = Math.floor(remain%86400/3600);
+    const m = Math.floor(remain%3600/60);
+    const s = remain%60;
 
-    updateFlap(h,hh);
-    updateFlap(m,mm);
-    updateFlap(s,ss);
+    hEl.textContent = String(h).padStart(2,"0");
+    mEl.textContent = String(m).padStart(2,"0");
+    sEl.textContent = String(s).padStart(2,"0");
 
-    if(remain===0 && !finished){
-      finished=true;
+    if(remain <= 10 && remain > 0){
+      wrap.classList.add("final");
+      playTick();
+      setTimeout(playTick,300); // nhanh hơn 10s cuối
+    } else {
+      wrap.classList.remove("final");
+      playTick();
+    }
+
+    /* HẾT GIỜ */
+    if(remain === 0 && !redirected){
+      redirected = true;
+
+      tick1Audio.pause();
+      tick2Audio.pause();
+
+      document.body.classList.add("fade-out");
+
       setTimeout(()=>{
-        document.body.classList.add("fade-out");
-        setTimeout(()=>{
-          window.location.href=REDIRECT_URL;
-        },1000);
-      },2000);
+        window.location.href = REDIRECT_URL;
+      },1000);
     }
   }
 
   requestAnimationFrame(loop);
 }
 loop();
+
+/* ===== BACKGROUND ===== */
+const canvas = document.getElementById("bg");
+const ctx = canvas.getContext("2d");
+
+function resize(){
+  canvas.width = innerWidth;
+  canvas.height = innerHeight;
+}
+resize();
+addEventListener("resize",resize);
+
+let angle=0;
+
+function draw(){
+  ctx.fillStyle="#050b1a";
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+
+  ctx.strokeStyle="rgba(255,215,0,0.08)";
+  ctx.lineWidth=2;
+
+  for(let i=0;i<6;i++){
+    ctx.beginPath();
+    ctx.arc(
+      canvas.width/2,
+      canvas.height/2,
+      150 + i*60,
+      angle,
+      angle + Math.PI*1.2
+    );
+    ctx.stroke();
+  }
+
+  angle+=0.002;
+  requestAnimationFrame(draw);
+}
+draw();
 </script>
 
 </body>
