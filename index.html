@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Ultra VIP Countdown 2026</title>
+<title>Countdown 2026</title>
 
 <style>
 *{box-sizing:border-box}
@@ -18,24 +18,32 @@ body{
   font-family:system-ui;
   background:#000;
   color:#fff;
-  perspective:1200px;
 }
 
-/* ===== CANVAS BG ===== */
+/* Canvas nền */
 canvas{
   position:fixed;
   inset:0;
   z-index:-1;
 }
 
-/* ===== WRAP ===== */
-.wrap{
-  text-align:center;
-  transition:transform .4s ease;
+/* Fade khi chuyển */
+.fade-out{
+  animation:fadeOut 1s forwards;
 }
 
-.wrap.zoom{
-  animation:zoomPulse .6s infinite alternate;
+@keyframes fadeOut{
+  to{opacity:0;transform:scale(1.1)}
+}
+
+/* Wrap */
+.wrap{
+  text-align:center;
+  transition:.4s;
+}
+
+.wrap.final{
+  animation:zoomPulse .5s infinite alternate;
 }
 
 @keyframes zoomPulse{
@@ -43,80 +51,42 @@ canvas{
   to{transform:scale(1.05)}
 }
 
-.wrap.shake{
-  animation:shake .25s infinite;
-}
-
-@keyframes shake{
-  0%{transform:translateX(0)}
-  25%{transform:translateX(-4px)}
-  50%{transform:translateX(4px)}
-  75%{transform:translateX(-2px)}
-  100%{transform:translateX(0)}
-}
-
-h1{
-  margin-bottom:30px;
-  letter-spacing:3px;
-  color:#ffd700;
-}
-
-/* ===== CLOCK ===== */
+/* Clock */
 .clock{
   display:flex;
   align-items:center;
-  gap:18px;
+  gap:14px;
 }
 
-/* ===== GLASS BOX ===== */
-.flip-box{
-  width:110px;
-  height:100px;
-  position:relative;
-  transform-style:preserve-3d;
-}
-
-/* Glassmorphism */
-.glass{
-  width:100%;
-  height:100%;
-  border-radius:22px;
-  backdrop-filter:blur(18px);
-  background:rgba(255,255,255,0.08);
-  border:1px solid rgba(255,255,255,0.2);
+/* Box */
+.box{
+  width:90px;
+  height:80px;
+  border-radius:18px;
+  backdrop-filter:blur(12px);
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.15);
   box-shadow:
-    0 10px 40px rgba(0,0,0,0.6),
-    inset 0 0 20px rgba(255,215,0,0.2);
+    0 6px 20px rgba(0,0,0,0.6),
+    inset 0 0 15px rgba(255,215,0,0.2);
   display:flex;
   justify-content:center;
   align-items:center;
-  position:absolute;
-  backface-visibility:hidden;
-  font-size:52px;
+  font-size:42px;
   font-weight:800;
 }
 
-/* Gold text */
+/* Gold */
 .gold{
-  background:linear-gradient(180deg,#fff8dc,#ffd700,#b8860b);
+  background:linear-gradient(180deg,#fff6c7,#ffd700,#b8860b);
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
   text-shadow:0 0 8px rgba(255,215,0,.6);
 }
 
-/* Flip animation */
-.flip-box.flip{
-  animation:flip3d .8s cubic-bezier(.22,1,.36,1);
-}
-
-@keyframes flip3d{
-  0%{transform:rotateX(0deg)}
-  100%{transform:rotateX(-180deg)}
-}
-
 /* Colon */
 .colon{
-  font-size:60px;
+  font-size:40px;
   color:#ffd700;
   animation:blink 1.2s infinite;
 }
@@ -133,71 +103,106 @@ h1{
 <canvas id="bg"></canvas>
 
 <div class="wrap" id="wrap">
-  <h1>COUNTDOWN 2026</h1>
   <div class="clock">
-    <div class="flip-box" id="hBox">
-      <div class="glass gold" id="hFront">00</div>
-    </div>
-
+    <div class="box gold" id="h">00</div>
     <div class="colon">:</div>
-
-    <div class="flip-box" id="mBox">
-      <div class="glass gold" id="mFront">00</div>
-    </div>
-
+    <div class="box gold" id="m">00</div>
     <div class="colon">:</div>
-
-    <div class="flip-box" id="sBox">
-      <div class="glass gold" id="sFront">00</div>
-    </div>
+    <div class="box gold" id="s">00</div>
   </div>
 </div>
 
 <script>
 const TARGET = new Date(2026,1,17,0,0,0).getTime();
+const REDIRECT_URL = "./fireworks.html";
+
 const wrap = document.getElementById("wrap");
+const hEl = document.getElementById("h");
+const mEl = document.getElementById("m");
+const sEl = document.getElementById("s");
 
-function updateBox(boxId, frontId, value){
-  const box = document.getElementById(boxId);
-  const front = document.getElementById(frontId);
+let last = -1;
+let redirected = false;
 
-  if(front.textContent === value) return;
+/* ===== AUDIO HỒI HỘP ===== */
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-  box.classList.add("flip");
+function tickSound(speed=1){
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
 
-  setTimeout(()=>{
-    front.textContent = value;
-  },400);
+  osc.type = "sine";
+  osc.frequency.value = 120 * speed;
+  gain.gain.value = 0.08;
 
-  setTimeout(()=>{
-    box.classList.remove("flip");
-  },800);
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+
+  osc.start();
+  osc.stop(audioCtx.currentTime + 0.08);
 }
 
+function boomSound(){
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+
+  osc.type="sawtooth";
+  osc.frequency.setValueAtTime(80,audioCtx.currentTime);
+  gain.gain.setValueAtTime(0.4,audioCtx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+1);
+
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+
+  osc.start();
+  osc.stop(audioCtx.currentTime+1);
+}
+
+window.addEventListener("pointerdown",()=>{
+  audioCtx.resume();
+},{once:true});
+
+/* ===== LOOP ===== */
 function loop(){
   const now = Date.now();
   const remain = Math.max(0, Math.floor((TARGET-now)/1000));
 
-  const h = Math.floor(remain%86400/3600);
-  const m = Math.floor(remain%3600/60);
-  const s = remain%60;
+  if(remain !== last){
+    last = remain;
 
-  updateBox("hBox","hFront",String(h).padStart(2,"0"));
-  updateBox("mBox","mFront",String(m).padStart(2,"0"));
-  updateBox("sBox","sFront",String(s).padStart(2,"0"));
+    const h = Math.floor(remain%86400/3600);
+    const m = Math.floor(remain%3600/60);
+    const s = remain%60;
 
-  /* 10 GIÂY CUỐI */
-  if(remain <= 10 && remain > 0){
-    wrap.classList.add("zoom","shake");
-  }else{
-    wrap.classList.remove("zoom","shake");
+    hEl.textContent = String(h).padStart(2,"0");
+    mEl.textContent = String(m).padStart(2,"0");
+    sEl.textContent = String(s).padStart(2,"0");
+
+    if(remain <= 10 && remain > 0){
+      wrap.classList.add("final");
+      tickSound(2);
+    } else {
+      wrap.classList.remove("final");
+      tickSound(1);
+    }
+
+    /* HẾT GIỜ */
+    if(remain === 0 && !redirected){
+      redirected = true;
+      boomSound();
+      document.body.classList.add("fade-out");
+
+      setTimeout(()=>{
+        window.location.href = REDIRECT_URL;
+      },1000);
+    }
   }
 
   requestAnimationFrame(loop);
 }
 loop();
 
-/* ===== VIP CANVAS BACKGROUND ===== */
+/* ===== BACKGROUND VIP ===== */
 const canvas = document.getElementById("bg");
 const ctx = canvas.getContext("2d");
 
@@ -211,24 +216,22 @@ addEventListener("resize",resize);
 let angle=0;
 
 function draw(){
-  const g=ctx.createRadialGradient(
-    canvas.width/2,canvas.height/2,0,
-    canvas.width/2,canvas.height/2,canvas.width
-  );
-  g.addColorStop(0,"#1a1a2e");
-  g.addColorStop(1,"#000814");
-  ctx.fillStyle=g;
+  ctx.fillStyle="#050b1a";
   ctx.fillRect(0,0,canvas.width,canvas.height);
 
-  ctx.fillStyle="rgba(255,215,0,0.08)";
-  for(let i=0;i<20;i++){
+  ctx.strokeStyle="rgba(255,215,0,0.08)";
+  ctx.lineWidth=2;
+
+  for(let i=0;i<6;i++){
     ctx.beginPath();
     ctx.arc(
-      canvas.width/2 + Math.cos(angle+i)*300,
-      canvas.height/2 + Math.sin(angle+i)*300,
-      80,0,Math.PI*2
+      canvas.width/2,
+      canvas.height/2,
+      150 + i*60,
+      angle,
+      angle + Math.PI*1.2
     );
-    ctx.fill();
+    ctx.stroke();
   }
 
   angle+=0.002;
