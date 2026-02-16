@@ -7,7 +7,6 @@
 
 <style>
 *{box-sizing:border-box}
-
 body{
   margin:0;
   height:100vh;
@@ -19,37 +18,18 @@ body{
   background:#000;
   color:#fff;
 }
+canvas{position:fixed;inset:0;z-index:-1}
 
-canvas{
-  position:fixed;
-  inset:0;
-  z-index:-1;
-}
-
-/* Fade out */
-.fade-out{
-  animation:fadeOut 1s forwards;
-}
-@keyframes fadeOut{
-  to{opacity:0;transform:scale(1.1)}
-}
+/* Fade */
+.fade-out{animation:fadeOut 1s forwards}
+@keyframes fadeOut{to{opacity:0;transform:scale(1.1)}}
 
 /* Wrap */
-.wrap{
-  text-align:center;
-  transition:.4s;
-}
+.wrap{text-align:center;transition:.4s}
+.wrap.final{animation:zoomPulse .5s infinite alternate}
+@keyframes zoomPulse{from{transform:scale(1)}to{transform:scale(1.05)}}
 
-.wrap.final{
-  animation:zoomPulse .5s infinite alternate;
-}
-
-@keyframes zoomPulse{
-  from{transform:scale(1)}
-  to{transform:scale(1.05)}
-}
-
-/* TITLE */
+/* Title */
 .title{
   font-size:28px;
   letter-spacing:6px;
@@ -58,9 +38,7 @@ canvas{
   background:linear-gradient(180deg,#fff6c7,#ffd700,#b8860b);
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
-  text-shadow:
-    0 0 10px rgba(255,215,0,.8),
-    0 0 25px rgba(255,215,0,.4);
+  text-shadow:0 0 10px rgba(255,215,0,.8);
 }
 
 /* Clock */
@@ -71,7 +49,6 @@ canvas{
   transition:.6s;
 }
 
-/* Box */
 .box{
   width:90px;
   height:80px;
@@ -79,9 +56,7 @@ canvas{
   backdrop-filter:blur(12px);
   background:rgba(255,255,255,0.06);
   border:1px solid rgba(255,255,255,0.15);
-  box-shadow:
-    0 6px 20px rgba(0,0,0,0.6),
-    inset 0 0 15px rgba(255,215,0,0.2);
+  box-shadow:0 6px 20px rgba(0,0,0,0.6);
   display:flex;
   justify-content:center;
   align-items:center;
@@ -90,16 +65,14 @@ canvas{
   transition:.5s;
 }
 
-/* Exit animation */
-.box.exit{
-  animation:boxExit .6s forwards;
-}
+/* Exit */
+.box.exit{animation:boxExit .6s forwards}
 @keyframes boxExit{
-  0%{opacity:1;transform:scale(1);filter:blur(0)}
+  0%{opacity:1;transform:scale(1)}
   100%{opacity:0;transform:scale(0.6);filter:blur(8px)}
 }
 
-/* Gold text */
+/* Gold */
 .gold{
   background:linear-gradient(180deg,#fff6c7,#ffd700,#b8860b);
   -webkit-background-clip:text;
@@ -107,32 +80,20 @@ canvas{
   text-shadow:0 0 8px rgba(255,215,0,.6);
 }
 
-/* Colon */
 .colon{
   font-size:40px;
   color:#ffd700;
   animation:blink 1.2s infinite;
-  transition:.4s;
 }
 @keyframes blink{
   0%,50%,100%{opacity:1}
   25%,75%{opacity:.3}
 }
 
-/* Center modes */
-.center{
-  justify-content:center !important;
-}
+.center{justify-content:center!important}
+.only-seconds{transform:scale(2.8);font-size:90px}
 
-.only-seconds{
-  transform:scale(2.8);
-  font-size:90px;
-}
-
-/* Shake 10s cuối */
-.shake{
-  animation:shake .3s infinite;
-}
+.shake{animation:shake .3s infinite}
 @keyframes shake{
   0%{transform:translateX(0)}
   25%{transform:translateX(-3px)}
@@ -148,7 +109,7 @@ canvas{
 <canvas id="bg"></canvas>
 
 <div class="wrap" id="wrap">
-  <div class="title">COUNTDOWN 2026</div>
+  <div class="title">HAPPY NEW YEAR 2027</div>
 
   <div class="clock" id="clock">
     <div class="box gold" id="h">00</div>
@@ -160,46 +121,29 @@ canvas{
 </div>
 
 <script>
-/* CONFIG */
-const TARGET = new Date(2027,0,1,0,0,0).getTime();
-const TICK = "https://files.catbox.moe/o0fdwn.mp3";
+/* ===== TARGET 01/01/2027 00:00:00 (Giờ Việt Nam UTC+7) ===== */
+const vietnamOffset = 7 * 60; // phút
+const targetVN = Date.UTC(2026,11,31,17,0,0); 
+// 00:00 VN = 17:00 UTC ngày 31/12/2026
+
 const REDIRECT_URL = "./fireworks.html";
 
-/* ELEMENT */
-const wrap = document.getElementById("wrap");
-const clock = document.getElementById("clock");
-const hEl = document.getElementById("h");
-const mEl = document.getElementById("m");
-const sEl = document.getElementById("s");
-const c1 = document.getElementById("c1");
-const c2 = document.getElementById("c2");
+const wrap=document.getElementById("wrap");
+const clock=document.getElementById("clock");
+const hEl=document.getElementById("h");
+const mEl=document.getElementById("m");
+const sEl=document.getElementById("s");
+const c1=document.getElementById("c1");
+const c2=document.getElementById("c2");
 
-/* AUDIO */
-const tickAudio = new Audio(TICK);
-tickAudio.volume = 0.9;
-
-let soundEnabled=false;
-window.addEventListener("pointerdown",()=>{
-  if(soundEnabled) return;
-  soundEnabled=true;
-  tickAudio.play().then(()=>tickAudio.pause()).catch(()=>{});
-},{once:true});
-
-function playTick(){
-  if(!soundEnabled) return;
-  tickAudio.currentTime=0;
-  tickAudio.play().catch(()=>{});
-}
-
-/* LOOP */
 let last=-1;
 let hourRemoved=false;
 let minuteRemoved=false;
 let redirected=false;
 
 function loop(){
-  const now=Date.now();
-  const remain=Math.max(0,Math.floor((TARGET-now)/1000));
+  const nowUTC = Date.now();
+  const remain = Math.max(0,Math.floor((targetVN-nowUTC)/1000));
 
   if(remain!==last){
     last=remain;
@@ -212,8 +156,7 @@ function loop(){
     mEl.textContent=String(m).padStart(2,"0");
     sEl.textContent=String(s).padStart(2,"0");
 
-    /* Hết giờ */
-    if(h===0 && !hourRemoved){
+    if(h===0&&!hourRemoved){
       hourRemoved=true;
       hEl.classList.add("exit");
       setTimeout(()=>{
@@ -223,8 +166,7 @@ function loop(){
       },600);
     }
 
-    /* Hết phút */
-    if(h===0 && m===0 && !minuteRemoved){
+    if(h===0&&m===0&&!minuteRemoved){
       minuteRemoved=true;
       mEl.classList.add("exit");
       setTimeout(()=>{
@@ -234,22 +176,16 @@ function loop(){
       },600);
     }
 
-    /* 10s cuối */
-    if(remain<=10 && remain>0){
+    if(remain<=10&&remain>0){
       wrap.classList.add("final");
       sEl.classList.add("shake");
-      playTick();
-      setTimeout(playTick,200);
     }else{
       wrap.classList.remove("final");
       sEl.classList.remove("shake");
-      playTick();
     }
 
-    /* Hết toàn bộ */
-    if(remain===0 && !redirected){
+    if(remain===0&&!redirected){
       redirected=true;
-      tickAudio.pause();
       document.body.classList.add("fade-out");
       setTimeout(()=>{
         window.location.href=REDIRECT_URL;
@@ -261,7 +197,7 @@ function loop(){
 }
 loop();
 
-/* BACKGROUND */
+/* Background */
 const canvas=document.getElementById("bg");
 const ctx=canvas.getContext("2d");
 
@@ -273,26 +209,16 @@ resize();
 addEventListener("resize",resize);
 
 let angle=0;
-
 function draw(){
   ctx.fillStyle="#050b1a";
   ctx.fillRect(0,0,canvas.width,canvas.height);
-
   ctx.strokeStyle="rgba(255,215,0,0.08)";
   ctx.lineWidth=2;
-
   for(let i=0;i<6;i++){
     ctx.beginPath();
-    ctx.arc(
-      canvas.width/2,
-      canvas.height/2,
-      150+i*60,
-      angle,
-      angle+Math.PI*1.2
-    );
+    ctx.arc(canvas.width/2,canvas.height/2,150+i*60,angle,angle+Math.PI*1.2);
     ctx.stroke();
   }
-
   angle+=0.002;
   requestAnimationFrame(draw);
 }
@@ -300,4 +226,4 @@ draw();
 </script>
 
 </body>
-</html>
+  </html>
