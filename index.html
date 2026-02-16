@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Countdown 2026</title>
+<title>VIP Countdown 2026</title>
 
 <style>
 *{box-sizing:border-box}
@@ -27,11 +27,10 @@ canvas{
   z-index:-1;
 }
 
-/* Fade khi chuyển */
+/* Fade out */
 .fade-out{
   animation:fadeOut 1s forwards;
 }
-
 @keyframes fadeOut{
   to{opacity:0;transform:scale(1.1)}
 }
@@ -49,6 +48,22 @@ canvas{
 @keyframes zoomPulse{
   from{transform:scale(1)}
   to{transform:scale(1.05)}
+}
+
+/* TITLE */
+.title{
+  font-size:28px;
+  letter-spacing:6px;
+  margin-bottom:30px;
+  font-weight:800;
+
+  background:linear-gradient(180deg,#fff6c7,#ffd700,#b8860b);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+
+  text-shadow:
+    0 0 10px rgba(255,215,0,.8),
+    0 0 25px rgba(255,215,0,.4);
 }
 
 /* Clock */
@@ -76,7 +91,7 @@ canvas{
   font-weight:800;
 }
 
-/* Gold */
+/* Gold text */
 .gold{
   background:linear-gradient(180deg,#fff6c7,#ffd700,#b8860b);
   -webkit-background-clip:text;
@@ -90,7 +105,6 @@ canvas{
   color:#ffd700;
   animation:blink 1.2s infinite;
 }
-
 @keyframes blink{
   0%,50%,100%{opacity:1}
   25%,75%{opacity:.3}
@@ -103,6 +117,8 @@ canvas{
 <canvas id="bg"></canvas>
 
 <div class="wrap" id="wrap">
+  <div class="title">COUNTDOWN 2026</div>
+
   <div class="clock">
     <div class="box gold" id="h">00</div>
     <div class="colon">:</div>
@@ -113,56 +129,49 @@ canvas{
 </div>
 
 <script>
+/* ===== CONFIG ===== */
 const TARGET = new Date(2026,1,17,0,0,0).getTime();
+const TICK1  = "https://files.catbox.moe/o0fdwn.mp3";
+const TICK2  = "https://files.catbox.moe/o0fdwn.mp3";
 const REDIRECT_URL = "./fireworks.html";
 
+/* ===== ELEMENT ===== */
 const wrap = document.getElementById("wrap");
 const hEl = document.getElementById("h");
 const mEl = document.getElementById("m");
 const sEl = document.getElementById("s");
 
+/* ===== AUDIO ===== */
+const tick1Audio = new Audio(TICK1);
+const tick2Audio = new Audio(TICK2);
+tick1Audio.volume = 0.9;
+tick2Audio.volume = 0.9;
+
+let soundEnabled = false;
+let tickToggle = false;
+
+window.addEventListener("pointerdown",()=>{
+  if(soundEnabled) return;
+  soundEnabled = true;
+
+  tick1Audio.play().then(()=>tick1Audio.pause()).catch(()=>{});
+  tick2Audio.play().then(()=>tick2Audio.pause()).catch(()=>{});
+},{once:true});
+
+function playTick(){
+  if(!soundEnabled) return;
+
+  tickToggle = !tickToggle;
+
+  const audio = tickToggle ? tick1Audio : tick2Audio;
+  audio.currentTime = 0;
+  audio.play().catch(()=>{});
+}
+
+/* ===== LOOP ===== */
 let last = -1;
 let redirected = false;
 
-/* ===== AUDIO HỒI HỘP ===== */
-const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
-function tickSound(speed=1){
-  const osc = audioCtx.createOscillator();
-  const gain = audioCtx.createGain();
-
-  osc.type = "sine";
-  osc.frequency.value = 120 * speed;
-  gain.gain.value = 0.08;
-
-  osc.connect(gain);
-  gain.connect(audioCtx.destination);
-
-  osc.start();
-  osc.stop(audioCtx.currentTime + 0.08);
-}
-
-function boomSound(){
-  const osc = audioCtx.createOscillator();
-  const gain = audioCtx.createGain();
-
-  osc.type="sawtooth";
-  osc.frequency.setValueAtTime(80,audioCtx.currentTime);
-  gain.gain.setValueAtTime(0.4,audioCtx.currentTime);
-  gain.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+1);
-
-  osc.connect(gain);
-  gain.connect(audioCtx.destination);
-
-  osc.start();
-  osc.stop(audioCtx.currentTime+1);
-}
-
-window.addEventListener("pointerdown",()=>{
-  audioCtx.resume();
-},{once:true});
-
-/* ===== LOOP ===== */
 function loop(){
   const now = Date.now();
   const remain = Math.max(0, Math.floor((TARGET-now)/1000));
@@ -180,16 +189,20 @@ function loop(){
 
     if(remain <= 10 && remain > 0){
       wrap.classList.add("final");
-      tickSound(2);
+      playTick();
+      setTimeout(playTick,300); // nhanh hơn 10s cuối
     } else {
       wrap.classList.remove("final");
-      tickSound(1);
+      playTick();
     }
 
     /* HẾT GIỜ */
     if(remain === 0 && !redirected){
       redirected = true;
-      boomSound();
+
+      tick1Audio.pause();
+      tick2Audio.pause();
+
       document.body.classList.add("fade-out");
 
       setTimeout(()=>{
@@ -202,7 +215,7 @@ function loop(){
 }
 loop();
 
-/* ===== BACKGROUND VIP ===== */
+/* ===== BACKGROUND ===== */
 const canvas = document.getElementById("bg");
 const ctx = canvas.getContext("2d");
 
