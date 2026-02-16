@@ -7,6 +7,7 @@
 
 <style>
 *{box-sizing:border-box}
+
 body{
   margin:0;
   height:100vh;
@@ -18,6 +19,7 @@ body{
   background:#000;
   color:#fff;
 }
+
 canvas{position:fixed;inset:0;z-index:-1}
 
 /* Fade */
@@ -31,57 +33,55 @@ canvas{position:fixed;inset:0;z-index:-1}
 
 /* Title */
 .title{
-  font-size:28px;
-  letter-spacing:6px;
-  margin-bottom:30px;
+  font-size:22px;
+  letter-spacing:4px;
+  margin-bottom:20px;
   font-weight:800;
   background:linear-gradient(180deg,#fff6c7,#ffd700,#b8860b);
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
-  text-shadow:0 0 10px rgba(255,215,0,.8);
 }
 
 /* Clock */
 .clock{
   display:flex;
   align-items:center;
-  gap:14px;
+  gap:10px;
   transition:.6s;
+  justify-content:center;
 }
 
+/* Box nhỏ hơn */
 .box{
-  width:90px;
-  height:80px;
-  border-radius:18px;
+  width:70px;
+  height:60px;
+  border-radius:14px;
   backdrop-filter:blur(12px);
   background:rgba(255,255,255,0.06);
   border:1px solid rgba(255,255,255,0.15);
-  box-shadow:0 6px 20px rgba(0,0,0,0.6);
+  box-shadow:0 4px 15px rgba(0,0,0,0.6);
   display:flex;
   justify-content:center;
   align-items:center;
-  font-size:42px;
+  font-size:30px;
   font-weight:800;
   transition:.5s;
 }
 
-/* Exit */
 .box.exit{animation:boxExit .6s forwards}
 @keyframes boxExit{
   0%{opacity:1;transform:scale(1)}
-  100%{opacity:0;transform:scale(0.6);filter:blur(8px)}
+  100%{opacity:0;transform:scale(0.6);filter:blur(6px)}
 }
 
-/* Gold */
 .gold{
   background:linear-gradient(180deg,#fff6c7,#ffd700,#b8860b);
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
-  text-shadow:0 0 8px rgba(255,215,0,.6);
 }
 
 .colon{
-  font-size:40px;
+  font-size:26px;
   color:#ffd700;
   animation:blink 1.2s infinite;
 }
@@ -90,15 +90,17 @@ canvas{position:fixed;inset:0;z-index:-1}
   25%,75%{opacity:.3}
 }
 
-.center{justify-content:center!important}
-.only-seconds{transform:scale(2.8);font-size:90px}
+.only-seconds{
+  transform:scale(2.2);
+  font-size:70px;
+}
 
 .shake{animation:shake .3s infinite}
 @keyframes shake{
   0%{transform:translateX(0)}
-  25%{transform:translateX(-3px)}
-  50%{transform:translateX(3px)}
-  75%{transform:translateX(-2px)}
+  25%{transform:translateX(-2px)}
+  50%{transform:translateX(2px)}
+  75%{transform:translateX(-1px)}
   100%{transform:translateX(0)}
 }
 </style>
@@ -109,79 +111,79 @@ canvas{position:fixed;inset:0;z-index:-1}
 <canvas id="bg"></canvas>
 
 <div class="wrap" id="wrap">
-  <div class="title">HAPPY NEW YEAR 2027</div>
+  <div class="title">COUNTDOWN 01.01.2027</div>
 
   <div class="clock" id="clock">
+    <div class="box gold" id="d">00</div>
+    <div class="colon">:</div>
     <div class="box gold" id="h">00</div>
-    <div class="colon" id="c1">:</div>
+    <div class="colon">:</div>
     <div class="box gold" id="m">00</div>
-    <div class="colon" id="c2">:</div>
+    <div class="colon">:</div>
     <div class="box gold" id="s">00</div>
   </div>
 </div>
 
 <script>
-/* ===== TARGET 01/01/2027 00:00:00 (Giờ Việt Nam UTC+7) ===== */
-const vietnamOffset = 7 * 60; // phút
-const targetVN = Date.UTC(2026,11,31,17,0,0); 
-// 00:00 VN = 17:00 UTC ngày 31/12/2026
+/* ===== GIỮ NGUYÊN CATBOX ===== */
+const TICK = "https://files.catbox.moe/o0fdwn.mp3";
+
+/* ===== TARGET 01/01/2027 00:00:00 GIỜ VN ===== */
+const targetVN = Date.UTC(2026,11,31,17,0,0);
 
 const REDIRECT_URL = "./fireworks.html";
 
 const wrap=document.getElementById("wrap");
-const clock=document.getElementById("clock");
+const dEl=document.getElementById("d");
 const hEl=document.getElementById("h");
 const mEl=document.getElementById("m");
 const sEl=document.getElementById("s");
-const c1=document.getElementById("c1");
-const c2=document.getElementById("c2");
+
+const tickAudio=new Audio(TICK);
+tickAudio.volume=0.9;
+
+let soundEnabled=false;
+window.addEventListener("pointerdown",()=>{
+  if(soundEnabled)return;
+  soundEnabled=true;
+  tickAudio.play().then(()=>tickAudio.pause()).catch(()=>{});
+},{once:true});
+
+function playTick(){
+  if(!soundEnabled)return;
+  tickAudio.currentTime=0;
+  tickAudio.play().catch(()=>{});
+}
 
 let last=-1;
-let hourRemoved=false;
-let minuteRemoved=false;
 let redirected=false;
 
 function loop(){
-  const nowUTC = Date.now();
-  const remain = Math.max(0,Math.floor((targetVN-nowUTC)/1000));
+  const nowUTC=Date.now();
+  const remain=Math.max(0,Math.floor((targetVN-nowUTC)/1000));
 
   if(remain!==last){
     last=remain;
 
-    const h=Math.floor(remain%86400/3600);
-    const m=Math.floor(remain%3600/60);
-    const s=remain%60;
+    const days=Math.floor(remain/86400);
+    const hours=Math.floor(remain%86400/3600);
+    const minutes=Math.floor(remain%3600/60);
+    const seconds=remain%60;
 
-    hEl.textContent=String(h).padStart(2,"0");
-    mEl.textContent=String(m).padStart(2,"0");
-    sEl.textContent=String(s).padStart(2,"0");
-
-    if(h===0&&!hourRemoved){
-      hourRemoved=true;
-      hEl.classList.add("exit");
-      setTimeout(()=>{
-        hEl.style.display="none";
-        c1.style.display="none";
-        clock.classList.add("center");
-      },600);
-    }
-
-    if(h===0&&m===0&&!minuteRemoved){
-      minuteRemoved=true;
-      mEl.classList.add("exit");
-      setTimeout(()=>{
-        mEl.style.display="none";
-        c2.style.display="none";
-        sEl.classList.add("only-seconds");
-      },600);
-    }
+    dEl.textContent=String(days).padStart(2,"0");
+    hEl.textContent=String(hours).padStart(2,"0");
+    mEl.textContent=String(minutes).padStart(2,"0");
+    sEl.textContent=String(seconds).padStart(2,"0");
 
     if(remain<=10&&remain>0){
       wrap.classList.add("final");
       sEl.classList.add("shake");
+      playTick();
+      setTimeout(playTick,200);
     }else{
       wrap.classList.remove("final");
       sEl.classList.remove("shake");
+      playTick();
     }
 
     if(remain===0&&!redirected){
@@ -216,7 +218,7 @@ function draw(){
   ctx.lineWidth=2;
   for(let i=0;i<6;i++){
     ctx.beginPath();
-    ctx.arc(canvas.width/2,canvas.height/2,150+i*60,angle,angle+Math.PI*1.2);
+    ctx.arc(canvas.width/2,canvas.height/2,120+i*50,angle,angle+Math.PI*1.2);
     ctx.stroke();
   }
   angle+=0.002;
@@ -226,4 +228,4 @@ draw();
 </script>
 
 </body>
-  </html>
+</html>
