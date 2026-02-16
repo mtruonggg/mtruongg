@@ -3,226 +3,239 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Countdown</title>
+<title>Ultra VIP Countdown 2026</title>
 
 <style>
+*{box-sizing:border-box}
+
 body{
   margin:0;
   height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  background:#071b2a;
-  font-family:system-ui;
-  color:#ffe66d;
-}
-
-.wrap{text-align:center;width:100%}
-
-.countdown{
-  display:flex;
-  gap:16px;
-  justify-content:center;
-}
-
-.unit{display:flex;flex-direction:column;align-items:center}
-.unit.hide{display:none}
-
-.box{
-  width:78px;
-  height:64px;
-  background:#fff;
-  color:#111;
-  border-radius:12px;
-  font-size:34px;
-  font-weight:700;
-  position:relative;
   overflow:hidden;
   display:flex;
   justify-content:center;
   align-items:center;
+  font-family:system-ui;
+  background:#000;
+  color:#fff;
+  perspective:1200px;
 }
 
-/* Box nhún nhẹ */
-.box.animate{
-  animation: boxJump 0.3s ease;
-}
-
-@keyframes boxJump{
-  0%{ transform: translateY(0); }
-  30%{ transform: translateY(8%); }
-  60%{ transform: translateY(0); }
-  100%{ transform: translateY(0); }
-}
-
-.num{
-  position:absolute;
+/* ===== CANVAS BG ===== */
+canvas{
+  position:fixed;
   inset:0;
+  z-index:-1;
+}
+
+/* ===== WRAP ===== */
+.wrap{
+  text-align:center;
+  transition:transform .4s ease;
+}
+
+.wrap.zoom{
+  animation:zoomPulse .6s infinite alternate;
+}
+
+@keyframes zoomPulse{
+  from{transform:scale(1)}
+  to{transform:scale(1.05)}
+}
+
+.wrap.shake{
+  animation:shake .25s infinite;
+}
+
+@keyframes shake{
+  0%{transform:translateX(0)}
+  25%{transform:translateX(-4px)}
+  50%{transform:translateX(4px)}
+  75%{transform:translateX(-2px)}
+  100%{transform:translateX(0)}
+}
+
+h1{
+  margin-bottom:30px;
+  letter-spacing:3px;
+  color:#ffd700;
+}
+
+/* ===== CLOCK ===== */
+.clock{
+  display:flex;
+  align-items:center;
+  gap:18px;
+}
+
+/* ===== GLASS BOX ===== */
+.flip-box{
+  width:110px;
+  height:100px;
+  position:relative;
+  transform-style:preserve-3d;
+}
+
+/* Glassmorphism */
+.glass{
+  width:100%;
+  height:100%;
+  border-radius:22px;
+  backdrop-filter:blur(18px);
+  background:rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.2);
+  box-shadow:
+    0 10px 40px rgba(0,0,0,0.6),
+    inset 0 0 20px rgba(255,215,0,0.2);
   display:flex;
   justify-content:center;
   align-items:center;
+  position:absolute;
+  backface-visibility:hidden;
+  font-size:52px;
+  font-weight:800;
 }
 
-.num.current{transform:translateY(0);opacity:1}
-.num.next{transform:translateY(-100%);opacity:0}
-
-.box.slide .num.current{
-  transform:translateY(100%);
-  opacity:0;
-  transition:.32s ease;
+/* Gold text */
+.gold{
+  background:linear-gradient(180deg,#fff8dc,#ffd700,#b8860b);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  text-shadow:0 0 8px rgba(255,215,0,.6);
 }
 
-.box.slide .num.next{
-  transform:translateY(0);
-  opacity:1;
-  transition:.32s ease;
+/* Flip animation */
+.flip-box.flip{
+  animation:flip3d .8s cubic-bezier(.22,1,.36,1);
 }
 
-.label{margin-top:6px;font-size:12px;color:#fff}
-.info{margin-top:18px;font-size:14px;color:#fff}
+@keyframes flip3d{
+  0%{transform:rotateX(0deg)}
+  100%{transform:rotateX(-180deg)}
+}
+
+/* Colon */
+.colon{
+  font-size:60px;
+  color:#ffd700;
+  animation:blink 1.2s infinite;
+}
+
+@keyframes blink{
+  0%,50%,100%{opacity:1}
+  25%,75%{opacity:.3}
+}
 </style>
 </head>
 
 <body>
-<div class="wrap">
-  <h1>COUNTDOWN XUÂN BÍNH NGỌ 2026</h1>
 
-  <div class="countdown">
-    <div class="unit" id="ud"><div class="box" id="d"></div><div class="label">NGÀY</div></div>
-    <div class="unit" id="uh"><div class="box" id="h"></div><div class="label">GIỜ</div></div>
-    <div class="unit" id="um"><div class="box" id="m"></div><div class="label">PHÚT</div></div>
-    <div class="unit" id="us"><div class="box" id="s"></div><div class="label">GIÂY</div></div>
+<canvas id="bg"></canvas>
+
+<div class="wrap" id="wrap">
+  <h1>COUNTDOWN 2026</h1>
+  <div class="clock">
+    <div class="flip-box" id="hBox">
+      <div class="glass gold" id="hFront">00</div>
+    </div>
+
+    <div class="colon">:</div>
+
+    <div class="flip-box" id="mBox">
+      <div class="glass gold" id="mFront">00</div>
+    </div>
+
+    <div class="colon">:</div>
+
+    <div class="flip-box" id="sBox">
+      <div class="glass gold" id="sFront">00</div>
+    </div>
   </div>
-
-  <div class="info" id="info">Chạm màn hình để bật âm thanh</div>
 </div>
 
 <script>
-/* ===== CONFIG ===== */
-const TARGET = new Date(2026,1,17,0,0,0).getTime(); // 17/02/2026
-const TICK1  = "https://files.catbox.moe/o0fdwn.mp3";
-const TICK2  = "https://files.catbox.moe/o0fdwn.mp3";
-const REDIRECT_URL = "./fireworks.html";
-/* ================= */
+const TARGET = new Date(2026,1,17,0,0,0).getTime();
+const wrap = document.getElementById("wrap");
 
-let lastRemain = null;
-let soundOK = false;
-let tickToggle = false;
-let redirected = false;
+function updateBox(boxId, frontId, value){
+  const box = document.getElementById(boxId);
+  const front = document.getElementById(frontId);
 
-/* ===== AUDIO ===== */
-const tick1Audio = new Audio(TICK1);
-const tick2Audio = new Audio(TICK2);
-tick1Audio.volume = 0.9;
-tick2Audio.volume = 0.9;
+  if(front.textContent === value) return;
 
-// bật âm thanh khi chạm
-window.addEventListener("pointerdown",()=>{
-  if(soundOK) return;
-  soundOK = true;
-  tick1Audio.play().then(()=>tick1Audio.pause());
-  tick2Audio.play().then(()=>tick2Audio.pause());
-  info.textContent="Âm thanh đã bật";
-},{once:true});
-
-// tick xen kẽ
-function playTick(){
-  if(!soundOK) return;
-  tickToggle = !tickToggle;
-  if(tickToggle){
-    tick1Audio.currentTime=0;
-    tick1Audio.play().catch(()=>{});
-  }else{
-    setTimeout(()=>{
-      tick2Audio.currentTime=0;
-      tick2Audio.play().catch(()=>{});
-    },400);
-  }
-}
-
-/* ===== INIT BOX ===== */
-function init(id){
-  const el=document.getElementById(id);
-  const n=document.createElement("div");
-  n.className="num current";
-  n.textContent="00";
-  el.appendChild(n);
-}
-["d","h","m","s"].forEach(init);
-
-/* ===== UPDATE NUMBER ===== */
-function update(el,val){
-  const cur=el.querySelector(".current");
-  if(cur && cur.textContent===val) return;
-
-  const next=document.createElement("div");
-  next.className="num next";
-  next.textContent=val;
-  el.appendChild(next);
-
-  const box = el.closest(".box") || el;
-  box.classList.add("animate");
-  requestAnimationFrame(()=>el.classList.add("slide"));
+  box.classList.add("flip");
 
   setTimeout(()=>{
-    el.innerHTML="";
-    const n=document.createElement("div");
-    n.className="num current";
-    n.textContent=val;
-    el.appendChild(n);
-    el.classList.remove("slide");
-    box.classList.remove("animate");
-  },350);
+    front.textContent = value;
+  },400);
+
+  setTimeout(()=>{
+    box.classList.remove("flip");
+  },800);
 }
 
-const dEl=d, hEl=h, mEl=m, sEl=s;
-const ud=document.getElementById("ud");
-const uh=document.getElementById("uh");
-const um=document.getElementById("um");
-
-/* ===== LOOP ===== */
 function loop(){
   const now = Date.now();
   const remain = Math.max(0, Math.floor((TARGET-now)/1000));
 
-  // 🎆 HẾT GIỜ → CHUYỂN FIREWORKS
-  if(remain === 0 && !redirected){
-    redirected = true;
+  const h = Math.floor(remain%86400/3600);
+  const m = Math.floor(remain%3600/60);
+  const s = remain%60;
 
-    tick1Audio.pause();
-    tick2Audio.pause();
+  updateBox("hBox","hFront",String(h).padStart(2,"0"));
+  updateBox("mBox","mFront",String(m).padStart(2,"0"));
+  updateBox("sBox","sFront",String(s).padStart(2,"0"));
 
-    setTimeout(()=>{
-      window.location.href = REDIRECT_URL;
-    },500);
-
-    return;
-  }
-
-  if(remain !== lastRemain){
-    lastRemain = remain;
-
-    const d = Math.floor(remain/86400);
-    const h = Math.floor(remain%86400/3600);
-    const m = Math.floor(remain%3600/60);
-    const s = remain%60;
-
-    update(dEl,String(d).padStart(2,"0"));
-    update(hEl,String(h).padStart(2,"0"));
-    update(mEl,String(m).padStart(2,"0"));
-    update(sEl,String(s).padStart(2,"0"));
-
-    if(d<=0) ud.classList.add("hide");
-    if(d<=0&&h<=0) uh.classList.add("hide");
-    if(d<=0&&h<=0&&m<=0) um.classList.add("hide");
-
-    playTick();
+  /* 10 GIÂY CUỐI */
+  if(remain <= 10 && remain > 0){
+    wrap.classList.add("zoom","shake");
+  }else{
+    wrap.classList.remove("zoom","shake");
   }
 
   requestAnimationFrame(loop);
 }
-
 loop();
+
+/* ===== VIP CANVAS BACKGROUND ===== */
+const canvas = document.getElementById("bg");
+const ctx = canvas.getContext("2d");
+
+function resize(){
+  canvas.width = innerWidth;
+  canvas.height = innerHeight;
+}
+resize();
+addEventListener("resize",resize);
+
+let angle=0;
+
+function draw(){
+  const g=ctx.createRadialGradient(
+    canvas.width/2,canvas.height/2,0,
+    canvas.width/2,canvas.height/2,canvas.width
+  );
+  g.addColorStop(0,"#1a1a2e");
+  g.addColorStop(1,"#000814");
+  ctx.fillStyle=g;
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+
+  ctx.fillStyle="rgba(255,215,0,0.08)";
+  for(let i=0;i<20;i++){
+    ctx.beginPath();
+    ctx.arc(
+      canvas.width/2 + Math.cos(angle+i)*300,
+      canvas.height/2 + Math.sin(angle+i)*300,
+      80,0,Math.PI*2
+    );
+    ctx.fill();
+  }
+
+  angle+=0.002;
+  requestAnimationFrame(draw);
+}
+draw();
 </script>
+
 </body>
 </html>
