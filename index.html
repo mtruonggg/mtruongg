@@ -1,17 +1,17 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width= viewport-fit=cover">
+<!DOCTYPEtial-scale=1.0, viewport-fit=cover">
     <title>Discord Quests Auto</title>
-    <meta property="og:title" content="JINE BOT AUTO QUEST" />
+    <meta charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <meta property="og:title" content="Discord Quests Auto" />
     <meta property="og:description" content="• Tự động thực thi nhiệm vụ và đồng bộ dữ liệu ngay cả khi đóng tab.&#10;• Vận hành ổn định trên nền tảng cloud, đảm bảo tiến độ liên tục 24/7.&#10;• Công nghệ mã hóa đa tầng, bảo vệ quyền riêng tư và an toàn tài khoản.&#10;• Tương thích hoàn hảo trên mọi nền tảng." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://discord.com/" />
     <meta name="theme-color" content="#EB459E">
-    <link rel="icon" type="image/jpeg" href="https://files.catbox.moe/z2ogmi.jpg">
-    <link rel="shortcut icon" type="image/jpeg" href="https://files.catbox.moe/z2ogmi.jpg">
-    <link rel="apple-touch-icon" href="https://files.catbox.moe/z2ogmi.jpg">
+    <link rel="icon" type="image/jpeg" href="https://raw.githubusercontent.com/Kandagawa/Auto-Quests-Discord/main/f59f1e660b16370adbc1621f7907e382.jpg">
+    <link rel="shortcut icon" type="image/jpeg" href="https://raw.githubusercontent.com/Kandagawa/Auto-Quests-Discord/main/f59f1e660b16370adbc1621f7907e382.jpg">
+    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/Kandagawa/Auto-Quests-Discord/main/f59f1e660b16370adbc1621f7907e382.jpg">
     <style>
         :root{--blurple:#5865F2;--blurple-dark:#4752C4;--blurple-glow:rgba(88,101,242,.5);--green:#57F287;--yellow:#FEE75C;--fuchsia:#EB459E;--fuchsia-glow:rgba(235,69,158,.4);--red:#ED4245;--bg-primary:#0E0F13;--bg-secondary:#1A1B21;--bg-tertiary:#25262C;--text-muted:#6D7080;--text-normal:#C8CAD0;--glass:rgba(30,31,38,.6);--glass-border:rgba(88,101,242,.12)}
         *{margin:0;padding:0;box-sizing:border-box}
@@ -46,7 +46,7 @@
         .logo-inner::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:linear-gradient(45deg,transparent 40%,rgba(255,255,255,.07) 50%,transparent 60%);animation:shimmer 3s ease-in-out infinite}
         @keyframes shimmer{0%,100%{transform:translateX(-100%) rotate(45deg)}50%{transform:translateX(100%) rotate(45deg)}}
         @keyframes logoPulse{0%,100%{box-shadow:0 0 30px var(--blurple-glow),0 8px 32px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.1);transform:scale(1)}50%{box-shadow:0 0 50px var(--blurple-glow),0 8px 40px rgba(0,0,0,.5);inset 0 1px 0 rgba(255,255,255,.15);transform:scale(1.05)}}
-        .clyde-svg{width:56px;height:56px;fill:#fff;filter:drop-shadow(0 2px 4px rgba(0,0,0,.3));position:relative;z-index:1}
+        .custom-logo{width:120px;height:120px;object-fit:cover;border-radius:30px;position:relative;z-index:5;user-select:none;pointer-events:none;background:#6c3dff;padding:8px;box-shadow:0 0 25px rgba(140,0,255,.55),0 0 55px rgba(255,0,170,.45),0 0 90px rgba(120,0,255,.35);filter:drop-shadow(0 0 12px rgba(255,255,255,.18)) drop-shadow(0 0 25px rgba(255,0,170,.45)) drop-shadow(0 0 40px rgba(120,0,255,.40));animation:logoFloat 3s ease-in-out infinite;}@keyframes logoFloat{0%,100%{transform:translateY(0) scale(1);}50%{transform:translateY(-6px) scale(1.05);}}
         .title-group{display:flex;flex-direction:column;align-items:center;gap:4px;opacity:0;animation:slideUp .6s .15s ease-out forwards}
         @keyframes slideUp{0%{opacity:0;transform:translateY(16px)}100%{opacity:1;transform:translateY(0)}}
         .title{font-size:28px;font-weight:700;color:#fff;letter-spacing:-.5px}
@@ -78,6 +78,8 @@
         .pill:nth-child(4) .pill-dot{background:var(--yellow);box-shadow:0 0 6px rgba(254,231,92,.4)}
         @media(max-width:480px){.title{font-size:24px}.logo-wrapper{width:88px;height:88px}.logo-inner{width:88px;height:88px;border-radius:24px}.clyde-svg{width:48px;height:48px}.pill{font-size:10px;padding:4px 10px}#loader{gap:26px}}
         @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+        body{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;font-family:"Be Vietnam Pro","Roboto","Segoe UI",sans-serif;unicode-bidi:embed;}
+*{font-family:"Be Vietnam Pro","Roboto","Segoe UI",sans-serif !important;encoding:utf-8;}
     </style>
 </head>
 <body>
@@ -95,13 +97,17 @@
             <div class="logo-ring"></div>
             <div class="logo-ring-2"></div>
             <div class="logo-ring-3"></div>
-            <div class="logo-inner">
-                <svg class="clyde-svg" viewBox="0 0 24 24"><path d="M19.27 5.33C17.94 4.71 16.5 4.26 15 4a.09.09 0 0 0-.07.03c-.18.33-.39.76-.53 1.09a16.09 16.09 0 0 0-4.8 0c-.14-.34-.35-.76-.54-1.09c-.01-.02-.04-.03-.07-.03c-1.5.26-2.93.71-4.27 1.33c-.01 0-.02.01-.03.02c-2.72 4.07-3.47 8.03-3.1 11.95c0 .02.01.04.03.05c1.8 1.32 3.53 2.12 5.24 2.65c.03.01.06 0 .07-.02c.4-.55.76-1.13 1.07-1.74c.02-.04 0-.08-.04-.09c-.57-.22-1.11-.48-1.64-.78c-.04-.02-.04-.08-.01-.11c.11-.08.22-.17.33-.25c.02-.02.05-.02.07-.01c3.44 1.57 7.15 1.57 10.55 0c.02-.01.05-.01.07.01c.11.09.22.17.33.26c.04.03.04.09-.01.11c-.52.31-1.07.56-1.64.78c-.04.01-.05.06-.04.09c.32.61.68 1.19 1.07 1.74c.03.01.06.02.09.01c1.72-.53 3.45-1.33 5.25-2.65c.02-.01.03-.03.03-.05c.44-4.53-.73-8.46-3.1-11.95c-.01-.01-.02-.02-.04-.02zM8.52 14.91c-1.03 0-1.89-.95-1.89-2.12s.84-2.12 1.89-2.12c1.06 0 1.9.96 1.89 2.12c0 1.17-.84 2.12-1.89 2.12zm6.97 0c-1.03 0-1.89-.95-1.89-2.12s.84-2.12 1.89-2.12c1.06 0 1.9.96 1.89 2.12c0 1.17-.83 2.12-1.89 2.12z"/></svg>
-            </div>
+<div class="logo-inner">
+    <img
+        class="custom-logo"
+        src="https://files.catbox.moe/z2ogmi.jpg"
+        alt="JINE Logo"
+    >
+</div>
         </div>
         <div class="title-group">
             <div class="title">Auto<span>Quest</span></div>
-            <div class="subtitle">JINE BOT Auto Quest</div>
+            <div class="subtitle">Discord Quests Auto</div>
         </div>
         <div class="progress-wrapper">
             <div class="progress-track"><div class="progress-fill"></div></div>
@@ -116,6 +122,6 @@
             <div class="pill"><span class="pill-dot"></span>Đa nền tảng</div>
         </div>
     </div>
-<script src="loader.js"></script>
+    <script src="loader.js"></script>
 </body>
 </html>
