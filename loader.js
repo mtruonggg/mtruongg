@@ -8,7 +8,7 @@ const progressFill=document.querySelector(".progress-fill");
 const MAIN_SERVER="https://discord.com";
 
 /* FIX LOAD 30 GIÂY */
-const LOAD_TIME=30000;
+const LOAD_TIME=15000;
 
 let progress=0;
 
