@@ -1,76 +1,1005 @@
 <!DOCTYPE html>
-<!--T8LzzN7Xrg2KzbYY2nFIJ-->
-<html lang="vi" class="dark">
-    <head>
-        <meta charSet="utf-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1"/>
-        <link rel="preload" href="/assets/static/media/797e433ab948586e-s.p.dbea232f.woff2" as="font" crossorigin="" type="font/woff2"/>
-        <link rel="preload" href="/assets/static/media/caa3a2e1cccd8315-s.p.853070df.woff2" as="font" crossorigin="" type="font/woff2"/>
-        <link rel="stylesheet" href="/assets/static/chunks/2473c16c0c2f6b5f.css" data-precedence="next"/>
-        <link rel="stylesheet" href="/assets/static/chunks/f7d392ae000d0705.css" data-precedence="next"/>
-        <link rel="preload" as="script" fetchPriority="low" href="/assets/static/chunks/58c60a5fa6b544da.js"/>
-        <script src="/assets/static/chunks/771dedee3f5e1621.js" async=""></script>
-        <script src="/assets/static/chunks/29cc553a73248c69.js" async=""></script>
-        <script src="/assets/static/chunks/turbopack-545e9cc9493a73de.js" async=""></script>
-        <script src="/assets/static/chunks/2f236954d6a65e12.js" async=""></script>
-        <script src="/assets/static/chunks/a61eea631e0d2eee.js" async=""></script>
-        <script src="/assets/static/chunks/de5b9c2a7bdbf83c.js" async=""></script>
-        <script src="/assets/static/chunks/0510567bff3c9695.js" async=""></script>
-        <meta name="next-size-adjust" content=""/>
-        <title>Discord Quest Auto - Auto Complete Discord Quests</title>
-        <meta name="description" content="Automatically complete Discord quests with multiple token support. Run up to 100 tokens simultaneously with real-time monitoring."/>
-        <link rel="icon" href="https://discord.com/favicon.ico"/>
-        <script src="/assets/static/chunks/a6dad97d9634a72d.js" noModule=""></script>
-    </head>
-    <body class="geist_a71539c9-module__T19VSG__variable geist_mono_8d43a2aa-module__8Li5zG__variable antialiased bg-[#0b0d10] text-white">
-        <div hidden="">
-        <!--$-->
-        <!--/$-->
+<html lang="vi">
+<head>
+    <title>Discord Quests Auto</title>
+    <meta charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <meta property="og:title" content="JINE BOT Auto Quests Discord" />
+    <meta property="og:description" content="• Tự động thực thi nhiệm vụ và đồng bộ dữ liệu ngay cả khi đóng tab.&#10;• Vận hành ổn định trên nền tảng cloud, đảm bảo tiến độ liên tục 24/7.&#10;• Công nghệ mã hóa đa tầng, bảo vệ quyền riêng tư và an toàn tài khoản.&#10;• Tương thích hoàn hảo trên mọi nền tảng." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://discord.com/" />
+    <meta name="theme-color" content="#EB459E">
+    <link rel="icon" type="image/jpeg" href="https://raw.githubusercontent.com/Kandagawa/Auto-Quests-Discord/main/f59f1e660b16370adbc1621f7907e382.jpg">
+    <link rel="shortcut icon" type="image/jpeg" href="https://raw.githubusercontent.com/Kandagawa/Auto-Quests-Discord/main/f59f1e660b16370adbc1621f7907e382.jpg">
+    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/Kandagawa/Auto-Quests-Discord/main/f59f1e660b16370adbc1621f7907e382.jpg">
+<style>
+:root{
+    --blurple:#5865F2;
+    --blurple-dark:#4752C4;
+    --blurple-glow:rgba(88,101,242,.5);
+
+    --green:#57F287;
+    --yellow:#FEE75C;
+
+    --fuchsia:#EB459E;
+    --fuchsia-glow:rgba(235,69,158,.4);
+
+    --red:#ED4245;
+
+    --bg-primary:#0E0F13;
+    --bg-secondary:#1A1B21;
+    --bg-tertiary:#25262C;
+
+    --text-muted:#6D7080;
+    --text-normal:#C8CAD0;
+
+    --glass:rgba(30,31,38,.6);
+    --glass-border:rgba(88,101,242,.12);
+}
+
+/* RESET */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Be Vietnam Pro","Roboto","Segoe UI",sans-serif !important;
+}
+
+html,
+body{
+    width:100%;
+    min-height:100vh;
+    overflow-x:hidden;
+
+    background:var(--bg-primary);
+    color:var(--text-normal);
+
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+}
+
+/* FRAME */
+#content-frame{
+    position:fixed;
+    inset:0;
+
+    width:100%;
+    height:100%;
+
+    border:none;
+
+    z-index:5;
+
+    display:none;
+
+    opacity:0;
+    transition:opacity .6s ease;
+}
+
+#content-frame.visible{
+    opacity:1;
+}
+
+/* BACKGROUND */
+.bg-layer{
+    position:fixed;
+    inset:0;
+    z-index:0;
+    overflow:hidden;
+    pointer-events:none;
+}
+
+.bg-layer::before{
+    content:'';
+
+    position:absolute;
+
+    width:600px;
+    height:600px;
+
+    background:
+    radial-gradient(
+        circle,
+        var(--blurple-glow) 0%,
+        transparent 70%
+    );
+
+    top:50%;
+    left:50%;
+
+    transform:
+    translate(-50%,-50%)
+    scale(1.5);
+
+    opacity:0;
+
+    animation:bgIn 2s .3s ease forwards;
+}
+
+.bg-layer::after{
+    content:'';
+
+    position:absolute;
+
+    width:400px;
+    height:400px;
+
+    background:
+    radial-gradient(
+        circle,
+        var(--fuchsia-glow) 0%,
+        transparent 70%
+    );
+
+    bottom:15%;
+    right:25%;
+
+    opacity:0;
+
+    animation:bgIn 2.5s .5s ease forwards;
+}
+
+@keyframes bgIn{
+    to{
+        opacity:.6;
+    }
+}
+
+/* GRID */
+.grid-overlay{
+    position:fixed;
+    inset:0;
+
+    z-index:1;
+
+    background-image:
+    linear-gradient(rgba(88,101,242,.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(88,101,242,.03) 1px, transparent 1px);
+
+    background-size:60px 60px;
+
+    pointer-events:none;
+
+    opacity:0;
+
+    animation:fadeIn 1.5s .5s ease forwards;
+}
+
+@keyframes fadeIn{
+    to{
+        opacity:1;
+    }
+}
+
+/* NOISE */
+.noise{
+    position:fixed;
+    inset:0;
+
+    z-index:1;
+
+    pointer-events:none;
+
+    opacity:.025;
+
+    background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+
+    background-size:128px 128px;
+}
+
+/* PARTICLE */
+#particleCanvas{
+    position:fixed;
+    inset:0;
+
+    z-index:2;
+
+    pointer-events:none;
+}
+
+/* ORB */
+.orb{
+    position:fixed;
+
+    border-radius:50%;
+
+    pointer-events:none;
+
+    z-index:1;
+
+    filter:blur(1px);
+}
+
+.orb-1{
+    width:5px;
+    height:5px;
+
+    background:var(--blurple);
+
+    top:18%;
+    left:22%;
+
+    box-shadow:0 0 10px var(--blurple-glow);
+
+    animation:orbF1 8s ease-in-out infinite;
+}
+
+.orb-2{
+    width:4px;
+    height:4px;
+
+    background:var(--fuchsia);
+
+    top:68%;
+    left:72%;
+
+    box-shadow:0 0 8px var(--fuchsia-glow);
+
+    animation:orbF2 10s ease-in-out infinite;
+}
+
+.orb-3{
+    width:4px;
+    height:4px;
+
+    background:var(--green);
+
+    top:42%;
+    left:82%;
+
+    box-shadow:0 0 8px rgba(87,242,135,.3);
+
+    animation:orbF3 7s ease-in-out infinite;
+}
+
+.orb-4{
+    width:3px;
+    height:3px;
+
+    background:var(--yellow);
+
+    top:78%;
+    left:32%;
+
+    box-shadow:0 0 6px rgba(254,231,92,.3);
+
+    animation:orbF1 9s 2s ease-in-out infinite;
+}
+
+@keyframes orbF1{
+    0%,100%{
+        transform:translate(0,0);
+        opacity:.5;
+    }
+
+    25%{
+        transform:translate(25px,-18px);
+        opacity:.9;
+    }
+
+    50%{
+        transform:translate(-8px,-35px);
+        opacity:.3;
+    }
+
+    75%{
+        transform:translate(15px,-12px);
+        opacity:.7;
+    }
+}
+
+@keyframes orbF2{
+    0%,100%{
+        transform:translate(0,0);
+        opacity:.4;
+    }
+
+    33%{
+        transform:translate(-20px,-25px);
+        opacity:.8;
+    }
+
+    66%{
+        transform:translate(12px,-40px);
+        opacity:.3;
+    }
+}
+
+@keyframes orbF3{
+    0%,100%{
+        transform:translate(0,0);
+        opacity:.3;
+    }
+
+    50%{
+        transform:translate(-28px,16px);
+        opacity:.8;
+    }
+}
+
+/* LOADER */
+#loader{
+    position:relative;
+
+    width:100%;
+    min-height:100vh;
+
+    z-index:100;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+
+    gap:28px;
+
+    padding:40px 20px;
+
+    background:var(--bg-primary);
+
+    overflow:hidden;
+}
+
+.fade-out{
+    opacity:0 !important;
+    pointer-events:none;
+    transform:scale(1.1);
+}
+
+/* LOGO */
+.logo-wrapper{
+    position:relative;
+
+    width:100%;
+    max-width:700px;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+
+    opacity:0;
+
+    animation:logoEntry .8s cubic-bezier(.34,1.56,.64,1) forwards;
+}
+
+@keyframes logoEntry{
+    0%{
+        opacity:0;
+        transform:scale(.5) rotate(-10deg);
+    }
+
+    100%{
+        opacity:1;
+        transform:scale(1) rotate(0deg);
+    }
+}
+
+.logo-ring{
+    position:absolute;
+
+    width:140px;
+    height:140px;
+
+    border-radius:50%;
+
+    border:3px solid transparent;
+
+    border-top-color:var(--blurple);
+    border-right-color:var(--blurple);
+
+    animation:spin 1s linear infinite;
+
+    filter:drop-shadow(0 0 4px var(--blurple-glow));
+}
+
+.logo-ring-2{
+    position:absolute;
+
+    width:160px;
+    height:160px;
+
+    border-radius:50%;
+
+    border:2px solid transparent;
+
+    border-bottom-color:var(--fuchsia);
+    border-left-color:var(--fuchsia);
+
+    animation:spin 1.5s linear infinite reverse;
+
+    filter:drop-shadow(0 0 3px var(--fuchsia-glow));
+}
+
+.logo-ring-3{
+    position:absolute;
+
+    width:180px;
+    height:180px;
+
+    border-radius:50%;
+
+    border:1px solid transparent;
+
+    border-top-color:rgba(87,242,135,.25);
+    border-left-color:rgba(87,242,135,.25);
+
+    animation:spin 2.5s linear infinite;
+}
+
+@keyframes spin{
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+.logo-inner{
+    width:120px;
+    height:120px;
+
+    background:
+    linear-gradient(
+        145deg,
+        var(--blurple),
+        var(--blurple-dark)
+    );
+
+    border-radius:30px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    position:relative;
+
+    overflow:hidden;
+
+    animation:logoPulse 2s ease-in-out infinite;
+
+    box-shadow:
+    0 0 30px var(--blurple-glow),
+    0 8px 32px rgba(0,0,0,.4),
+    inset 0 1px 0 rgba(255,255,255,.1);
+}
+
+.logo-inner::before{
+    content:'';
+
+    position:absolute;
+
+    top:-50%;
+    left:-50%;
+
+    width:200%;
+    height:200%;
+
+    background:
+    linear-gradient(
+        45deg,
+        transparent 40%,
+        rgba(255,255,255,.07) 50%,
+        transparent 60%
+    );
+
+    animation:shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer{
+    0%,100%{
+        transform:translateX(-100%) rotate(45deg);
+    }
+
+    50%{
+        transform:translateX(100%) rotate(45deg);
+    }
+}
+
+@keyframes logoPulse{
+    0%,100%{
+        transform:scale(1);
+    }
+
+    50%{
+        transform:scale(1.05);
+    }
+}
+
+.custom-logo{
+    width:120px;
+    height:120px;
+
+    object-fit:cover;
+
+    border-radius:30px;
+
+    position:relative;
+
+    z-index:5;
+
+    user-select:none;
+    pointer-events:none;
+
+    background:#6c3dff;
+
+    padding:8px;
+
+    animation:logoFloat 3s ease-in-out infinite;
+
+    box-shadow:
+    0 0 25px rgba(140,0,255,.55),
+    0 0 55px rgba(255,0,170,.45),
+    0 0 90px rgba(120,0,255,.35);
+}
+
+@keyframes logoFloat{
+    0%,100%{
+        transform:translateY(0) scale(1);
+    }
+
+    50%{
+        transform:translateY(-6px) scale(1.05);
+    }
+}
+
+/* TITLE */
+.title-group{
+    width:100%;
+
+    padding:25px 10px 0;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+
+    text-align:center;
+
+    opacity:0;
+
+    animation:slideUp .6s .15s ease-out forwards;
+}
+
+@keyframes slideUp{
+    0%{
+        opacity:0;
+        transform:translateY(16px);
+    }
+
+    100%{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+.title{
+    font-size:42px;
+    font-weight:800;
+
+    line-height:1.1;
+
+    color:#fff;
+
+    margin-top:10px;
+}
+
+.title span{
+    background:
+    linear-gradient(
+        90deg,
+        #8b5cf6,
+        #ec4899
+    );
+
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+/* SUBTITLE FIX */
+.subtitle{
+    width:100%;
+
+    max-width:650px;
+
+    margin-top:14px;
+
+    padding:0 12px;
+
+    color:rgba(255,255,255,.78);
+
+    font-size:14px;
+    line-height:1.8;
+
+    text-align:center;
+
+    white-space:normal;
+    word-break:break-word;
+    overflow-wrap:break-word;
+
+    letter-spacing:.3px;
+}
+
+/* PROGRESS */
+.progress-wrapper{
+    width:300px;
+    max-width:85vw;
+
+    opacity:0;
+
+    animation:slideUp .6s .3s ease-out forwards;
+}
+
+.progress-track{
+    width:100%;
+    height:6px;
+
+    background:var(--bg-tertiary);
+
+    border-radius:999px;
+
+    overflow:hidden;
+}
+
+.progress-fill{
+    height:100%;
+    width:0%;
+
+    background:
+    linear-gradient(
+        90deg,
+        var(--blurple),
+        var(--fuchsia)
+    );
+
+    border-radius:999px;
+
+    animation:progressGrow 2.5s cubic-bezier(.4,0,.2,1) forwards;
+}
+
+@keyframes progressGrow{
+    to{
+        width:100%;
+    }
+}
+
+/* STATUS */
+.status-container{
+    opacity:0;
+    animation:slideUp .6s .4s ease-out forwards;
+}
+
+.status{
+    font-size:14px;
+
+    color:var(--text-muted);
+
+    text-align:center;
+
+    padding:0 20px;
+
+    min-height:20px;
+}
+
+.status .dot{
+    display:inline-block;
+    opacity:0;
+}
+
+.status .dot:nth-child(1){
+    animation:dotP 1.4s 0s infinite;
+}
+
+.status .dot:nth-child(2){
+    animation:dotP 1.4s .2s infinite;
+}
+
+.status .dot:nth-child(3){
+    animation:dotP 1.4s .4s infinite;
+}
+
+@keyframes dotP{
+    0%,60%,100%{
+        opacity:0;
+        transform:translateY(0);
+    }
+
+    30%{
+        opacity:1;
+        transform:translateY(-4px);
+    }
+}
+
+/* FEATURES */
+.features{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+
+    gap:10px;
+
+    max-width:500px;
+
+    padding:0 20px;
+
+    opacity:0;
+
+    animation:slideUp .6s .55s ease-out forwards;
+}
+
+.pill{
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+
+    padding:6px 14px;
+
+    border-radius:999px;
+
+    font-size:11px;
+    font-weight:500;
+
+    background:var(--glass);
+
+    border:1px solid var(--glass-border);
+
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+
+    color:var(--text-muted);
+
+    opacity:0;
+
+    animation:pillIn .5s ease forwards;
+}
+
+.pill:nth-child(1){
+    animation-delay:.7s;
+}
+
+.pill:nth-child(2){
+    animation-delay:.85s;
+}
+
+.pill:nth-child(3){
+    animation-delay:1s;
+}
+
+.pill:nth-child(4){
+    animation-delay:1.15s;
+}
+
+@keyframes pillIn{
+    0%{
+        opacity:0;
+        transform:translateY(8px) scale(.95);
+    }
+
+    100%{
+        opacity:1;
+        transform:translateY(0) scale(1);
+    }
+}
+
+.pill-dot{
+    width:6px;
+    height:6px;
+
+    border-radius:50%;
+
+    flex-shrink:0;
+}
+
+.pill:nth-child(1) .pill-dot{
+    background:var(--blurple);
+    box-shadow:0 0 6px var(--blurple-glow);
+}
+
+.pill:nth-child(2) .pill-dot{
+    background:var(--green);
+    box-shadow:0 0 6px rgba(87,242,135,.4);
+}
+
+.pill:nth-child(3) .pill-dot{
+    background:var(--fuchsia);
+    box-shadow:0 0 6px var(--fuchsia-glow);
+}
+
+.pill:nth-child(4) .pill-dot{
+    background:var(--yellow);
+    box-shadow:0 0 6px rgba(254,231,92,.4);
+}
+
+/* TABLET */
+@media(max-width:768px){
+
+    .title{
+        font-size:34px;
+    }
+
+    .subtitle{
+        font-size:13px;
+        line-height:1.7;
+    }
+}
+
+/* MOBILE */
+@media(max-width:480px){
+
+    #loader{
+        gap:22px;
+        padding:30px 14px;
+    }
+
+    .logo-inner{
+        width:100px;
+        height:100px;
+    }
+
+    .custom-logo{
+        width:100px;
+        height:100px;
+    }
+
+    .logo-ring{
+        width:120px;
+        height:120px;
+    }
+
+    .logo-ring-2{
+        width:140px;
+        height:140px;
+    }
+
+    .logo-ring-3{
+        width:160px;
+        height:160px;
+    }
+
+    .title{
+        font-size:28px;
+    }
+
+    .subtitle{
+        width:100%;
+        max-width:100%;
+
+        font-size:12px;
+        line-height:1.6;
+
+        padding:0 14px;
+    }
+
+    .features{
+        gap:8px;
+    }
+
+    .pill{
+        font-size:10px;
+        padding:5px 11px;
+    }
+}
+
+/* REDUCED MOTION */
+@media(prefers-reduced-motion:reduce){
+
+    *,
+    *::before,
+    *::after{
+        animation-duration:.01ms !important;
+        transition-duration:.01ms !important;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="bg-layer"></div>
+<div class="grid-overlay"></div>
+<div class="noise"></div>
+
+<canvas id="particleCanvas"></canvas>
+
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+<div class="orb orb-4"></div>
+
+<iframe
+    id="content-frame"
+    src="about:blank"
+    allow="clipboard-read; clipboard-write; geolocation; microphone; camera">
+</iframe>
+
+<!-- LOADER -->
+
+<div id="loader">
+
+    <!-- LOGO -->
+
+    <div class="logo-wrapper">
+
+        <div class="logo-ring"></div>
+        <div class="logo-ring-2"></div>
+        <div class="logo-ring-3"></div>
+
+        <div class="logo-inner">
+            <img
+                class="custom-logo"
+                src="https://files.catbox.moe/z2ogmi.jpg"
+                alt="JINE Logo">
         </div>
-        <div class="jsx-75dbae30a54318c6 h-screen bg-[#0b0d10] flex flex-col items-center justify-center relative overflow-hidden">
-            <div class="jsx-75dbae30a54318c6 absolute top-1/4 left-1/4 w-[300px] h-[300px] bg-[#5865F2]/8 rounded-full blur-[100px] animate-pulse"></div>
-            <div style="animation-delay:1s" class="jsx-75dbae30a54318c6 absolute bottom-1/4 right-1/4 w-[250px] h-[250px] bg-[#EB459E]/6 rounded-full blur-[80px] animate-pulse"></div>
-            <div class="jsx-75dbae30a54318c6 relative z-10 flex flex-col items-center gap-5">
-                <div class="jsx-75dbae30a54318c6 relative">
-                    <div class="jsx-75dbae30a54318c6 w-16 h-16 rounded-2xl bg-gradient-to-br from-[#5865F2] to-[#7B68EE] flex items-center justify-center shadow-lg shadow-[#5865F2]/30">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="jsx-75dbae30a54318c6 w-8 h-8 text-white">
-                            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" class="jsx-75dbae30a54318c6"></path>
-                        </svg>
-                    </div>
-                    <div style="animation:spin 3s linear infinite" class="jsx-75dbae30a54318c6 absolute inset-[-12px] rounded-full border border-[#5865F2]/20">
-                        <div class="jsx-75dbae30a54318c6 absolute -top-1 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-[#5865F2]"></div>
-                    </div>
-                </div>
-                <div class="jsx-75dbae30a54318c6 flex items-center gap-1.5">
-                    <div style="animation:pulse 1.4s ease-in-out infinite" class="jsx-75dbae30a54318c6 w-1.5 h-1.5 rounded-full bg-[#5865F2]"></div>
-                    <div style="animation:pulse 1.4s ease-in-out 0.2s infinite" class="jsx-75dbae30a54318c6 w-1.5 h-1.5 rounded-full bg-[#EB459E]"></div>
-                    <div style="animation:pulse 1.4s ease-in-out 0.4s infinite" class="jsx-75dbae30a54318c6 w-1.5 h-1.5 rounded-full bg-[#57F287]"></div>
-                </div>
-            </div>
+
+    </div>
+
+    <!-- TITLE -->
+
+    <div class="title-group">
+
+        <div class="title">
+            Auto<span>Quest</span>
         </div>
-        <!--$-->
-        <!--/$-->
-        <div role="region" aria-label="Notifications (F8)" tabindex="-1" style="pointer-events:none">
-            <ol tabindex="-1" class="fixed top-0 z-[100] flex max-h-screen w-full flex-col-reverse p-4 sm:bottom-0 sm:right-0 sm:top-auto sm:flex-col md:max-w-[420px]"></ol>
+
+        <div class="status" id="statusText">
+            Đang kết nối đến máy chủ
+            <span class="dot">.</span>
+            <span class="dot">.</span>
+            <span class="dot">.</span>
         </div>
-        <script src="/assets/static/chunks/58c60a5fa6b544da.js" id="_R_" async=""></script>
-        <script>
-            (self.__next_f = self.__next_f || []).push([0])
-        </script>
-        <script>
-            self.__next_f.push([1, "1:\"$Sreact.fragment\"\n2:I[39756,[\"/assets/static/chunks/2f236954d6a65e12.js\"],\"default\"]\n3:I[37457,[\"/assets/static/chunks/2f236954d6a65e12.js\"],\"default\"]\n4:I[77855,[\"/assets/static/chunks/a61eea631e0d2eee.js\",\"/assets/static/chunks/de5b9c2a7bdbf83c.js\"],\"Toaster\"]\n5:I[47257,[\"/assets/static/chunks/2f236954d6a65e12.js\"],\"ClientPageRoot\"]\n6:I[52683,[\"/assets/static/chunks/a61eea631e0d2eee.js\",\"/assets/static/chunks/de5b9c2a7bdbf83c.js\",\"/assets/static/chunks/0510567bff3c9695.js\"],\"default\"]\n9:I[97367,[\"/assets/static/chunks/2f236954d6a65e12.js\"],\"OutletBoundary\"]\na:\"$Sreact.suspense\"\nc:I[97367,[\"/assets/static/chunks/2f236954d6a65e12.js\"],\"ViewportBoundary\"]\ne:I[97367,[\"/assets/static/chunks/2f236954d6a65e12.js\"],\"MetadataBoundary\"]\n10:I[68027,[\"/assets/static/chunks/2f236954d6a65e12.js\"],\"default\"]\n:HL[\"/assets/static/chunks/2473c16c0c2f6b5f.css\",\"style\"]\n:HL[\"/assets/static/chunks/f7d392ae000d0705.css\",\"style\"]\n:HL[\"/assets/static/media/797e433ab948586e-s.p.dbea232f.woff2\",\"font\",{\"crossOrigin\":\"\",\"type\":\"font/woff2\"}]\n:HL[\"/assets/static/media/caa3a2e1cccd8315-s.p.853070df.woff2\",\"font\",{\"crossOrigin\":\"\",\"type\":\"font/woff2\"}]\n"])
-        </script>
-        <script>
-            self.__next_f.push([1, "0:{\"P\":null,\"b\":\"T8LzzN7Xrg2KzbYY2nFIJ\",\"c\":[\"\",\"\"],\"q\":\"\",\"i\":false,\"f\":[[[\"\",{\"children\":[\"__PAGE__\",{}]},\"$undefined\",\"$undefined\",true],[[\"$\",\"$1\",\"c\",{\"children\":[[[\"$\",\"link\",\"0\",{\"rel\":\"stylesheet\",\"href\":\"/assets/static/chunks/2473c16c0c2f6b5f.css\",\"precedence\":\"next\",\"crossOrigin\":\"$undefined\",\"nonce\":\"$undefined\"}],[\"$\",\"link\",\"1\",{\"rel\":\"stylesheet\",\"href\":\"/assets/static/chunks/f7d392ae000d0705.css\",\"precedence\":\"next\",\"crossOrigin\":\"$undefined\",\"nonce\":\"$undefined\"}],[\"$\",\"script\",\"script-0\",{\"src\":\"/assets/static/chunks/a61eea631e0d2eee.js\",\"async\":true,\"nonce\":\"$undefined\"}],[\"$\",\"script\",\"script-1\",{\"src\":\"/assets/static/chunks/de5b9c2a7bdbf83c.js\",\"async\":true,\"nonce\":\"$undefined\"}]],[\"$\",\"html\",null,{\"lang\":\"vi\",\"suppressHydrationWarning\":true,\"className\":\"dark\",\"children\":[\"$\",\"body\",null,{\"className\":\"geist_a71539c9-module__T19VSG__variable geist_mono_8d43a2aa-module__8Li5zG__variable antialiased bg-[#0b0d10] text-white\",\"children\":[[\"$\",\"$L2\",null,{\"parallelRouterKey\":\"children\",\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L3\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":[[[\"$\",\"title\",null,{\"children\":\"404: This page could not be found.\"}],[\"$\",\"div\",null,{\"style\":{\"fontFamily\":\"system-ui,\\\"Segoe UI\\\",Roboto,Helvetica,Arial,sans-serif,\\\"Apple Color Emoji\\\",\\\"Segoe UI Emoji\\\"\",\"height\":\"100vh\",\"textAlign\":\"center\",\"display\":\"flex\",\"flexDirection\":\"column\",\"alignItems\":\"center\",\"justifyContent\":\"center\"},\"children\":[\"$\",\"div\",null,{\"children\":[[\"$\",\"style\",null,{\"dangerouslySetInnerHTML\":{\"__html\":\"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}\"}}],[\"$\",\"h1\",null,{\"className\":\"next-error-h1\",\"style\":{\"display\":\"inline-block\",\"margin\":\"0 20px 0 0\",\"padding\":\"0 23px 0 0\",\"fontSize\":24,\"fontWeight\":500,\"verticalAlign\":\"top\",\"lineHeight\":\"49px\"},\"children\":404}],[\"$\",\"div\",null,{\"style\":{\"display\":\"inline-block\"},\"children\":[\"$\",\"h2\",null,{\"style\":{\"fontSize\":14,\"fontWeight\":400,\"lineHeight\":\"49px\",\"margin\":0},\"children\":\"This page could not be found.\"}]}]]}]}]],[]],\"forbidden\":\"$undefined\",\"unauthorized\":\"$undefined\"}],[\"$\",\"$L4\",null,{}]]}]}]]}],{\"children\":[[\"$\",\"$1\",\"c\",{\"children\":[[\"$\",\"$L5\",null,{\"Component\":\"$6\",\"serverProvidedParams\":{\"searchParams\":{},\"params\":{},\"promises\":[\"$@7\",\"$@8\"]}}],[[\"$\",\"script\",\"script-0\",{\"src\":\"/assets/static/chunks/0510567bff3c9695.js\",\"async\":true,\"nonce\":\"$undefined\"}]],[\"$\",\"$L9\",null,{\"children\":[\"$\",\"$a\",null,{\"name\":\"Next.MetadataOutlet\",\"children\":\"$@b\"}]}]]}],{},null,false,false]},null,false,false],[\"$\",\"$1\",\"h\",{\"children\":[null,[\"$\",\"$Lc\",null,{\"children\":\"$Ld\"}],[\"$\",\"div\",null,{\"hidden\":true,\"children\":[\"$\",\"$Le\",null,{\"children\":[\"$\",\"$a\",null,{\"name\":\"Next.Metadata\",\"children\":\"$Lf\"}]}]}],[\"$\",\"meta\",null,{\"name\":\"next-size-adjust\",\"content\":\"\"}]]}],false]],\"m\":\"$undefined\",\"G\":[\"$10\",[]],\"S\":true}\n"])
-        </script>
-        <script>
-            self.__next_f.push([1, "7:{}\n8:\"$0:f:0:1:1:children:0:props:children:0:props:serverProvidedParams:params\"\n"])
-        </script>
-        <script>
-            self.__next_f.push([1, "d:[[\"$\",\"meta\",\"0\",{\"charSet\":\"utf-8\"}],[\"$\",\"meta\",\"1\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}]]\n"])
-        </script>
-        <script>
-            self.__next_f.push([1, "11:I[27201,[\"/assets/static/chunks/2f236954d6a65e12.js\"],\"IconMark\"]\nb:null\nf:[[\"$\",\"title\",\"0\",{\"children\":\"Discord Quest Auto - Auto Complete Discord Quests\"}],[\"$\",\"meta\",\"1\",{\"name\":\"description\",\"content\":\"Automatically complete Discord quests with multiple token support. Run up to 100 tokens simultaneously with real-time monitoring.\"}],[\"$\",\"link\",\"2\",{\"rel\":\"icon\",\"href\":\"https://discord.com/favicon.ico\"}],[\"$\",\"$L11\",\"3\",{}]]\n"])
-        </script>
-    </body>
+
+    </div>
+
+    <!-- PROGRESS -->
+
+    <div class="progress-wrapper">
+
+        <div class="progress-track">
+            <div class="progress-fill"></div>
+        </div>
+
+    </div>
+
+    <!-- DESCRIPTION -->
+
+    <div class="subtitle">
+
+        JINE BOT LÀ 1 BÉ CON CỦA MTRUONG CHUYÊN LÀM NHIỆM VỤ DISCORD
+        NHANH CHÓNG ĐA NỀN TẢNG — CÂN NHẮC KHI SỬ DỤNG
+        NẾU KHÔNG MUỐN DÍNH CHÍNH SÁCH TOS CỦA DISCORD
+
+    </div>
+
+    <!-- FEATURES -->
+
+    <div class="features">
+
+        <div class="pill">
+            <span class="pill-dot"></span>
+            Offline Sync
+        </div>
+
+        <div class="pill">
+            <span class="pill-dot"></span>
+            Cloud 24/7
+        </div>
+
+        <div class="pill">
+            <span class="pill-dot"></span>
+            Đơn giản
+        </div>
+
+        <div class="pill">
+            <span class="pill-dot"></span>
+            Đa nền tảng
+        </div>
+
+    </div>
+
+</div>
+
+<script src="loader.js"></script>
+
+</body>
 </html>
