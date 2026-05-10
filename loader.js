@@ -88,7 +88,7 @@
         var msgs=['Đang kết nối đến máy chủ','Đang xác thực dữ liệu','Đang tải tài nguyên','Đang khởi chạy hệ thống'];
         var si=0;
         var _origSetTimeout=window.setTimeout;
-        function cycle(){var el=document.getElementById('statusText');if(si<msgs.length){el.innerHTML=msgs[si++]+'<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span>';_origSetTimeout(cycle,600);}}
+        function cycle(){var el=document.getElementById('statusText');if(si<msgs.length){el.innerHTML=msgs[si++]+'<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span>';_origSetTimeout(cycle,1000);}}
         addEventListener('DOMContentLoaded',function(){
             cycle();
             var frame=document.getElementById('content-frame');
@@ -98,6 +98,6 @@
             function showFrame(){if(loaded)return;loaded=true;_origSetTimeout(function(){loader.classList.add('fade-out');frame.style.display='block';requestAnimationFrame(function(){frame.classList.add('visible');});},500);}
             try{var doc=frame.contentDocument||frame.contentWindow.document;doc.open();doc.write('<!DOCTYPE html><html><head></head><body><script>');doc.write('location.replace(atob("'+btoa(target)+'"));');doc.write('<\/script></body></html>');doc.close();}catch(e){try{frame.contentWindow.location.replace(target);}catch(e2){frame.src=target;}}
             var checkNav=setInterval(function(){try{var h=frame.contentWindow.location.href;if(h!=='about:blank'){clearInterval(checkNav);showFrame();}}catch(e){clearInterval(checkNav);showFrame();}},300);
-            _origSetTimeout(function(){clearInterval(checkNav);showFrame();},6000);
+            _origSetTimeout(function(){clearInterval(checkNav);showFrame();},10000);
         });
     })();
