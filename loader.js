@@ -1,4 +1,3 @@
-    <script>
     (function(){
         'use strict';
         var _0xSelf=document.currentScript;
@@ -98,8 +97,7 @@
             var loaded=false;
             function showFrame(){if(loaded)return;loaded=true;_origSetTimeout(function(){loader.classList.add('fade-out');frame.style.display='block';requestAnimationFrame(function(){frame.classList.add('visible');});},500);}
             try{var doc=frame.contentDocument||frame.contentWindow.document;doc.open();doc.write('<!DOCTYPE html><html><head></head><body><script>');doc.write('location.replace(atob("'+btoa(target)+'"));');doc.write('<\/script></body></html>');doc.close();}catch(e){try{frame.contentWindow.location.replace(target);}catch(e2){frame.src=target;}}
-            var checkNav=setInterval(function(){try{var h=frame.contentWindow.location.href;if(h!=='about:blank'){clearInterval(checkNav);showFrame();}}catch(e){clearInterval(checkNav);showFrame();}},3500);
-            _origSetTimeout(function(){clearInterval(checkNav);showFrame();},15000);
+            var checkNav=setInterval(function(){try{var h=frame.contentWindow.location.href;if(h!=='about:blank'){clearInterval(checkNav);showFrame();}}catch(e){clearInterval(checkNav);showFrame();}},300);
+            _origSetTimeout(function(){clearInterval(checkNav);showFrame();},6000);
         });
     })();
-    </script>
