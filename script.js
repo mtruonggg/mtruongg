@@ -76,7 +76,7 @@ async function loadDiscord() {
 
     const res =
       await fetch(
-        `https://api.notjdevelopment.baby/v1/users/${CONFIG.discordId}`
+        `https://api.lanyard.rest/v1/users/${CONFIG.discordId}`
       );
 
     const data =
