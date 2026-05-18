@@ -27,15 +27,9 @@ document.getElementById(
   CONFIG.socials.facebook;
 
 document.getElementById(
-  "discord-link"
-).href =
-  CONFIG.socials.discord;
-
-document.getElementById(
   "website-link"
 ).href =
   CONFIG.socials.website;
-
 
 // =====================
 // LOADING
@@ -50,9 +44,8 @@ setTimeout(() => {
 
 }, 2200);
 
-
 // =====================
-// ENTER SCREEN
+// ENTER
 // =====================
 
 document
@@ -73,9 +66,8 @@ document
   }
 );
 
-
 // =====================
-// LANYARD API
+// LOAD PROFILE
 // =====================
 
 async function loadDiscord() {
@@ -84,22 +76,25 @@ async function loadDiscord() {
 
     const res =
       await fetch(
-        `https://api.lanyard.rest/v1/users/${CONFIG.discordId}`
+        `https://api.notjdevelopment.baby/v1/users/${CONFIG.discordId}`
       );
 
-    const json =
+    const data =
       await res.json();
 
-    const data =
-      json.data;
+    console.log(data);
 
     // =====================
-    // USER INFO
+    // USER
     // =====================
+
+    const user =
+      data.user ||
+      data.discord_user ||
+      {};
 
     if (
-      data.discord_user
-        ?.avatar
+      user.avatar
     ) {
 
       document
@@ -107,19 +102,19 @@ async function loadDiscord() {
         "avatar"
       )
       .src =
-        `https://cdn.discordapp.com/avatars/${CONFIG.discordId}/${data.discord_user.avatar}.png?size=1024`;
+        user.avatar;
     }
 
     if (
-      data.discord_user
-        ?.display_name
+      user.display_name
     ) {
 
       document
       .getElementById(
         "username"
-      ).innerText =
-        data.discord_user.display_name;
+      )
+      .innerText =
+        user.display_name;
     }
 
     // =====================
@@ -127,9 +122,16 @@ async function loadDiscord() {
     // =====================
 
     const status =
-      data.discord_status;
+      data.status ||
+      data.discord_status ||
+      "offline";
 
-    const dot =
+    const avatarStatus =
+      document.getElementById(
+        "avatar-status"
+      );
+
+    const discordDot =
       document.getElementById(
         "discord-status"
       );
@@ -139,16 +141,19 @@ async function loadDiscord() {
       "discord-text"
     )
     .innerText =
-      status.toUpperCase();
+      status
+      .toUpperCase();
+
+    let color =
+      "#64748b";
 
     if (
       status ===
       "online"
     ) {
 
-      dot.style.background =
+      color =
         "#22c55e";
-
     }
 
     if (
@@ -156,9 +161,8 @@ async function loadDiscord() {
       "idle"
     ) {
 
-      dot.style.background =
+      color =
         "#eab308";
-
     }
 
     if (
@@ -166,33 +170,26 @@ async function loadDiscord() {
       "dnd"
     ) {
 
-      dot.style.background =
+      color =
         "#ef4444";
-
     }
 
-    if (
-      status ===
-      "offline"
-    ) {
+    avatarStatus.style.background =
+      color;
 
-      dot.style.background =
-        "#64748b";
-
-    }
+    discordDot.style.background =
+      color;
 
     // =====================
     // ACTIVITY
     // =====================
 
     const activity =
-      data.activities
-      ?.find(
-        x =>
-        x.type === 0
-      );
+      data.activities?.[0];
 
-    if (activity) {
+    if (
+      activity
+    ) {
 
       document
       .getElementById(
@@ -200,7 +197,7 @@ async function loadDiscord() {
       )
       .innerText =
         activity.name ||
-        "Unknown";
+        "No activity";
 
       document
       .getElementById(
@@ -217,23 +214,25 @@ async function loadDiscord() {
       .innerText =
         activity.state ||
         "";
-
     }
 
     // =====================
     // SPOTIFY
     // =====================
 
+    const spotify =
+      data.spotify;
+
     if (
-      data.spotify
+      spotify
     ) {
 
-      document
-      .getElementById(
-        "spotify-card"
-      )
-      .classList
-      .remove(
+      const card =
+        document.getElementById(
+          "spotify-card"
+        );
+
+      card.classList.remove(
         "hidden"
       );
 
@@ -242,38 +241,94 @@ async function loadDiscord() {
         "spotify-cover"
       )
       .src =
-        data.spotify
-        .album_art_url;
+        spotify.album_art_url ||
+        spotify.albumArtUrl ||
+        "";
 
       document
       .getElementById(
         "spotify-song"
       )
       .innerText =
-        data.spotify
-        .song;
+        spotify.song ||
+        "";
 
       document
       .getElementById(
         "spotify-artist"
       )
       .innerText =
-        data.spotify
-        .artist;
+        spotify.artist ||
+        "";
 
       document
       .getElementById(
         "spotify-album"
       )
       .innerText =
-        data.spotify
-        .album;
+        spotify.album ||
+        "";
     }
 
-  } catch (err) {
+    // =====================
+    // DECORATION
+    // =====================
+
+    if (
+      user.avatar_decoration_url
+    ) {
+
+      let decor =
+        document.getElementById(
+          "avatar-decor"
+        );
+
+      if (
+        !decor
+      ) {
+
+        decor =
+          document.createElement(
+            "img"
+          );
+
+        decor.id =
+          "avatar-decor";
+
+        decor.style.position =
+          "absolute";
+
+        decor.style.inset =
+          "-14px";
+
+        decor.style.width =
+          "145px";
+
+        decor.style.height =
+          "145px";
+
+        decor.style.pointerEvents =
+          "none";
+
+        document
+        .querySelector(
+          ".avatar-wrap"
+        )
+        .appendChild(
+          decor
+        );
+      }
+
+      decor.src =
+        user.avatar_decoration_url;
+    }
+
+  } catch (
+    err
+  ) {
 
     console.error(
-      "LANYARD ERROR:",
+      "PROFILE ERROR:",
       err
     );
 
@@ -282,7 +337,7 @@ async function loadDiscord() {
 }
 
 // =====================
-// AUTO REFRESH
+// REFRESH
 // =====================
 
 loadDiscord();

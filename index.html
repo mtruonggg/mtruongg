@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
 
@@ -9,7 +8,7 @@
     content="width=device-width, initial-scale=1.0"
   />
 
-  <title>JINE PROFILE</title>
+  <title>Sáng Profile</title>
 
   <link
     rel="preconnect"
@@ -30,7 +29,6 @@
     rel="stylesheet"
     href="./style.css"
   />
-
 </head>
 
 <body>
@@ -52,7 +50,7 @@
 
   </div>
 
-  <!-- CLICK ENTER -->
+  <!-- CLICK TO ENTER -->
   <div id="enter-screen">
 
     <div class="enter-box glass">
@@ -71,112 +69,96 @@
 
   </div>
 
-  <!-- BACKGROUND -->
+  <!-- BACKGROUND GLOW -->
   <div class="bg-glow glow-1"></div>
   <div class="bg-glow glow-2"></div>
 
-  <!-- PROFILE -->
+  <!-- CONTAINER -->
   <div class="container">
 
     <div class="profile-card glass">
 
-      <!-- BANNER -->
-      <div class="banner">
-
-        <img
-          src="./assets/banner.jpg"
-          alt="banner"
-        />
-
-      </div>
-
-      <!-- CONTENT -->
       <div class="profile-content">
 
         <!-- AVATAR -->
-        <img
-          id="avatar"
-          class="avatar"
-          src="./assets/avatar.jpg"
-          alt="avatar"
-        />
+        <div class="avatar-wrap">
 
-        <!-- INFO -->
+          <img
+            id="avatar"
+            class="avatar"
+            src="./assets/avatar.png"
+            alt=""
+          />
+
+          <span
+            id="avatar-status"
+            class="avatar-status">
+          </span>
+
+        </div>
+
+        <!-- PROFILE -->
         <div class="info">
 
-          <div class="username-row">
-
-            <h1 id="username">
-              Loading...
-            </h1>
-
-            <span
-              id="status-dot"
-              class="status-dot">
-            </span>
-
-          </div>
+          <h1 id="username">
+            Loading...
+          </h1>
 
           <p id="pronouns">
             he/him
           </p>
 
           <p id="bio">
-            My name mtruong 
+            Premium profile inspired by discord aesthetic.
           </p>
 
         </div>
 
-<div class="socials">
+        <!-- SOCIAL -->
+        <div class="socials">
 
-  <a
-    id="facebook-link"
-    class="glass social-btn"
-    target="_blank"
-  >
-    <i class="fab fa-facebook"></i>
-  </a>
+          <a
+            id="facebook-link"
+            class="glass social-btn"
+            target="_blank"
+          >
+            <i class="fab fa-facebook"></i>
+          </a>
 
-  <a
-    id="discord-link"
-    class="glass social-btn"
-    target="_blank"
-  >
-    <i class="fab fa-discord"></i>
-  </a>
+          <a
+            href="discord://-/users/318924091518222338"
+            class="glass social-btn"
+          >
+            <i class="fab fa-discord"></i>
+          </a>
 
-  <a
-    id="website-link"
-    class="glass social-btn"
-    target="_blank"
-  >
-    <i class="fas fa-globe"></i>
-  </a>
+          <a
+            id="website-link"
+            class="glass social-btn"
+            target="_blank"
+          >
+            <i class="fas fa-globe"></i>
+          </a>
 
-</div>
+        </div>
 
         <!-- DISCORD CARD -->
         <div
-          id="discord-card"
           class="glass discord-card"
         >
 
-          <div class="discord-header">
+          <div class="status-wrap">
 
-            <div class="status-wrap">
-
-              <div
-                id="discord-status"
-                class="online-dot">
-              </div>
-
-              <span
-                id="discord-text"
-              >
-                Loading...
-              </span>
-
+            <div
+              id="discord-status"
+              class="online-dot">
             </div>
+
+            <span
+              id="discord-text"
+            >
+              Loading...
+            </span>
 
           </div>
 
@@ -190,9 +172,11 @@
               No activity
             </h3>
 
-            <p id="activity-details"></p>
+            <p id="activity-details">
+            </p>
 
-            <p id="activity-state"></p>
+            <p id="activity-state">
+            </p>
 
           </div>
 
@@ -216,9 +200,11 @@
               Listening to Spotify
             </p>
 
-            <h3 id="spotify-song"></h3>
+            <h3 id="spotify-song">
+            </h3>
 
-            <p id="spotify-artist"></p>
+            <p id="spotify-artist">
+            </p>
 
             <small id="spotify-album">
             </small>
@@ -227,14 +213,17 @@
 
         </div>
 
-        <!-- SPOTIFY PLAYLIST -->
+        <!-- PLAYLIST -->
         <div class="spotify-embed glass">
 
           <iframe
-            style="border-radius:20px"
+            style="
+            border-radius:24px;
+            border:none;
+            "
             src="https://open.spotify.com/embed/playlist/6UatyjkgASKXHfSCU5Lwby?utm_source=generator&theme=0"
             width="100%"
-            height="152"
+            height="352"
             frameBorder="0"
             allowfullscreen=""
             allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
@@ -249,12 +238,8 @@
 
   </div>
 
-  <!-- CONFIG -->
   <script src="./config.js"></script>
-
-  <!-- MAIN SCRIPT -->
   <script src="./script.js"></script>
 
 </body>
-
 </html>
