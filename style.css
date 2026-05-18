@@ -1,0 +1,450 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap");
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:"Inter",sans-serif;
+}
+
+html,
+body{
+  width:100%;
+  min-height:100vh;
+  overflow-x:hidden;
+  background:#020617;
+}
+
+body{
+  position:relative;
+  background:
+  radial-gradient(circle at top left,
+  rgba(37,99,235,.20),
+  transparent 35%),
+
+  radial-gradient(circle at bottom right,
+  rgba(6,182,212,.15),
+  transparent 35%),
+
+  #020617;
+}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{
+  width:6px;
+}
+
+::-webkit-scrollbar-thumb{
+  background:#1d4ed8;
+  border-radius:999px;
+}
+
+/* PREMIUM GLASS */
+.glass{
+  background:
+  linear-gradient(
+    180deg,
+    rgba(255,255,255,.09),
+    rgba(255,255,255,.03)
+  );
+
+  border:
+  1px solid
+  rgba(255,255,255,.08);
+
+  backdrop-filter:
+  blur(28px)
+  saturate(180%);
+
+  -webkit-backdrop-filter:
+  blur(28px)
+  saturate(180%);
+
+  box-shadow:
+  0 8px 30px rgba(0,0,0,.35),
+  inset 0 1px 0 rgba(255,255,255,.05);
+}
+
+/* LOADING */
+#loading-screen{
+  position:fixed;
+  inset:0;
+  background:#020617;
+  z-index:9999;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.loader{
+  text-align:center;
+}
+
+.spinner{
+  width:85px;
+  height:85px;
+  border-radius:999px;
+  border:4px solid rgba(255,255,255,.1);
+  border-top-color:#3b82f6;
+  animation:spin 1s linear infinite;
+  margin:auto;
+}
+
+.loader h1{
+  color:#fff;
+  margin-top:22px;
+  font-size:28px;
+}
+
+.loader p{
+  color:#94a3b8;
+  margin-top:8px;
+}
+
+@keyframes spin{
+  to{
+    transform:rotate(360deg);
+  }
+}
+
+/* ENTER SCREEN */
+#enter-screen{
+  position:fixed;
+  inset:0;
+  z-index:999;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:rgba(0,0,0,.45);
+  backdrop-filter:blur(18px);
+}
+
+.enter-box{
+  width:320px;
+  border-radius:32px;
+  text-align:center;
+  padding:38px;
+}
+
+.enter-box h1{
+  color:#fff;
+  font-size:34px;
+  font-weight:800;
+}
+
+.enter-box p{
+  color:#94a3b8;
+  margin-top:8px;
+}
+
+#enter-btn{
+  border:none;
+  margin-top:24px;
+  padding:14px 28px;
+  border-radius:18px;
+  background:#2563eb;
+  color:#fff;
+  cursor:pointer;
+  font-size:16px;
+  font-weight:600;
+  transition:.25s;
+}
+
+#enter-btn:hover{
+  transform:translateY(-2px);
+  background:#3b82f6;
+}
+
+/* BACKGROUND GLOW */
+.bg-glow{
+  position:fixed;
+  width:420px;
+  height:420px;
+  border-radius:999px;
+  filter:blur(120px);
+  pointer-events:none;
+}
+
+.glow-1{
+  top:-150px;
+  left:-150px;
+  background:
+  rgba(37,99,235,.20);
+}
+
+.glow-2{
+  right:-150px;
+  bottom:-150px;
+  background:
+  rgba(6,182,212,.12);
+}
+
+/* CONTAINER */
+.container{
+  width:100%;
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:30px 18px;
+}
+
+/* PROFILE CARD */
+.profile-card{
+  width:100%;
+  max-width:430px;
+  border-radius:38px;
+  overflow:hidden;
+  animation:fadeUp .8s ease;
+}
+
+@keyframes fadeUp{
+  from{
+    opacity:0;
+    transform:
+    translateY(25px)
+    scale(.97);
+  }
+
+  to{
+    opacity:1;
+    transform:
+    translateY(0)
+    scale(1);
+  }
+}
+
+/* BANNER */
+.banner{
+  position:relative;
+  height:220px;
+}
+
+.banner img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.banner::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+  linear-gradient(
+    to bottom,
+    transparent,
+    #020617
+  );
+}
+
+/* CONTENT */
+.profile-content{
+  position:relative;
+  padding:0 26px 30px;
+}
+
+.avatar{
+  position:absolute;
+  top:-70px;
+  width:130px;
+  height:130px;
+  border-radius:999px;
+  object-fit:cover;
+  border:5px solid #020617;
+  box-shadow:
+  0 20px 45px rgba(0,0,0,.35);
+}
+
+.info{
+  padding-top:78px;
+}
+
+.username-row{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.username-row h1{
+  color:#fff;
+  font-size:34px;
+  font-weight:800;
+}
+
+.status-dot{
+  width:12px;
+  height:12px;
+  border-radius:999px;
+  background:#22c55e;
+  box-shadow:
+  0 0 18px #22c55e;
+}
+
+#pronouns{
+  color:#60a5fa;
+  font-weight:500;
+  margin-top:3px;
+}
+
+#bio{
+  color:#cbd5e1;
+  margin-top:14px;
+  line-height:1.7;
+}
+
+/* SOCIALS */
+.socials{
+  margin-top:24px;
+  display:grid;
+grid-template-columns:
+repeat(3,1fr);
+  gap:12px;
+}
+
+.social-btn{
+  height:62px;
+  border-radius:22px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-decoration:none;
+  color:#fff;
+  font-size:22px;
+  transition:.25s;
+}
+
+.social-btn:hover{
+  transform:
+  translateY(-4px);
+}
+
+/* DISCORD CARD */
+.discord-card{
+  margin-top:18px;
+  border-radius:28px;
+  padding:20px;
+}
+
+.discord-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.status-wrap{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.online-dot{
+  width:10px;
+  height:10px;
+  border-radius:999px;
+  background:#22c55e;
+}
+
+#discord-text{
+  color:#fff;
+  font-weight:600;
+}
+
+.playing{
+  margin-top:16px;
+  color:#60a5fa;
+  font-size:12px;
+  letter-spacing:2px;
+}
+
+#activity-name{
+  margin-top:10px;
+  color:#fff;
+  font-size:20px;
+}
+
+#activity-details{
+  color:#cbd5e1;
+  margin-top:6px;
+}
+
+#activity-state{
+  color:#94a3b8;
+  margin-top:6px;
+  font-size:14px;
+}
+
+/* SPOTIFY CARD */
+.spotify-card{
+  margin-top:18px;
+  border-radius:28px;
+  padding:18px;
+  display:flex;
+  gap:16px;
+}
+
+.spotify-card img{
+  width:88px;
+  height:88px;
+  border-radius:20px;
+  object-fit:cover;
+}
+
+.spotify-info{
+  flex:1;
+}
+
+.spotify-tag{
+  color:#22c55e;
+  font-size:13px;
+  font-weight:700;
+}
+
+#spotify-song{
+  color:#fff;
+  margin-top:6px;
+  font-size:20px;
+}
+
+#spotify-artist{
+  color:#cbd5e1;
+  margin-top:5px;
+}
+
+#spotify-album{
+  display:block;
+  margin-top:10px;
+  color:#94a3b8;
+}
+
+.spotify-embed{
+  margin-top:18px;
+  border-radius:28px;
+  padding:12px;
+}
+
+.hidden{
+  display:none;
+}
+
+/* MOBILE */
+@media(max-width:480px){
+
+  .profile-card{
+    border-radius:30px;
+  }
+
+  .banner{
+    height:190px;
+  }
+
+  .avatar{
+    width:110px;
+    height:110px;
+  }
+
+  .username-row h1{
+    font-size:28px;
+  }
+
+}

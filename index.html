@@ -1,1007 +1,260 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
+
 <head>
-    <title>Discord Quests Auto</title>
-    <meta charset="UTF-8">
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700;800&display=swap" rel="stylesheet">
-    <meta property="og:title" content="JINE BOT Auto Quests Discord" />
-    <meta property="og:description" content="• Tự động thực thi nhiệm vụ và đồng bộ dữ liệu ngay cả khi đóng tab.&#10;• Vận hành ổn định trên nền tảng cloud, đảm bảo tiến độ liên tục 24/7.&#10;• Công nghệ mã hóa đa tầng, bảo vệ quyền riêng tư và an toàn tài khoản.&#10;• Tương thích hoàn hảo trên mọi nền tảng." />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://discord.com/" />
-    <meta name="theme-color" content="#EB459E">
-    <link rel="icon" type="image/jpeg" href="https://raw.githubusercontent.com/Kandagawa/Auto-Quests-Discord/main/f59f1e660b16370adbc1621f7907e382.jpg">
-    <link rel="shortcut icon" type="image/jpeg" href="https://raw.githubusercontent.com/Kandagawa/Auto-Quests-Discord/main/f59f1e660b16370adbc1621f7907e382.jpg">
-    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/Kandagawa/Auto-Quests-Discord/main/f59f1e660b16370adbc1621f7907e382.jpg">
-<style>
-:root{
-    --blurple:#5865F2;
-    --blurple-dark:#4752C4;
-    --blurple-glow:rgba(88,101,242,.5);
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <title>JINE PROFILE</title>
+
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  />
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet"
+  />
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+  />
+
+  <link
+    rel="stylesheet"
+    href="./style.css"
+  />
 
-    --green:#57F287;
-    --yellow:#FEE75C;
-
-    --fuchsia:#EB459E;
-    --fuchsia-glow:rgba(235,69,158,.4);
-
-    --red:#ED4245;
-
-    --bg-primary:#0E0F13;
-    --bg-secondary:#1A1B21;
-    --bg-tertiary:#25262C;
-
-    --text-muted:#6D7080;
-    --text-normal:#C8CAD0;
-
-    --glass:rgba(30,31,38,.6);
-    --glass-border:rgba(88,101,242,.12);
-}
-
-/* RESET */
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:"Be Vietnam Pro","Roboto","Segoe UI",sans-serif !important;
-}
-
-html,
-body{
-    width:100%;
-    min-height:100vh;
-    overflow-x:hidden;
-
-    background:var(--bg-primary);
-    color:var(--text-normal);
-
-    -webkit-font-smoothing:antialiased;
-    text-rendering:optimizeLegibility;
-}
-
-/* FRAME */
-#content-frame{
-    position:fixed;
-    inset:0;
-
-    width:100%;
-    height:100%;
-
-    border:none;
-
-    z-index:5;
-
-    display:none;
-
-    opacity:0;
-    transition:opacity .6s ease;
-}
-
-#content-frame.visible{
-    opacity:1;
-}
-
-/* BACKGROUND */
-.bg-layer{
-    position:fixed;
-    inset:0;
-    z-index:0;
-    overflow:hidden;
-    pointer-events:none;
-}
-
-.bg-layer::before{
-    content:'';
-
-    position:absolute;
-
-    width:600px;
-    height:600px;
-
-    background:
-    radial-gradient(
-        circle,
-        var(--blurple-glow) 0%,
-        transparent 70%
-    );
-
-    top:50%;
-    left:50%;
-
-    transform:
-    translate(-50%,-50%)
-    scale(1.5);
-
-    opacity:0;
-
-    animation:bgIn 2s .3s ease forwards;
-}
-
-.bg-layer::after{
-    content:'';
-
-    position:absolute;
-
-    width:400px;
-    height:400px;
-
-    background:
-    radial-gradient(
-        circle,
-        var(--fuchsia-glow) 0%,
-        transparent 70%
-    );
-
-    bottom:15%;
-    right:25%;
-
-    opacity:0;
-
-    .progress-fill{
-    animation:progressGrow 15s linear forwards;
-}
-}
-
-@keyframes bgIn{
-    to{
-        opacity:.6;
-    }
-}
-
-/* GRID */
-.grid-overlay{
-    position:fixed;
-    inset:0;
-
-    z-index:1;
-
-    background-image:
-    linear-gradient(rgba(88,101,242,.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(88,101,242,.03) 1px, transparent 1px);
-
-    background-size:60px 60px;
-
-    pointer-events:none;
-
-    opacity:0;
-
-    animation:fadeIn 1.5s .5s ease forwards;
-}
-
-@keyframes fadeIn{
-    to{
-        opacity:1;
-    }
-}
-
-/* NOISE */
-.noise{
-    position:fixed;
-    inset:0;
-
-    z-index:1;
-
-    pointer-events:none;
-
-    opacity:.025;
-
-    background-image:
-    url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-
-    background-size:128px 128px;
-}
-
-/* PARTICLE */
-#particleCanvas{
-    position:fixed;
-    inset:0;
-
-    z-index:2;
-
-    pointer-events:none;
-}
-
-/* ORB */
-.orb{
-    position:fixed;
-
-    border-radius:50%;
-
-    pointer-events:none;
-
-    z-index:1;
-
-    filter:blur(1px);
-}
-
-.orb-1{
-    width:5px;
-    height:5px;
-
-    background:var(--blurple);
-
-    top:18%;
-    left:22%;
-
-    box-shadow:0 0 10px var(--blurple-glow);
-
-    animation:orbF1 8s ease-in-out infinite;
-}
-
-.orb-2{
-    width:4px;
-    height:4px;
-
-    background:var(--fuchsia);
-
-    top:68%;
-    left:72%;
-
-    box-shadow:0 0 8px var(--fuchsia-glow);
-
-    animation:orbF2 10s ease-in-out infinite;
-}
-
-.orb-3{
-    width:4px;
-    height:4px;
-
-    background:var(--green);
-
-    top:42%;
-    left:82%;
-
-    box-shadow:0 0 8px rgba(87,242,135,.3);
-
-    animation:orbF3 7s ease-in-out infinite;
-}
-
-.orb-4{
-    width:3px;
-    height:3px;
-
-    background:var(--yellow);
-
-    top:78%;
-    left:32%;
-
-    box-shadow:0 0 6px rgba(254,231,92,.3);
-
-    animation:orbF1 9s 2s ease-in-out infinite;
-}
-
-@keyframes orbF1{
-    0%,100%{
-        transform:translate(0,0);
-        opacity:.5;
-    }
-
-    25%{
-        transform:translate(25px,-18px);
-        opacity:.9;
-    }
-
-    50%{
-        transform:translate(-8px,-35px);
-        opacity:.3;
-    }
-
-    75%{
-        transform:translate(15px,-12px);
-        opacity:.7;
-    }
-}
-
-@keyframes orbF2{
-    0%,100%{
-        transform:translate(0,0);
-        opacity:.4;
-    }
-
-    33%{
-        transform:translate(-20px,-25px);
-        opacity:.8;
-    }
-
-    66%{
-        transform:translate(12px,-40px);
-        opacity:.3;
-    }
-}
-
-@keyframes orbF3{
-    0%,100%{
-        transform:translate(0,0);
-        opacity:.3;
-    }
-
-    50%{
-        transform:translate(-28px,16px);
-        opacity:.8;
-    }
-}
-
-/* LOADER */
-#loader{
-    position:relative;
-
-    width:100%;
-    min-height:100vh;
-
-    z-index:100;
-
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-
-    gap:28px;
-
-    padding:40px 20px;
-
-    background:var(--bg-primary);
-
-    overflow:hidden;
-}
-
-.fade-out{
-    opacity:0 !important;
-    pointer-events:none;
-    transform:scale(1.1);
-}
-
-/* LOGO */
-.logo-wrapper{
-    position:relative;
-
-    width:100%;
-    max-width:700px;
-
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-
-    opacity:0;
-
-    animation:logoEntry .8s cubic-bezier(.34,1.56,.64,1) forwards;
-}
-
-@keyframes logoEntry{
-    0%{
-        opacity:0;
-        transform:scale(.5) rotate(-10deg);
-    }
-
-    100%{
-        opacity:1;
-        transform:scale(1) rotate(0deg);
-    }
-}
-
-.logo-ring{
-    position:absolute;
-
-    width:140px;
-    height:140px;
-
-    border-radius:50%;
-
-    border:3px solid transparent;
-
-    border-top-color:var(--blurple);
-    border-right-color:var(--blurple);
-
-    animation:spin 1s linear infinite;
-
-    filter:drop-shadow(0 0 4px var(--blurple-glow));
-}
-
-.logo-ring-2{
-    position:absolute;
-
-    width:160px;
-    height:160px;
-
-    border-radius:50%;
-
-    border:2px solid transparent;
-
-    border-bottom-color:var(--fuchsia);
-    border-left-color:var(--fuchsia);
-
-    animation:spin 1.5s linear infinite reverse;
-
-    filter:drop-shadow(0 0 3px var(--fuchsia-glow));
-}
-
-.logo-ring-3{
-    position:absolute;
-
-    width:180px;
-    height:180px;
-
-    border-radius:50%;
-
-    border:1px solid transparent;
-
-    border-top-color:rgba(87,242,135,.25);
-    border-left-color:rgba(87,242,135,.25);
-
-    animation:spin 2.5s linear infinite;
-}
-
-@keyframes spin{
-    to{
-        transform:rotate(360deg);
-    }
-}
-
-.logo-inner{
-    width:120px;
-    height:120px;
-
-    background:
-    linear-gradient(
-        145deg,
-        var(--blurple),
-        var(--blurple-dark)
-    );
-
-    border-radius:30px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    position:relative;
-
-    overflow:hidden;
-
-    animation:logoPulse 2s ease-in-out infinite;
-
-    box-shadow:
-    0 0 30px var(--blurple-glow),
-    0 8px 32px rgba(0,0,0,.4),
-    inset 0 1px 0 rgba(255,255,255,.1);
-}
-
-.logo-inner::before{
-    content:'';
-
-    position:absolute;
-
-    top:-50%;
-    left:-50%;
-
-    width:200%;
-    height:200%;
-
-    background:
-    linear-gradient(
-        45deg,
-        transparent 40%,
-        rgba(255,255,255,.07) 50%,
-        transparent 60%
-    );
-
-    animation:shimmer 3s ease-in-out infinite;
-}
-
-@keyframes shimmer{
-    0%,100%{
-        transform:translateX(-100%) rotate(45deg);
-    }
-
-    50%{
-        transform:translateX(100%) rotate(45deg);
-    }
-}
-
-@keyframes logoPulse{
-    0%,100%{
-        transform:scale(1);
-    }
-
-    50%{
-        transform:scale(1.05);
-    }
-}
-
-.custom-logo{
-    width:120px;
-    height:120px;
-
-    object-fit:cover;
-
-    border-radius:30px;
-
-    position:relative;
-
-    z-index:5;
-
-    user-select:none;
-    pointer-events:none;
-
-    background:#6c3dff;
-
-    padding:8px;
-
-    animation:logoFloat 3s ease-in-out infinite;
-
-    box-shadow:
-    0 0 25px rgba(140,0,255,.55),
-    0 0 55px rgba(255,0,170,.45),
-    0 0 90px rgba(120,0,255,.35);
-}
-
-@keyframes logoFloat{
-    0%,100%{
-        transform:translateY(0) scale(1);
-    }
-
-    50%{
-        transform:translateY(-6px) scale(1.05);
-    }
-}
-
-/* TITLE */
-.title-group{
-    width:100%;
-
-    padding:25px 10px 0;
-
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-
-    text-align:center;
-
-    opacity:0;
-
-    animation:slideUp .6s .15s ease-out forwards;
-}
-
-@keyframes slideUp{
-    0%{
-        opacity:0;
-        transform:translateY(16px);
-    }
-
-    100%{
-        opacity:1;
-        transform:translateY(0);
-    }
-}
-
-.title{
-    font-size:42px;
-    font-weight:800;
-
-    line-height:1.1;
-
-    color:#fff;
-
-    margin-top:10px;
-}
-
-.title span{
-    background:
-    linear-gradient(
-        90deg,
-        #8b5cf6,
-        #ec4899
-    );
-
-    -webkit-background-clip:text;
-    -webkit-text-fill-color:transparent;
-}
-
-/* SUBTITLE FIX */
-.subtitle{
-    width:100%;
-
-    max-width:650px;
-
-    margin-top:14px;
-
-    padding:0 12px;
-
-    color:rgba(255,255,255,.78);
-
-    font-size:14px;
-    line-height:1.8;
-
-    text-align:center;
-
-    white-space:normal;
-    word-break:break-word;
-    overflow-wrap:break-word;
-
-    letter-spacing:.3px;
-}
-
-/* PROGRESS */
-.progress-wrapper{
-    width:300px;
-    max-width:85vw;
-
-    opacity:0;
-
-    animation:slideUp .6s .3s ease-out forwards;
-}
-
-.progress-track{
-    width:100%;
-    height:6px;
-
-    background:var(--bg-tertiary);
-
-    border-radius:999px;
-
-    overflow:hidden;
-}
-
-.progress-fill{
-    height:100%;
-    width:0%;
-
-    background:
-    linear-gradient(
-        90deg,
-        var(--blurple),
-        var(--fuchsia)
-    );
-
-    border-radius:999px;
-
-    animation:progressGrow 2.5s cubic-bezier(.4,0,.2,1) forwards;
-}
-
-@keyframes progressGrow{
-    to{
-        width:100%;
-    }
-}
-
-/* STATUS */
-.status-container{
-    opacity:0;
-    animation:slideUp .6s .4s ease-out forwards;
-}
-
-.status{
-    font-size:14px;
-
-    color:var(--text-muted);
-
-    text-align:center;
-
-    padding:0 20px;
-
-    min-height:20px;
-}
-
-.status .dot{
-    display:inline-block;
-    opacity:0;
-}
-
-.status .dot:nth-child(1){
-    animation:dotP 1.4s 0s infinite;
-}
-
-.status .dot:nth-child(2){
-    animation:dotP 1.4s .2s infinite;
-}
-
-.status .dot:nth-child(3){
-    animation:dotP 1.4s .4s infinite;
-}
-
-@keyframes dotP{
-    0%,60%,100%{
-        opacity:0;
-        transform:translateY(0);
-    }
-
-    30%{
-        opacity:1;
-        transform:translateY(-4px);
-    }
-}
-
-/* FEATURES */
-.features{
-    display:flex;
-    flex-wrap:wrap;
-    justify-content:center;
-
-    gap:10px;
-
-    max-width:500px;
-
-    padding:0 20px;
-
-    opacity:0;
-
-    animation:slideUp .6s .55s ease-out forwards;
-}
-
-.pill{
-    display:inline-flex;
-    align-items:center;
-    gap:5px;
-
-    padding:6px 14px;
-
-    border-radius:999px;
-
-    font-size:11px;
-    font-weight:500;
-
-    background:var(--glass);
-
-    border:1px solid var(--glass-border);
-
-    backdrop-filter:blur(10px);
-    -webkit-backdrop-filter:blur(10px);
-
-    color:var(--text-muted);
-
-    opacity:0;
-
-    animation:pillIn .5s ease forwards;
-}
-
-.pill:nth-child(1){
-    animation-delay:.7s;
-}
-
-.pill:nth-child(2){
-    animation-delay:.85s;
-}
-
-.pill:nth-child(3){
-    animation-delay:1s;
-}
-
-.pill:nth-child(4){
-    animation-delay:1.15s;
-}
-
-@keyframes pillIn{
-    0%{
-        opacity:0;
-        transform:translateY(8px) scale(.95);
-    }
-
-    100%{
-        opacity:1;
-        transform:translateY(0) scale(1);
-    }
-}
-
-.pill-dot{
-    width:6px;
-    height:6px;
-
-    border-radius:50%;
-
-    flex-shrink:0;
-}
-
-.pill:nth-child(1) .pill-dot{
-    background:var(--blurple);
-    box-shadow:0 0 6px var(--blurple-glow);
-}
-
-.pill:nth-child(2) .pill-dot{
-    background:var(--green);
-    box-shadow:0 0 6px rgba(87,242,135,.4);
-}
-
-.pill:nth-child(3) .pill-dot{
-    background:var(--fuchsia);
-    box-shadow:0 0 6px var(--fuchsia-glow);
-}
-
-.pill:nth-child(4) .pill-dot{
-    background:var(--yellow);
-    box-shadow:0 0 6px rgba(254,231,92,.4);
-}
-
-/* TABLET */
-@media(max-width:768px){
-
-    .title{
-        font-size:34px;
-    }
-
-    .subtitle{
-        font-size:13px;
-        line-height:1.7;
-    }
-}
-
-/* MOBILE */
-@media(max-width:480px){
-
-    #loader{
-        gap:22px;
-        padding:30px 14px;
-    }
-
-    .logo-inner{
-        width:100px;
-        height:100px;
-    }
-
-    .custom-logo{
-        width:100px;
-        height:100px;
-    }
-
-    .logo-ring{
-        width:120px;
-        height:120px;
-    }
-
-    .logo-ring-2{
-        width:140px;
-        height:140px;
-    }
-
-    .logo-ring-3{
-        width:160px;
-        height:160px;
-    }
-
-    .title{
-        font-size:28px;
-    }
-
-    .subtitle{
-        width:100%;
-        max-width:100%;
-
-        font-size:12px;
-        line-height:1.6;
-
-        padding:0 14px;
-    }
-
-    .features{
-        gap:8px;
-    }
-
-    .pill{
-        font-size:10px;
-        padding:5px 11px;
-    }
-}
-
-/* REDUCED MOTION */
-@media(prefers-reduced-motion:reduce){
-
-    *,
-    *::before,
-    *::after{
-        animation-duration:.01ms !important;
-        transition-duration:.01ms !important;
-    }
-}
-</style>
 </head>
 
 <body>
 
-<div class="bg-layer"></div>
-<div class="grid-overlay"></div>
-<div class="noise"></div>
+  <!-- LOADING -->
+  <div id="loading-screen">
 
-<canvas id="particleCanvas"></canvas>
+    <div class="loader">
 
-<div class="orb orb-1"></div>
-<div class="orb orb-2"></div>
-<div class="orb orb-3"></div>
-<div class="orb orb-4"></div>
+      <div class="spinner"></div>
 
-<iframe
-    id="content-frame"
-    src="about:blank"
-    allow="clipboard-read; clipboard-write; geolocation; microphone; camera">
-</iframe>
+      <h1>Loading</h1>
 
-<!-- LOADER -->
-
-<div id="loader">
-
-    <!-- LOGO -->
-
-    <div class="logo-wrapper">
-
-        <div class="logo-ring"></div>
-        <div class="logo-ring-2"></div>
-        <div class="logo-ring-3"></div>
-
-        <div class="logo-inner">
-            <img
-                class="custom-logo"
-                src="https://files.catbox.moe/z2ogmi.jpg"
-                alt="JINE Logo">
-        </div>
+      <p>
+        Preparing Experience...
+      </p>
 
     </div>
 
-    <!-- TITLE -->
+  </div>
 
-    <div class="title-group">
+  <!-- CLICK ENTER -->
+  <div id="enter-screen">
 
-        <div class="title">
-            Auto<span>Quest</span>
-        </div>
+    <div class="enter-box glass">
 
-        <div class="status" id="statusText">
-            Đang kết nối đến máy chủ
-            <span class="dot">.</span>
-            <span class="dot">.</span>
-            <span class="dot">.</span>
-        </div>
+      <h1>Welcome</h1>
 
-    </div>
+      <p>
+        click to enter experience
+      </p>
 
-    <!-- PROGRESS -->
-
-    <div class="progress-wrapper">
-
-        <div class="progress-track">
-            <div class="progress-fill"></div>
-        </div>
+      <button id="enter-btn">
+        Click To Enter
+      </button>
 
     </div>
 
-    <!-- DESCRIPTION -->
+  </div>
 
-    <div class="subtitle">
+  <!-- BACKGROUND -->
+  <div class="bg-glow glow-1"></div>
+  <div class="bg-glow glow-2"></div>
 
-        JINE BOT LÀ 1 BÉ CON CỦA MTRUONG CHUYÊN LÀM NHIỆM VỤ DISCORD
-        NHANH CHÓNG ĐA NỀN TẢNG — CÂN NHẮC KHI SỬ DỤNG
-        NẾU KHÔNG MUỐN DÍNH CHÍNH SÁCH TOS CỦA DISCORD
+  <!-- PROFILE -->
+  <div class="container">
 
-    </div>
+    <div class="profile-card glass">
 
-    <!-- FEATURES -->
+      <!-- BANNER -->
+      <div class="banner">
 
-    <div class="features">
+        <img
+          src="./assets/banner.jpg"
+          alt="banner"
+        />
 
-        <div class="pill">
-            <span class="pill-dot"></span>
-            Offline Sync
+      </div>
+
+      <!-- CONTENT -->
+      <div class="profile-content">
+
+        <!-- AVATAR -->
+        <img
+          id="avatar"
+          class="avatar"
+          src="./assets/avatar.jpg"
+          alt="avatar"
+        />
+
+        <!-- INFO -->
+        <div class="info">
+
+          <div class="username-row">
+
+            <h1 id="username">
+              Loading...
+            </h1>
+
+            <span
+              id="status-dot"
+              class="status-dot">
+            </span>
+
+          </div>
+
+          <p id="pronouns">
+            he/him
+          </p>
+
+          <p id="bio">
+            My name mtruong 
+          </p>
+
         </div>
 
-        <div class="pill">
-            <span class="pill-dot"></span>
-            Cloud 24/7
-        </div>
+<div class="socials">
 
-        <div class="pill">
-            <span class="pill-dot"></span>
-            Đơn giản
-        </div>
+  <a
+    id="facebook-link"
+    class="glass social-btn"
+    target="_blank"
+  >
+    <i class="fab fa-facebook"></i>
+  </a>
 
-        <div class="pill">
-            <span class="pill-dot"></span>
-            Đa nền tảng
-        </div>
+  <a
+    id="discord-link"
+    class="glass social-btn"
+    target="_blank"
+  >
+    <i class="fab fa-discord"></i>
+  </a>
 
-    </div>
+  <a
+    id="website-link"
+    class="glass social-btn"
+    target="_blank"
+  >
+    <i class="fas fa-globe"></i>
+  </a>
 
 </div>
 
-<script src="loader.js"></script>
+        <!-- DISCORD CARD -->
+        <div
+          id="discord-card"
+          class="glass discord-card"
+        >
+
+          <div class="discord-header">
+
+            <div class="status-wrap">
+
+              <div
+                id="discord-status"
+                class="online-dot">
+              </div>
+
+              <span
+                id="discord-text"
+              >
+                Loading...
+              </span>
+
+            </div>
+
+          </div>
+
+          <div id="activity-box">
+
+            <p class="playing">
+              ACTIVITY
+            </p>
+
+            <h3 id="activity-name">
+              No activity
+            </h3>
+
+            <p id="activity-details"></p>
+
+            <p id="activity-state"></p>
+
+          </div>
+
+        </div>
+
+        <!-- SPOTIFY REALTIME -->
+        <div
+          id="spotify-card"
+          class="glass spotify-card hidden"
+        >
+
+          <img
+            id="spotify-cover"
+            src=""
+            alt=""
+          />
+
+          <div class="spotify-info">
+
+            <p class="spotify-tag">
+              Listening to Spotify
+            </p>
+
+            <h3 id="spotify-song"></h3>
+
+            <p id="spotify-artist"></p>
+
+            <small id="spotify-album">
+            </small>
+
+          </div>
+
+        </div>
+
+        <!-- SPOTIFY PLAYLIST -->
+        <div class="spotify-embed glass">
+
+          <iframe
+            style="border-radius:20px"
+            src="https://open.spotify.com/embed/playlist/6UatyjkgASKXHfSCU5Lwby?utm_source=generator&theme=0"
+            width="100%"
+            height="152"
+            frameBorder="0"
+            allowfullscreen=""
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            loading="lazy">
+          </iframe>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- CONFIG -->
+  <script src="./config.js"></script>
+
+  <!-- MAIN SCRIPT -->
+  <script src="./script.js"></script>
 
 </body>
+
 </html>
