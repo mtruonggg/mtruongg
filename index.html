@@ -1,76 +1,101 @@
 <!DOCTYPE html>
-<!--T8LzzN7Xrg2KzbYY2nFIJ-->
-<html lang="vi" class="dark">
-    <head>
-        <meta charSet="utf-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1"/>
-        <link rel="preload" href="/assets/static/media/797e433ab948586e-s.p.dbea232f.woff2" as="font" crossorigin="" type="font/woff2"/>
-        <link rel="preload" href="/assets/static/media/caa3a2e1cccd8315-s.p.853070df.woff2" as="font" crossorigin="" type="font/woff2"/>
-        <link rel="stylesheet" href="/assets/static/chunks/2473c16c0c2f6b5f.css" data-precedence="next"/>
-        <link rel="stylesheet" href="/assets/static/chunks/f7d392ae000d0705.css" data-precedence="next"/>
-        <link rel="preload" as="script" fetchPriority="low" href="/assets/static/chunks/58c60a5fa6b544da.js"/>
-        <script src="/assets/static/chunks/771dedee3f5e1621.js" async=""></script>
-        <script src="/assets/static/chunks/29cc553a73248c69.js" async=""></script>
-        <script src="/assets/static/chunks/turbopack-545e9cc9493a73de.js" async=""></script>
-        <script src="/assets/static/chunks/2f236954d6a65e12.js" async=""></script>
-        <script src="/assets/static/chunks/a61eea631e0d2eee.js" async=""></script>
-        <script src="/assets/static/chunks/de5b9c2a7bdbf83c.js" async=""></script>
-        <script src="/assets/static/chunks/0510567bff3c9695.js" async=""></script>
-        <meta name="next-size-adjust" content=""/>
-        <title>Discord Quest Auto - Auto Complete Discord Quests</title>
-        <meta name="description" content="Automatically complete Discord quests with multiple token support. Run up to 100 tokens simultaneously with real-time monitoring."/>
-        <link rel="icon" href="https://discord.com/favicon.ico"/>
-        <script src="/assets/static/chunks/a6dad97d9634a72d.js" noModule=""></script>
-    </head>
-    <body class="geist_a71539c9-module__T19VSG__variable geist_mono_8d43a2aa-module__8Li5zG__variable antialiased bg-[#0b0d10] text-white">
-        <div hidden="">
-        <!--$-->
-        <!--/$-->
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Discord Quests Auto</title>
+
+<meta name="theme-color" content="#EB459E">
+
+<style>
+:root{
+--blurple:#5865F2;
+--blurple-dark:#4752C4;
+--blurple-glow:rgba(88,101,242,.5);
+--fuchsia:#EB459E;
+--fuchsia-glow:rgba(235,69,158,.4);
+--bg-primary:#0E0F13;
+--bg-tertiary:#25262C;
+--text-muted:#6D7080;
+}
+
+/* RESET */
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{
+background:var(--bg-primary);
+width:100%;height:100%;
+overflow:hidden;
+font-family:system-ui;
+}
+
+/* BACKGROUND (GIỮ NGUYÊN) */
+.bg-layer,.grid-overlay,.noise,#particleCanvas,.orb{position:fixed;inset:0;pointer-events:none}
+
+/* LOADER */
+#loader{
+position:fixed;inset:0;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+gap:25px;
+}
+
+/* LOGO WRAP */
+.logo-wrapper{
+position:relative;
+width:120px;height:120px;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+/* ❌ XÓA NỀN VUÔNG DISCORD */
+.logo-inner{
+width:120px;height:120px;
+background:transparent!important;
+box-shadow:none!important;
+display:flex;
+align-items:center;
+justify-content:center;
+border-radius:0;
+}
+
+/* LOGO */
+.custom-logo{
+width:80px;
+height:80px;
+object-fit:contain;
+border-radius:0;
+animation:float 3s ease-in-out infinite;
+filter:drop-shadow(0 0 10px rgba(255,255,255,.15));
+}
+
+@keyframes float{
+0%,100%{transform:translateY(0)}
+50%{transform:translateY(-5px)}
+}
+
+/* TITLE */
+.title{color:#fff;font-size:22px;font-weight:700}
+.subtitle{color:var(--text-muted);font-size:11px}
+</style>
+</head>
+
+<body>
+
+<div id="loader">
+
+    <div class="logo-wrapper">
+        <div class="logo-inner">
+            <img class="custom-logo" src="https://files.catbox.moe/z2ogmi.jpg">
         </div>
-        <div class="jsx-75dbae30a54318c6 h-screen bg-[#0b0d10] flex flex-col items-center justify-center relative overflow-hidden">
-            <div class="jsx-75dbae30a54318c6 absolute top-1/4 left-1/4 w-[300px] h-[300px] bg-[#5865F2]/8 rounded-full blur-[100px] animate-pulse"></div>
-            <div style="animation-delay:1s" class="jsx-75dbae30a54318c6 absolute bottom-1/4 right-1/4 w-[250px] h-[250px] bg-[#EB459E]/6 rounded-full blur-[80px] animate-pulse"></div>
-            <div class="jsx-75dbae30a54318c6 relative z-10 flex flex-col items-center gap-5">
-                <div class="jsx-75dbae30a54318c6 relative">
-                    <div class="jsx-75dbae30a54318c6 w-16 h-16 rounded-2xl bg-gradient-to-br from-[#5865F2] to-[#7B68EE] flex items-center justify-center shadow-lg shadow-[#5865F2]/30">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="jsx-75dbae30a54318c6 w-8 h-8 text-white">
-                            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" class="jsx-75dbae30a54318c6"></path>
-                        </svg>
-                    </div>
-                    <div style="animation:spin 3s linear infinite" class="jsx-75dbae30a54318c6 absolute inset-[-12px] rounded-full border border-[#5865F2]/20">
-                        <div class="jsx-75dbae30a54318c6 absolute -top-1 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-[#5865F2]"></div>
-                    </div>
-                </div>
-                <div class="jsx-75dbae30a54318c6 flex items-center gap-1.5">
-                    <div style="animation:pulse 1.4s ease-in-out infinite" class="jsx-75dbae30a54318c6 w-1.5 h-1.5 rounded-full bg-[#5865F2]"></div>
-                    <div style="animation:pulse 1.4s ease-in-out 0.2s infinite" class="jsx-75dbae30a54318c6 w-1.5 h-1.5 rounded-full bg-[#EB459E]"></div>
-                    <div style="animation:pulse 1.4s ease-in-out 0.4s infinite" class="jsx-75dbae30a54318c6 w-1.5 h-1.5 rounded-full bg-[#57F287]"></div>
-                </div>
-            </div>
-        </div>
-        <!--$-->
-        <!--/$-->
-        <div role="region" aria-label="Notifications (F8)" tabindex="-1" style="pointer-events:none">
-            <ol tabindex="-1" class="fixed top-0 z-[100] flex max-h-screen w-full flex-col-reverse p-4 sm:bottom-0 sm:right-0 sm:top-auto sm:flex-col md:max-w-[420px]"></ol>
-        </div>
-        <script src="/assets/static/chunks/58c60a5fa6b544da.js" id="_R_" async=""></script>
-        <script>
-            (self.__next_f = self.__next_f || []).push([0])
-        </script>
-        <script>
-            self.__next_f.push([1, "1:\"$Sreact.fragment\"\n2:I[39756,[\"/assets/static/chunks/2f236954d6a65e12.js\"],\"default\"]\n3:I[37457,[\"/assets/static/chunks/2f236954d6a65e12.js\"],\"default\"]\n4:I[77855,[\"/assets/static/chunks/a61eea631e0d2eee.js\",\"/assets/static/chunks/de5b9c2a7bdbf83c.js\"],\"Toaster\"]\n5:I[47257,[\"/assets/static/chunks/2f236954d6a65e12.js\"],\"ClientPageRoot\"]\n6:I[52683,[\"/assets/static/chunks/a61eea631e0d2eee.js\",\"/assets/static/chunks/de5b9c2a7bdbf83c.js\",\"/assets/static/chunks/0510567bff3c9695.js\"],\"default\"]\n9:I[97367,[\"/assets/static/chunks/2f236954d6a65e12.js\"],\"OutletBoundary\"]\na:\"$Sreact.suspense\"\nc:I[97367,[\"/assets/static/chunks/2f236954d6a65e12.js\"],\"ViewportBoundary\"]\ne:I[97367,[\"/assets/static/chunks/2f236954d6a65e12.js\"],\"MetadataBoundary\"]\n10:I[68027,[\"/assets/static/chunks/2f236954d6a65e12.js\"],\"default\"]\n:HL[\"/assets/static/chunks/2473c16c0c2f6b5f.css\",\"style\"]\n:HL[\"/assets/static/chunks/f7d392ae000d0705.css\",\"style\"]\n:HL[\"/assets/static/media/797e433ab948586e-s.p.dbea232f.woff2\",\"font\",{\"crossOrigin\":\"\",\"type\":\"font/woff2\"}]\n:HL[\"/assets/static/media/caa3a2e1cccd8315-s.p.853070df.woff2\",\"font\",{\"crossOrigin\":\"\",\"type\":\"font/woff2\"}]\n"])
-        </script>
-        <script>
-            self.__next_f.push([1, "0:{\"P\":null,\"b\":\"T8LzzN7Xrg2KzbYY2nFIJ\",\"c\":[\"\",\"\"],\"q\":\"\",\"i\":false,\"f\":[[[\"\",{\"children\":[\"__PAGE__\",{}]},\"$undefined\",\"$undefined\",true],[[\"$\",\"$1\",\"c\",{\"children\":[[[\"$\",\"link\",\"0\",{\"rel\":\"stylesheet\",\"href\":\"/assets/static/chunks/2473c16c0c2f6b5f.css\",\"precedence\":\"next\",\"crossOrigin\":\"$undefined\",\"nonce\":\"$undefined\"}],[\"$\",\"link\",\"1\",{\"rel\":\"stylesheet\",\"href\":\"/assets/static/chunks/f7d392ae000d0705.css\",\"precedence\":\"next\",\"crossOrigin\":\"$undefined\",\"nonce\":\"$undefined\"}],[\"$\",\"script\",\"script-0\",{\"src\":\"/assets/static/chunks/a61eea631e0d2eee.js\",\"async\":true,\"nonce\":\"$undefined\"}],[\"$\",\"script\",\"script-1\",{\"src\":\"/assets/static/chunks/de5b9c2a7bdbf83c.js\",\"async\":true,\"nonce\":\"$undefined\"}]],[\"$\",\"html\",null,{\"lang\":\"vi\",\"suppressHydrationWarning\":true,\"className\":\"dark\",\"children\":[\"$\",\"body\",null,{\"className\":\"geist_a71539c9-module__T19VSG__variable geist_mono_8d43a2aa-module__8Li5zG__variable antialiased bg-[#0b0d10] text-white\",\"children\":[[\"$\",\"$L2\",null,{\"parallelRouterKey\":\"children\",\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L3\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":[[[\"$\",\"title\",null,{\"children\":\"404: This page could not be found.\"}],[\"$\",\"div\",null,{\"style\":{\"fontFamily\":\"system-ui,\\\"Segoe UI\\\",Roboto,Helvetica,Arial,sans-serif,\\\"Apple Color Emoji\\\",\\\"Segoe UI Emoji\\\"\",\"height\":\"100vh\",\"textAlign\":\"center\",\"display\":\"flex\",\"flexDirection\":\"column\",\"alignItems\":\"center\",\"justifyContent\":\"center\"},\"children\":[\"$\",\"div\",null,{\"children\":[[\"$\",\"style\",null,{\"dangerouslySetInnerHTML\":{\"__html\":\"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}\"}}],[\"$\",\"h1\",null,{\"className\":\"next-error-h1\",\"style\":{\"display\":\"inline-block\",\"margin\":\"0 20px 0 0\",\"padding\":\"0 23px 0 0\",\"fontSize\":24,\"fontWeight\":500,\"verticalAlign\":\"top\",\"lineHeight\":\"49px\"},\"children\":404}],[\"$\",\"div\",null,{\"style\":{\"display\":\"inline-block\"},\"children\":[\"$\",\"h2\",null,{\"style\":{\"fontSize\":14,\"fontWeight\":400,\"lineHeight\":\"49px\",\"margin\":0},\"children\":\"This page could not be found.\"}]}]]}]}]],[]],\"forbidden\":\"$undefined\",\"unauthorized\":\"$undefined\"}],[\"$\",\"$L4\",null,{}]]}]}]]}],{\"children\":[[\"$\",\"$1\",\"c\",{\"children\":[[\"$\",\"$L5\",null,{\"Component\":\"$6\",\"serverProvidedParams\":{\"searchParams\":{},\"params\":{},\"promises\":[\"$@7\",\"$@8\"]}}],[[\"$\",\"script\",\"script-0\",{\"src\":\"/assets/static/chunks/0510567bff3c9695.js\",\"async\":true,\"nonce\":\"$undefined\"}]],[\"$\",\"$L9\",null,{\"children\":[\"$\",\"$a\",null,{\"name\":\"Next.MetadataOutlet\",\"children\":\"$@b\"}]}]]}],{},null,false,false]},null,false,false],[\"$\",\"$1\",\"h\",{\"children\":[null,[\"$\",\"$Lc\",null,{\"children\":\"$Ld\"}],[\"$\",\"div\",null,{\"hidden\":true,\"children\":[\"$\",\"$Le\",null,{\"children\":[\"$\",\"$a\",null,{\"name\":\"Next.Metadata\",\"children\":\"$Lf\"}]}]}],[\"$\",\"meta\",null,{\"name\":\"next-size-adjust\",\"content\":\"\"}]]}],false]],\"m\":\"$undefined\",\"G\":[\"$10\",[]],\"S\":true}\n"])
-        </script>
-        <script>
-            self.__next_f.push([1, "7:{}\n8:\"$0:f:0:1:1:children:0:props:children:0:props:serverProvidedParams:params\"\n"])
-        </script>
-        <script>
-            self.__next_f.push([1, "d:[[\"$\",\"meta\",\"0\",{\"charSet\":\"utf-8\"}],[\"$\",\"meta\",\"1\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}]]\n"])
-        </script>
-        <script>
-            self.__next_f.push([1, "11:I[27201,[\"/assets/static/chunks/2f236954d6a65e12.js\"],\"IconMark\"]\nb:null\nf:[[\"$\",\"title\",\"0\",{\"children\":\"Discord Quest Auto - Auto Complete Discord Quests\"}],[\"$\",\"meta\",\"1\",{\"name\":\"description\",\"content\":\"Automatically complete Discord quests with multiple token support. Run up to 100 tokens simultaneously with real-time monitoring.\"}],[\"$\",\"link\",\"2\",{\"rel\":\"icon\",\"href\":\"https://discord.com/favicon.ico\"}],[\"$\",\"$L11\",\"3\",{}]]\n"])
-        </script>
-    </body>
+    </div>
+
+    <div class="title">Auto Quest</div>
+    <div class="subtitle">JINE BOT SYSTEM</div>
+
+</div>
+
+</body>
 </html>
