@@ -1,197 +1,116 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jinee Portfolio</title>
 
-<meta charset="UTF-8" />
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1.0"
-/>
-
-<title>Profile</title>
-
-<link
-rel="preconnect"
-href="https://fonts.googleapis.com"
-/>
-
-<link
-rel="preconnect"
-href="https://fonts.gstatic.com"
-crossorigin
-/>
-
-<link
-href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
-rel="stylesheet"
-/>
-
-<link
-rel="stylesheet"
-href="style.css"
-/>
-
+<link rel="stylesheet" href="./assets/style.css">
 </head>
 
 <body>
 
-<!-- BG -->
+<<div>Thời gian: <span id="clock"></span></div>
+<div>Lượt xem: <span id="views"></span></div>
 
-<div class="bg"></div>
+<div id="boot-screen">
+  <div class="loader-box">
+    <div class="loader-ring"></div>
+    <div class="loader-ring"></div>
+    <img class="loader-avatar" src="./assets/avatar.jpg">
+  </div>
 
-<div class="bg-lights">
+  <div class="loading-text">LOADING PROFILE...</div>
 
-    <div class="light light1"></div>
-    <div class="light light2"></div>
-    <div class="light light3"></div>
+  <div class="loading-bar">
+    <div class="loading-progress"></div>
+  </div>
+</div>
+
+<header>
+  <div class="logo">
+    <i class="fa-solid fa-code"></i> Jinee
+  </div>
+
+  <button class="menu-btn" onclick="toggleMenu()">
+    <i class="fa-solid fa-bars"></i>
+  </button>
+</header>
+
+<div id="mobile-menu">
+  <a href="#hero">Trang chủ</a>
+  <a href="#about">Giới thiệu</a>
+  <a href="#skills">Kỹ năng</a>
+  <a href="#projects">Dự án</a>
+  <a href="#payment">Payment</a>
+  <a href="#discord-profile">Discord</a>
+</div>
+
+<div class="container">
+
+<section id="hero">
+  <div class="glass-card">
+    <div class="pill">👋 Xin chào, tớ là</div>
+
+    <h1 class="hero-title">Jinee</h1>
+
+    <div class="typewriter" id="typewriter">Loading...</div>
+
+    <p class="sub">
+      Backend Developer • Pentester • Linux Enthusiast
+    </p>
+
+    <div class="stats">
+      <div><strong>10+</strong><br>Projects</div>
+      <div><strong>18</strong><br>Tuổi</div>
+      <div><strong>5+</strong><br>Tech</div>
+    </div>
+
+    <div class="buttons">
+      <a href="#projects" class="btn">Xem dự án</a>
+      <a href="#discord-profile" class="btn">Discord</a>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <h2>Giới thiệu</h2>
+
+  <div class="glass-card">
+  <p>
+    Công nghệ đối với tôi không chỉ đơn thuần là việc viết code hay sử dụng các công cụ lập trình, mà là một hệ sinh thái phức tạp nơi mọi thành phần đều liên kết chặt chẽ với nhau để tạo ra các hệ thống có thể vận hành thực tế. Tôi đặc biệt tập trung vào mảng backend, nơi xử lý toàn bộ logic phía server, quản lý dữ liệu, tối ưu hiệu suất và đảm bảo hệ thống hoạt động ổn định trong nhiều điều kiện tải khác nhau. Bên cạnh đó, bảo mật hệ thống là một lĩnh vực tôi quan tâm sâu, bởi mỗi ứng dụng đều có nguy cơ tồn tại lỗ hổng nếu không được thiết kế cẩn thận ngay từ đầu. Tôi cũng dành thời gian nghiên cứu automation nhằm tối ưu hóa quy trình, giảm thao tác thủ công và tăng hiệu quả vận hành. Linux là môi trường làm việc chính giúp tôi hiểu sâu hơn về hệ thống, networking và triển khai dịch vụ thực tế. Ngoài ra, tôi luôn tìm cách cập nhật công nghệ mới, thử nghiệm các framework và kiến trúc khác nhau để mở rộng tư duy thiết kế hệ thống, hướng đến các sản phẩm có tính ổn định, mở rộng tốt và an toàn khi triển khai lâu dài.
+  </p>
+</div>
+</section>
+
+<section id="discord-profile">
+  <h2>Discord</h2>
+
+  <div class="glass-card discord-box">
+
+    <div class="avatar-wrap">
+      <img id="dc-avatar">
+      <img id="dc-decoration">
+      <div id="dc-status"></div>
+    </div>
+
+    <div>
+      <div id="dc-name">Loading...</div>
+      <div id="dc-username"></div>
+      <div id="dc-activity"></div>
+    </div>
+
+  </div>
+
+  <div id="discord-badges"></div>
+</section>
 
 </div>
 
-<canvas id="particles"></canvas>
-
-<!-- OVERLAY -->
-
-<div id="overlay">
-
-    <div class="noise"></div>
-
-    <div class="intro">
-
-        <div class="intro-glow"></div>
-
-        <div class="enter-box">
-
-            <span>
-                click to enter
-            </span>
-
-        </div>
-
-        <div class="visualizer">
-
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-
-        </div>
-
-    </div>
-
-</div>
-
-<!-- CURSOR -->
-
-<div id="cursor-glow"></div>
-<div id="mouse-light"></div>
-
-<!-- MAIN -->
-
-<main id="app">
-
-    <div class="card">
-
-        <!-- DISCORD BANNER -->
-
-        <div class="banner"></div>
-
-        <!-- AVATAR -->
-
-        <div class="avatar-wrap">
-
-            <img
-            class="avatar-decoration"
-            src=""
-            alt=""
-            />
-
-            <div class="status dnd"></div>
-
-            <img
-            class="avatar"
-            src=""
-            alt=""
-            />
-
-        </div>
-
-        <!-- BADGES -->
-
-        <div class="badges"></div>
-
-        <!-- USER -->
-
-        <h1 class="username">
-            Loading...
-        </h1>
-
-        <p class="bio">
-            loading profile...
-        </p>
-
-        <!-- MUSIC -->
-
-        <div class="music-player">
-
-            <div class="music-cover">
-                ♪
-            </div>
-
-            <div class="music-info">
-
-                <div class="music-title">
-                    Not Playing
-                </div>
-
-                <div class="music-artist">
-                    Spotify Idle
-                </div>
-
-            </div>
-
-        </div>
-
-        <!-- SOCIAL -->
-
-        <div class="socials">
-
-            <a
-            target="_blank"
-            href="https://discord.com">
-
-            discord
-
-            </a>
-
-            <a
-            target="_blank"
-            href="https://facebook.com">
-
-            facebook
-
-            </a>
-
-            <a
-            target="_blank"
-            href="#">
-
-            website
-
-            </a>
-
-        </div>
-
-    </div>
-
-</main>
-
-<!-- RIPPLE -->
-
-<div id="ripple-container"></div>
-
-<script src="script.js"></script>
+<script src="./assets/script.js"></script>
 
 </body>
 </html>
