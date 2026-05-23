@@ -1,116 +1,91 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Jinee Portfolio</title>
-
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-<link rel="stylesheet" href="./assets/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord HypeSquad Badge Manager</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="./images/logo.png">
+    <link rel="apple-touch-icon" href="./images/logo.png">
+	<meta name="google-site-verification" content="1xWTL9GsVehj53Mtymtb0oI0csOm-fOOo1C4YwpJl0o" />
 </head>
 
 <body>
+    <div class="container">
+        <div class="header">
+            <h1>Trình quản lý huy hiệu Discord HypeSquad</h1>
+            <p>Dễ dàng quản lý huy hiệu Discord HypeSquad của bạn</p>
+        </div>
 
-<<div>Thời gian: <span id="clock"></span></div>
-<div>Lượt xem: <span id="views"></span></div>
+        <div class="main-content">
+            <!-- Login Section -->
+            <div id="loginSection" class="token-section">
+                <label for="token">Discord Token:</label>
+                <div class="input-wrapper">
+                    <input type="password" id="token" placeholder="Nhập mã Discord của bạn vào đây..." autocomplete="off">
+                    <button id="toggleToken" class="toggle-btn" title="Hiện/Ẩn Token">👁️</button>
+                </div>
+            </div>
 
-<div id="boot-screen">
-  <div class="loader-box">
-    <div class="loader-ring"></div>
-    <div class="loader-ring"></div>
-    <img class="loader-avatar" src="./assets/avatar.jpg">
-  </div>
+            <!-- Profile Section (Hidden by default) -->
+            <div id="profileSection" class="profile-section hidden">
+                <div class="profile-card">
+                    <img id="userAvatar" src="" alt="Avatar" class="profile-avatar">
+                    <div class="profile-info">
+                        <span class="profile-label">Connected as:</span>
+                        <h3 id="username">User</h3>
+                    </div>
+                    <button id="logoutBtn" class="logout-btn" title="Logout">
+                        ❌
+                    </button>
+                </div>
+            </div>
 
-  <div class="loading-text">LOADING PROFILE...</div>
+            <div class="badge-selection">
+                <h3>Select HypeSquad Badge:</h3>
+                <div class="badge-options">
+                    <div class="badge-option" data-house="2">
+                        <div class="badge-icon">
+                            <img src="images/hypesquadbravery.svg" alt="Bravery">
+                        </div>
+                        <span>Bravery</span>
+                    </div>
+                    <div class="badge-option" data-house="3">
+                        <div class="badge-icon">
+                            <img src="images/hypesquadbrilliance.svg" alt="Brilliance">
+                        </div>
+                        <span>Brilliance</span>
+                    </div>
+                    <div class="badge-option" data-house="1">
+                        <div class="badge-icon">
+                            <img src="images/hypesquadbalance.svg" alt="Balance">
+                        </div>
+                        <span>Balance</span>
+                    </div>
+                </div>
+            </div>
 
-  <div class="loading-bar">
-    <div class="loading-progress"></div>
-  </div>
-</div>
+            <div class="action-buttons">
+                <button id="setBadge" class="action-btn set-btn" disabled>Add Badge</button>
+                <button id="removeBadge" class="action-btn remove-btn">Remove Badge</button>
+            </div>
 
-<header>
-  <div class="logo">
-    <i class="fa-solid fa-code"></i> Jinee
-  </div>
+            <div class="status-section">
+                <div id="status" class="status-message"></div>
+                <div id="loading" class="loading hidden">
+                    <div class="spinner"></div>
+                    <span>Processing...</span>
+                </div>
+            </div>
+        </div>
 
-  <button class="menu-btn" onclick="toggleMenu()">
-    <i class="fa-solid fa-bars"></i>
-  </button>
-</header>
-
-<div id="mobile-menu">
-  <a href="#hero">Trang chủ</a>
-  <a href="#about">Giới thiệu</a>
-  <a href="#skills">Kỹ năng</a>
-  <a href="#projects">Dự án</a>
-  <a href="#payment">Payment</a>
-  <a href="#discord-profile">Discord</a>
-</div>
-
-<div class="container">
-
-<section id="hero">
-  <div class="glass-card">
-    <div class="pill">👋 Xin chào, tớ là</div>
-
-    <h1 class="hero-title">Jinee</h1>
-
-    <div class="typewriter" id="typewriter">Loading...</div>
-
-    <p class="sub">
-      Backend Developer • Pentester • Linux Enthusiast
-    </p>
-
-    <div class="stats">
-      <div><strong>10+</strong><br>Projects</div>
-      <div><strong>18</strong><br>Tuổi</div>
-      <div><strong>5+</strong><br>Tech</div>
+        <div class="footer">
+            <p>⚠️ <strong>Warning:</strong> Đừng bao giờ chia sẻ tokens Discord của bạn với bất kỳ ai.!</p>
+        </div>
     </div>
 
-    <div class="buttons">
-      <a href="#projects" class="btn">Xem dự án</a>
-      <a href="#discord-profile" class="btn">Discord</a>
-    </div>
-  </div>
-</section>
-
-<section id="about">
-  <h2>Giới thiệu</h2>
-
-  <div class="glass-card">
-  <p>
-    Công nghệ đối với tôi không chỉ đơn thuần là việc viết code hay sử dụng các công cụ lập trình, mà là một hệ sinh thái phức tạp nơi mọi thành phần đều liên kết chặt chẽ với nhau để tạo ra các hệ thống có thể vận hành thực tế. Tôi đặc biệt tập trung vào mảng backend, nơi xử lý toàn bộ logic phía server, quản lý dữ liệu, tối ưu hiệu suất và đảm bảo hệ thống hoạt động ổn định trong nhiều điều kiện tải khác nhau. Bên cạnh đó, bảo mật hệ thống là một lĩnh vực tôi quan tâm sâu, bởi mỗi ứng dụng đều có nguy cơ tồn tại lỗ hổng nếu không được thiết kế cẩn thận ngay từ đầu. Tôi cũng dành thời gian nghiên cứu automation nhằm tối ưu hóa quy trình, giảm thao tác thủ công và tăng hiệu quả vận hành. Linux là môi trường làm việc chính giúp tôi hiểu sâu hơn về hệ thống, networking và triển khai dịch vụ thực tế. Ngoài ra, tôi luôn tìm cách cập nhật công nghệ mới, thử nghiệm các framework và kiến trúc khác nhau để mở rộng tư duy thiết kế hệ thống, hướng đến các sản phẩm có tính ổn định, mở rộng tốt và an toàn khi triển khai lâu dài.
-  </p>
-</div>
-</section>
-
-<section id="discord-profile">
-  <h2>Discord</h2>
-
-  <div class="glass-card discord-box">
-
-    <div class="avatar-wrap">
-      <img id="dc-avatar">
-      <img id="dc-decoration">
-      <div id="dc-status"></div>
-    </div>
-
-    <div>
-      <div id="dc-name">Loading...</div>
-      <div id="dc-username"></div>
-      <div id="dc-activity"></div>
-    </div>
-
-  </div>
-
-  <div id="discord-badges"></div>
-</section>
-
-</div>
-
-<script src="./assets/script.js"></script>
-
+    <script src="script.js"></script>
 </body>
+
 </html>

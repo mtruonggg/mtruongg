@@ -1,728 +1,378 @@
-const USER_ID =
-"318924091518222338";
-
-/* ======================
-ELEMENTS
-====================== */
-
-const overlay =
-document.getElementById(
-"overlay"
-);
-
-const app =
-document.getElementById(
-"app"
-);
-
-const card =
-document.querySelector(
-".card"
-);
-
-/* ======================
-ENTER
-====================== */
-
-overlay.addEventListener(
-"click",
-()=>{
-
-const audio =
-new Audio(
-"https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8e2b2f7.mp3"
-);
-
-audio.volume = .15;
-
-audio.play()
-.catch(()=>{});
-
-overlay.animate(
-[
-{
-opacity:1,
-filter:"blur(0px)"
-},
-{
-opacity:0,
-filter:"blur(18px)"
-}
-],
-{
-duration:1200,
-easing:
-"cubic-bezier(.19,1,.22,1)"
-}
-);
-
-overlay.classList.add(
-"hide"
-);
-
-setTimeout(()=>{
-
-app.classList.add(
-"show"
-);
-
-},300);
-
-}
-);
-
-/* ======================
-DISCORD API
-====================== */
-
-async function loadDiscord(){
-
-try{
-
-const res =
-await fetch(
-`https://api.lanyard.rest/v1/users/${USER_ID}`
-);
-
-const json =
-await res.json();
-
-if(
-!json.success
-)return;
-
-const data =
-json.data;
-
-/* ======================
-USERNAME
-====================== */
-
-document.querySelector(
-".username"
-).textContent =
-data.discord_user.username;
-
-/* ======================
-AVATAR
-====================== */
-
-const avatar =
-document.querySelector(
-".avatar"
-);
-
-avatar.src =
-`https://cdn.discordapp.com/avatars/${
-USER_ID
-}/${
-data.discord_user.avatar
-}.png?size=1024`;
-
-/* ======================
-STATUS
-====================== */
-
-const status =
-document.querySelector(
-".status"
-);
-
-status.className =
-"status";
-
-status.classList.add(
-data.discord_status
-);
-
-/* ======================
-BANNER
-====================== */
-
-const banner =
-document.querySelector(
-".banner"
-);
-
-if(
-data.discord_user.banner
-){
-
-banner.style.backgroundImage =
-`url(
-https://cdn.discordapp.com/banners/${
-USER_ID
-}/${
-data.discord_user.banner
-}?size=1024
-)`;
-
-}
-
-/* ======================
-AVATAR DECORATION
-====================== */
-
-const decor =
-document.querySelector(
-".avatar-decoration"
-);
-
-if(
-data.discord_user
-.avatar_decoration_data
-){
-
-decor.src =
-`https://cdn.discordapp.com/avatar-decoration-presets/${
-data.discord_user
-.avatar_decoration_data
-.asset
-}.png`;
-
-}else{
-
-decor.style.display =
-"none";
-
-}
-
-/* ======================
-BADGES
-====================== */
-
-const badges =
-document.querySelector(
-".badges"
-);
-
-badges.innerHTML = "";
-
-const flagMap = {
-
-1:
-"https://cdn.discordapp.com/emojis/1082679435456831488.webp",
-
-2:
-"https://cdn.discordapp.com/emojis/1082679482357553152.webp",
-
-4:
-"https://cdn.discordapp.com/emojis/1082679503022884864.webp",
-
-8:
-"https://cdn.discordapp.com/emojis/1082679467543259176.webp",
-
-64:
-"https://cdn.discordapp.com/emojis/1082679548023556137.webp",
-
-512:
-"https://cdn.discordapp.com/emojis/1082679596283236432.webp"
-
-};
-
-const flags =
-data.discord_user
-.public_flags || 0;
-
-Object.entries(
-flagMap
-).forEach(
-([bit,url])=>{
-
-if(
-flags &
-Number(bit)
-){
-
-const img =
-document.createElement(
-"img"
-);
-
-img.src = url;
-
-img.className =
-"badge";
-
-badges.appendChild(
-img
-);
-
-}
-
-}
-);
-
-/* ======================
-SPOTIFY
-====================== */
-
-const bio =
-document.querySelector(
-".bio"
-);
-
-const title =
-document.querySelector(
-".music-title"
-);
-
-const artist =
-document.querySelector(
-".music-artist"
-);
-
-const cover =
-document.querySelector(
-".music-cover"
-);
-
-if(
-data.listening_to_spotify
-){
-
-bio.textContent =
-"Listening to Spotify";
-
-title.textContent =
-data.spotify.song;
-
-artist.textContent =
-data.spotify.artist;
-
-cover.innerHTML =
-`
-<img
-src="${data.spotify.album_art_url}"
-style="
-width:100%;
-height:100%;
-object-fit:cover;
-border-radius:14px;
-"
-/>
-`;
-
-}else{
-
-const game =
-data.activities.find(
-a => a.type === 0
-);
-
-bio.textContent =
-game
-?
-`🎮 ${game.name}`
-:
-"aesthetic profile";
-
-title.textContent =
-"Not Playing";
-
-artist.textContent =
-"Spotify Idle";
-
-cover.innerHTML =
-"♪";
-
-}
-
-}catch(err){
-
-console.log(
-"Lanyard Error:",
-err
-);
-
-}
-
-}
-
-loadDiscord();
-
-setInterval(
-loadDiscord,
-15000
-);
-
-/* ======================
-PARTICLES
-====================== */
-
-const canvas =
-document.getElementById(
-"particles"
-);
-
-const ctx =
-canvas.getContext(
-"2d"
-);
-
-function resize(){
-
-canvas.width =
-window.innerWidth;
-
-canvas.height =
-window.innerHeight;
-
+class DiscordHypeSquadManager {
+    constructor() {
+        this.selectedHouse = null;
+        this.token = null;
+        this.init();
+    }
+
+    init() {
+        this.bindEvents();
+        this.checkSavedSession();
+        this.loadSavedToken();
+    }
+
+    bindEvents() {
+        // Badge selection
+        document.querySelectorAll('.badge-option').forEach(option => {
+            option.addEventListener('click', this.selectBadge.bind(this));
+        });
+
+        // Action buttons
+        document.getElementById('setBadge').addEventListener('click', this.setBadge.bind(this));
+        document.getElementById('removeBadge').addEventListener('click', this.removeBadge.bind(this));
+
+        // Manual Token Input
+        const tokenInput = document.getElementById('token');
+        const toggleBtn = document.getElementById('toggleToken');
+
+        if (tokenInput) {
+            tokenInput.addEventListener('input', this.onTokenChange.bind(this));
+        }
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', this.toggleTokenVisibility.bind(this));
+        }
+
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', this.logout.bind(this));
+
+        // Check if Electron API is available
+        if (window.electronAPI) {
+            console.log('Electron API handled via invoke/promise pattern');
+        } else {
+            console.warn('Electron API not found. Auto-login will not work.');
+        }
+    }
+
+    checkSavedSession() {
+        const savedToken = localStorage.getItem('discord_token');
+        if (savedToken) {
+            this.token = this.sanitizeToken(savedToken);
+            this.fetchUserProfile();
+        }
+    }
+
+    async loginWithDiscord() {
+        if (!window.electronAPI) return;
+
+        this.showLoading(true);
+        try {
+            const token = await window.electronAPI.loginWithDiscord();
+            if (token) {
+                const sanitized = this.sanitizeToken(token);
+                this.token = sanitized;
+                localStorage.setItem('discord_token', sanitized);
+                await this.fetchUserProfile();
+                this.showStatus('✅ Logged in successfully!', 'success');
+            } else {
+                this.showStatus('❌ Login cancelled or failed.', 'error');
+            }
+        } catch (error) {
+            console.error('Login error:', error);
+            this.showStatus('❌ Login error occurred.', 'error');
+        } finally {
+            this.showLoading(false);
+        }
+    }
+
+    async fetchUserProfile() {
+        if (!this.token) return;
+
+        try {
+            const response = await fetch('https://discord.com/api/v9/users/@me', {
+                headers: {
+                    'Authorization': this.token
+                }
+            });
+
+            if (response.ok) {
+                const user = await response.json();
+                this.updateProfileUI(user);
+                this.updateSetButtonState();
+            } else {
+                // If token is invalid, clear it
+                this.logout();
+                this.showStatus('❌ Session expired. Please login again.', 'error');
+            }
+        } catch (error) {
+            console.error('Profile fetch error:', error);
+            // Don't logout on network error, just show error
+            this.showStatus('❌ Could not fetch profile.', 'error');
+        }
+    }
+
+    updateProfileUI(user) {
+        // Hide login, show profile
+        document.getElementById('loginSection').classList.add('hidden');
+        document.getElementById('profileSection').classList.remove('hidden');
+
+        // Update profile info
+        const usernameEl = document.getElementById('username');
+        usernameEl.innerHTML = ''; // Clear previous content
+
+        // Create name span
+        const nameSpan = document.createElement('span');
+        nameSpan.textContent = user.username;
+        usernameEl.appendChild(nameSpan);
+
+        // Check for HypeSquad Badge
+        // Flags: Bravery=64, Brilliance=128, Balance=256
+        const flags = user.flags || user.public_flags || 0;
+        let badgeIcon = null;
+
+        if (flags & 64) badgeIcon = 'hypesquadbravery.svg';
+        else if (flags & 128) badgeIcon = 'hypesquadbrilliance.svg';
+        else if (flags & 256) badgeIcon = 'hypesquadbalance.svg';
+
+        if (badgeIcon) {
+            const badgeImg = document.createElement('img');
+            badgeImg.src = `images/${badgeIcon}`;
+            badgeImg.className = 'current-badge-icon';
+            badgeImg.title = 'Current HypeSquad Badge';
+            usernameEl.appendChild(badgeImg);
+        }
+
+        const avatarUrl = user.avatar
+            ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`
+            : `https://cdn.discordapp.com/embed/avatars/${parseInt(user.discriminator) % 5}.png`;
+
+        document.getElementById('userAvatar').src = avatarUrl;
+    }
+
+    async logout() {
+        this.token = null;
+        this.selectedHouse = null;
+        localStorage.removeItem('discord_token');
+
+        if (window.electronAPI) {
+            await window.electronAPI.logout();
+        }
+
+        // Reset UI
+        document.getElementById('loginSection').classList.remove('hidden');
+        document.getElementById('profileSection').classList.add('hidden');
+
+        // Clear selection
+        document.querySelectorAll('.badge-option').forEach(option => {
+            option.classList.remove('selected');
+        });
+
+        this.updateSetButtonState();
+        this.showStatus('Logged out.', 'info');
+
+        // Clear token input
+        const tokenInput = document.getElementById('token');
+        if (tokenInput) {
+            tokenInput.value = '';
+        }
+    }
+
+    // Load saved token if any
+    loadSavedToken() {
+        const savedToken = localStorage.getItem('discord_token');
+        if (savedToken) {
+            const sanitized = this.sanitizeToken(savedToken);
+            const tokenInput = document.getElementById('token');
+            if (tokenInput) tokenInput.value = sanitized;
+            this.token = sanitized;
+        }
+    }
+
+    toggleTokenVisibility() {
+        const tokenInput = document.getElementById('token');
+        const toggleBtn = document.getElementById('toggleToken');
+
+        if (tokenInput.type === 'password') {
+            tokenInput.type = 'text';
+            toggleBtn.textContent = '🙈';
+        } else {
+            tokenInput.type = 'password';
+            toggleBtn.textContent = '👁️';
+        }
+    }
+
+    onTokenChange(event) {
+        this.token = this.sanitizeToken(event.target.value);
+        localStorage.setItem('discord_token', this.token);
+        this.updateSetButtonState();
+    }
+
+    selectBadge(event) {
+        // Clear previous selection
+        document.querySelectorAll('.badge-option').forEach(option => {
+            option.classList.remove('selected');
+        });
+
+        // Mark new selection
+        const selectedOption = event.currentTarget;
+        selectedOption.classList.add('selected');
+        this.selectedHouse = parseInt(selectedOption.dataset.house);
+
+        this.updateSetButtonState();
+    }
+
+    updateSetButtonState() {
+        const setBadgeBtn = document.getElementById('setBadge');
+        setBadgeBtn.disabled = !(this.token && this.selectedHouse);
+    }
+
+    async setBadge() {
+        if (!this.token || !this.selectedHouse) {
+            this.showStatus('Token and badge selection are required!', 'error');
+            return;
+        }
+
+        this.showLoading(true);
+
+        try {
+            // In some environments there may be an offset in Discord API house IDs.
+            // Map selection to ensure correct badge: 1->3, 2->1, 3->2
+            const houseIdMap = { 1: 3, 2: 1, 3: 2 };
+            const apiHouseId = houseIdMap[this.selectedHouse] || this.selectedHouse;
+
+            const response = await fetch('https://discord.com/api/v9/hypesquad/online', {
+                method: 'POST',
+                headers: {
+                    'Authorization': this.token,
+                    'Content-Type': 'application/json',
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                },
+                body: JSON.stringify({
+                    house_id: apiHouseId
+                })
+            });
+
+            if (response.ok) {
+                const houseName = this.getHouseName(this.selectedHouse);
+                this.showStatus(`✅ ${houseName} badge added successfully!`, 'success');
+                // Refresh profile to show new badge
+                this.fetchUserProfile();
+            } else if (response.status === 401) {
+                this.showStatus('❌ Invalid token! Please check your token.', 'error');
+            } else if (response.status === 429) {
+                const data = await response.json().catch(() => ({}));
+                const retryAfter = data.retry_after ? Math.ceil(data.retry_after) : 'few';
+                this.showStatus(`⏳ Rate limited! Please wait ${retryAfter} seconds.`, 'error');
+            } else {
+                const errorData = await response.json().catch(() => ({}));
+                this.showStatus(`❌ Error: ${errorData.message || 'Unknown error'}`, 'error');
+            }
+        } catch (error) {
+            console.error('API Error:', error);
+            this.showStatus('❌ Connection error! Please check your internet.', 'error');
+        } finally {
+            this.showLoading(false);
+        }
+    }
+
+    async removeBadge() {
+        if (!this.token) {
+            this.showStatus('Token is required!', 'error');
+            return;
+        }
+
+        this.showLoading(true);
+
+        try {
+            const response = await fetch('https://discord.com/api/v9/hypesquad/online', {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': this.token,
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                }
+            });
+
+            if (response.ok || response.status === 204) {
+                this.showStatus('✅ HypeSquad badge removed successfully!', 'success');
+                // Clear selection
+                document.querySelectorAll('.badge-option').forEach(option => {
+                    option.classList.remove('selected');
+                });
+                this.selectedHouse = null;
+                this.updateSetButtonState();
+                // Refresh profile to show no badge
+                this.fetchUserProfile();
+            } else if (response.status === 401) {
+                this.showStatus('❌ Invalid token! Please check your token.', 'error');
+            } else if (response.status === 429) {
+                const data = await response.json().catch(() => ({}));
+                const retryAfter = data.retry_after ? Math.ceil(data.retry_after) : 'few';
+                this.showStatus(`⏳ Rate limited! Please wait ${retryAfter} seconds.`, 'error');
+            } else {
+                const errorData = await response.json().catch(() => ({}));
+                this.showStatus(`❌ Error: ${errorData.message || 'Unknown error'}`, 'error');
+            }
+        } catch (error) {
+            console.error('API Error:', error);
+            this.showStatus('❌ Connection error! Please check your internet.', 'error');
+        } finally {
+            this.showLoading(false);
+        }
+    }
+
+    getHouseName(houseId) {
+        const houses = {
+            1: 'Balance (Green)',
+            2: 'Bravery (Purple)',
+            3: 'Brilliance (Red)'
+        };
+        return houses[houseId] || 'Unknown';
+    }
+
+    showStatus(message, type) {
+        const statusElement = document.getElementById('status');
+        statusElement.textContent = message;
+        statusElement.className = `status-message ${type}`;
+
+        // Clear message after 5 seconds
+        setTimeout(() => {
+            statusElement.textContent = '';
+            statusElement.className = 'status-message';
+        }, 5000);
+    }
+
+    showLoading(show) {
+        const loadingElement = document.getElementById('loading');
+        const buttons = document.querySelectorAll('.action-btn');
+
+        if (show) {
+            loadingElement.classList.remove('hidden');
+            buttons.forEach(btn => btn.disabled = true);
+        } else {
+            loadingElement.classList.add('hidden');
+            buttons.forEach(btn => btn.disabled = false);
+            this.updateSetButtonState(); // Refresh set button state
+        }
+    }
+
+    // Token format validation
+    validateToken(token) {
+        // Discord token format: 24 chars.6 chars.27 chars (base64)
+        const tokenRegex = /^[A-Za-z0-9+/]{24}\.[A-Za-z0-9+/]{6}\.[A-Za-z0-9+/\-_]{27}$/;
+        return tokenRegex.test(token);
+    }
+
+    // Accept tokens wrapped in quotes (single or double)
+    sanitizeToken(raw) {
+        if (!raw) return '';
+        let token = String(raw).trim();
+        if ((token.startsWith('"') && token.endsWith('"')) || (token.startsWith("'") && token.endsWith("'"))) {
+            token = token.slice(1, -1).trim();
+        }
+        return token;
+    }
 }
 
-resize();
+// Uygulama başlatma
+document.addEventListener('DOMContentLoaded', () => {
+    new DiscordHypeSquadManager();
 
-window.addEventListener(
-"resize",
-resize
-);
-
-const particles = [];
-
-for(
-let i = 0;
-i < 100;
-i++
-){
-
-particles.push({
-
-x:
-Math.random() *
-canvas.width,
-
-y:
-Math.random() *
-canvas.height,
-
-size:
-Math.random() * 2,
-
-speedX:
-(
-Math.random()
--.5
-) * .3,
-
-speedY:
-(
-Math.random()
--.5
-) * .3
-
+    // Show info message when page loads
+    setTimeout(() => {
+        const statusElement = document.getElementById('status');
+        statusElement.textContent = '💡 Enter your Discord token and choose the badge you want.';
+        statusElement.className = 'status-message info';
+    }, 1000);
 });
 
-}
+// Security warning
 
-function animateParticles(){
-
-ctx.clearRect(
-0,
-0,
-canvas.width,
-canvas.height
-);
-
-particles.forEach(
-(p,i)=>{
-
-p.x += p.speedX;
-p.y += p.speedY;
-
-if(
-p.x < 0 ||
-p.x > canvas.width
-)
-p.speedX *= -1;
-
-if(
-p.y < 0 ||
-p.y > canvas.height
-)
-p.speedY *= -1;
-
-ctx.beginPath();
-
-ctx.arc(
-p.x,
-p.y,
-p.size,
-0,
-Math.PI * 2
-);
-
-ctx.fillStyle =
-"rgba(255,255,255,.15)";
-
-ctx.fill();
-
-for(
-let j=i+1;
-j<particles.length;
-j++
-){
-
-const p2 =
-particles[j];
-
-const dx =
-p.x - p2.x;
-
-const dy =
-p.y - p2.y;
-
-const dist =
-Math.sqrt(
-dx*dx+dy*dy
-);
-
-if(
-dist < 100
-){
-
-ctx.beginPath();
-
-ctx.moveTo(
-p.x,
-p.y
-);
-
-ctx.lineTo(
-p2.x,
-p2.y
-);
-
-ctx.strokeStyle =
-`rgba(
-255,
-255,
-255,
-${
-0.05 *
-(
-1 -
-dist / 100
-)
-}
-)`;
-
-ctx.stroke();
-
-}
-
-}
-
-});
-
-requestAnimationFrame(
-animateParticles
-);
-
-}
-
-animateParticles();
-
-/* ======================
-CARD 3D
-====================== */
-
-document.addEventListener(
-"mousemove",
-(e)=>{
-
-if(
-window.innerWidth
-< 768
-)return;
-
-const rect =
-card.getBoundingClientRect();
-
-const x =
-e.clientX -
-rect.left;
-
-const y =
-e.clientY -
-rect.top;
-
-const centerX =
-rect.width / 2;
-
-const centerY =
-rect.height / 2;
-
-const rotateX =
-(
-y-centerY
-)/18;
-
-const rotateY =
-(
-centerX-x
-)/18;
-
-card.style.transform =
-`
-perspective(1200px)
-rotateX(${-rotateX}deg)
-rotateY(${rotateY}deg)
-scale(1.02)
-`;
-
-}
-);
-
-/* ======================
-CURSOR GLOW
-====================== */
-
-const cursor =
-document.getElementById(
-"cursor-glow"
-);
-
-document.addEventListener(
-"mousemove",
-(e)=>{
-
-cursor.style.left =
-e.clientX+"px";
-
-cursor.style.top =
-e.clientY+"px";
-
-}
-);
-
-/* ======================
-CURSOR TRAIL
-====================== */
-
-document.addEventListener(
-"mousemove",
-(e)=>{
-
-if(
-window.innerWidth
-< 768
-)return;
-
-const trail =
-document.createElement(
-"div"
-);
-
-trail.className =
-"trail";
-
-trail.style.left =
-e.clientX+"px";
-
-trail.style.top =
-e.clientY+"px";
-
-document.body.appendChild(
-trail
-);
-
-setTimeout(()=>{
-
-trail.remove();
-
-},700);
-
-}
-);
-
-/* ======================
-RIPPLE CLICK
-====================== */
-
-document.addEventListener(
-"click",
-(e)=>{
-
-const ripple =
-document.createElement(
-"div"
-);
-
-ripple.className =
-"ripple";
-
-ripple.style.left =
-e.clientX+"px";
-
-ripple.style.top =
-e.clientY+"px";
-
-document.body.appendChild(
-ripple
-);
-
-setTimeout(()=>{
-
-ripple.remove();
-
-},800);
-
-}
-);
-
-/* ======================
-MOUSE LIGHT
-====================== */
-
-const mouseLight =
-document.getElementById(
-"mouse-light"
-);
-
-document.addEventListener(
-"mousemove",
-(e)=>{
-
-mouseLight.style.left =
-e.clientX+"px";
-
-mouseLight.style.top =
-e.clientY+"px";
-
-}
-);
-
-/* ======================
-PARALLAX BG
-====================== */
-
-document.addEventListener(
-"mousemove",
-(e)=>{
-
-const x =
-(
-e.clientX /
-window.innerWidth
--.5
-)*20;
-
-const y =
-(
-e.clientY /
-window.innerHeight
--.5
-)*20;
-
-document.querySelector(
-".bg-lights"
-).style.transform =
-`
-translate(
-${x}px,
-${y}px
-)
-`;
-
-}
-);
